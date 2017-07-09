@@ -7,17 +7,15 @@ use Elasticsearch\ClientBuilder;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\JsonResponse;
-use Zend\Expressive\Router;
 
 class HomePageAction implements ServerMiddlewareInterface
 {
-    private $router;
+    private $hosts;
 
-    public function __construct(Router\RouterInterface $router)
+    public function __construct(array $hosts)
     {
-        $this->router   = $router;
+        $this->hosts = $hosts;
     }
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
@@ -44,7 +42,7 @@ class HomePageAction implements ServerMiddlewareInterface
         ];
         
         $client = ClientBuilder::create()
-                ->setHosts(['10.211.55.29:9200'])
+                ->setHosts($this->hosts)
                 ->build();
         
         $article = current($client->search($params)['hits']['hits'])['_source'];

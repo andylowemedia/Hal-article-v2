@@ -3,13 +3,12 @@
 namespace App\Action;
 
 use Interop\Container\ContainerInterface;
-use Zend\Expressive\Router\RouterInterface;
 
 class HomePageFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        $router   = $container->get(RouterInterface::class);
-        return new HomePageAction($router);
+        $config = $container->get('config');
+        return new HomePageAction($config['elasticsearch']['hosts']);
     }
 }
