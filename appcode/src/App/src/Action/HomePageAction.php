@@ -22,9 +22,13 @@ class HomePageAction implements ServerMiddlewareInterface
     {
         $requestParams = $request->getQueryParams();
         
+        if (!isset($requestParams['index']) || !isset($requestParams['type']) || !isset($requestParams['slug'])) {
+            throw new \InvalidArgumentException('Index, Type & Slug must be set in query parameters to continue');
+        }
+        
         $params = [
-            'index' => $params['index'],
-            'type' => $params['type'],
+            'index' => $requestParams['index'],
+            'type' => $requestParams['type'],
                 
             'body' => [
                 'track_scores' => true,
