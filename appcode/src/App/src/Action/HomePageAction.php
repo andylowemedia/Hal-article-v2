@@ -31,12 +31,10 @@ class HomePageAction implements ServerMiddlewareInterface
             'type' => $requestParams['type'],
                 
             'body' => [
-                'track_scores' => true,
-                "min_score" => 1,
                 'query' => [
                     "bool" => [
                         'must' => [
-                            "match_phrase" => [
+                            "match" => [
                                 'slug' => $requestParams['slug']
                             ]
                         ]
