@@ -27,17 +27,13 @@ class HomePageAction implements ServerMiddlewareInterface
         }
         
         $params = [
-            'index' => $requestParams['index'],
-            'type' => $requestParams['type'],
+            'index' => 'articles',
+            'type' => 'article',
                 
             'body' => [
                 'query' => [
-                    "bool" => [
-                        'must' => [
-                            "match" => [
-                                'slug' => $requestParams['slug']
-                            ]
-                        ]
+                    "term" => [
+                        'slug' => $requestParams['slug']
                     ]
                 ]
             ]
