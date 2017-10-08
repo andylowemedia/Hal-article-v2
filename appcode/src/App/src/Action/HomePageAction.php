@@ -33,7 +33,7 @@ class HomePageAction implements ServerMiddlewareInterface
             'body' => [
                 'query' => [
                     "term" => [
-                        'slug' => $requestParams['slug']
+                        'slug' => strtolower($requestParams['slug'])
                     ]
                 ]
             ]
