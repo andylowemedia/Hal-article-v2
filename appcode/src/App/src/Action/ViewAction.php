@@ -9,7 +9,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterfa
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
 
-class HomePageAction implements ServerMiddlewareInterface
+class ViewAction implements ServerMiddlewareInterface
 {
     private $hosts;
 

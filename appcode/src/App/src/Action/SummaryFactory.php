@@ -4,11 +4,12 @@ namespace App\Action;
 
 use Interop\Container\ContainerInterface;
 
-class HomePageFactory
+class SummaryFactory
 {
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('config');
-        return new HomePageAction($config['elasticsearch']['hosts']);
+        
+        return new SummaryAction($config['elasticsearch']['hosts']);
     }
 }

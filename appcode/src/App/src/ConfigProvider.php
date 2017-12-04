@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Elasticsearch\Client as ElasticsearchClient;
+
 /**
  * The configuration provider for the App module
  *
@@ -21,7 +23,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
-            'templates'    => $this->getTemplates(),
+//            'templates'    => $this->getTemplates(),
         ];
     }
 
@@ -34,9 +36,23 @@ class ConfigProvider
     {
         return [
             'factories'  => [
-                Action\HomePageAction::class    => Action\HomePageFactory::class,
+                Action\ViewAction::class        => Action\ViewFactory::class,
                 Action\AddAction::class         => Action\AddFactory::class,
+                Action\SummaryAction::class     => Action\SummaryFactory::class,
+                Action\SearchAction::class      => Action\SearchFactory::class,
+                Action\CategoryAction::class    => Action\CategoryFactory::class,
+                Action\CustomFeedAction::class  => Action\CustomFeedFactory::class,
+                Mapper\Article::class           => Mapper\MapperFactory::class,
+                Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
+                Mapper\Category::class          => Mapper\MapperFactory::class,
+                Mapper\ArticleCategory::class   => Mapper\MapperFactory::class,
+                Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
+                Mapper\SourceHistory::class     => Mapper\MapperFactory::class,
+                ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,
             ],
+//            'abstract_factories' => [
+//                Mapper\MapperFactory::class
+//            ]
         ];
     }
 
@@ -45,14 +61,14 @@ class ConfigProvider
      *
      * @return array
      */
-    public function getTemplates()
-    {
-        return [
-            'paths' => [
-                'app'    => [__DIR__ . '/../templates/app'],
-                'error'  => [__DIR__ . '/../templates/error'],
-                'layout' => [__DIR__ . '/../templates/layout'],
-            ],
-        ];
-    }
+//    public function getTemplates()
+//    {
+//        return [
+//            'paths' => [
+//                'app'    => [__DIR__ . '/../templates/app'],
+//                'error'  => [__DIR__ . '/../templates/error'],
+//                'layout' => [__DIR__ . '/../templates/layout'],
+//            ],
+//        ];
+//    }
 }

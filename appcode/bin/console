@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+chdir(dirname(__DIR__));
+use Symfony\Component\Console\Application;
+use Console\Command;
+
+require 'vendor/autoload.php';
+$container = require 'config/container.php';
+
+$config = $container->get('config');
+
+
+$application = new Application();
+
+foreach ($config['commands'] as $commandName) {
+    $commandClass = 'Console\\Command\\' . $commandName;
+    if ($container->has($commandClass)) {
+        $application->add($container->get($commandClass));
+    }
+}
+
+$application->run();
