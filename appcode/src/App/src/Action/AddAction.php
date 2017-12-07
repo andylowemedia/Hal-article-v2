@@ -121,8 +121,10 @@ class AddAction implements ServerMiddlewareInterface
                 'url' => $article->originalUrl,
                 'source' => $this->sources[$article->sourceId],
                 'publishDate' => $article->getPublishDate('c'),
+                'date' => $article->getPublishDate('c'),
                 'status' => 2,
-                'articleTypeId' => $article->articleTypeId
+                'articleTypeId' => $article->articleTypeId,
+                'sourceId' => $article->sourceId
             ]
         ];
         
@@ -142,7 +144,7 @@ class AddAction implements ServerMiddlewareInterface
             foreach ($media as $mediaModel) {
                 $mediaCode[] = $mediaModel->url;
             }
-            $params['body']['images'] = $mediaCode;
+            $params['body']['media'] = $mediaCode;
         }
         
         
