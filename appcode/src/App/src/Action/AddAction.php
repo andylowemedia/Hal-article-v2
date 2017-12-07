@@ -8,6 +8,9 @@ use App\Mapper\Article as ArticleMapper;
 use App\Model\ArticleImage as ArticleImageModel;
 use App\Mapper\ArticleImage as ArticleImageMapper;
 
+use App\Model\ArticleMedia as ArticleMediaModel;
+use App\Mapper\ArticleMedia as ArticleMediaMapper;
+
 use App\Model\ArticleCategory as ArticleCategoryModel;
 use App\Mapper\ArticleCategory as ArticleCategoryMapper;
 
@@ -40,13 +43,14 @@ class AddAction implements ServerMiddlewareInterface
     private $featuredSites;
     private $sources = [];
 
-    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleCategoryMapper $articleCategoryMapper, FeaturedArticleMapper $featuredArticleMapper)
+    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleMediaMapper $articleMediaMapper, ArticleCategoryMapper $articleCategoryMapper, FeaturedArticleMapper $featuredArticleMapper)
     {
         $this->apiConfig                = $apiConfig;
         $this->hosts                    = $hosts;
         $this->dbAdapter                = $dbAdapter;
         $this->articleMapper            = $articleMapper;
         $this->articleImageMapper       = $articleImageMapper;
+        $this->articleMediaMapper       = $articleMediaMapper;
         $this->articleCategoryMapper    = $articleCategoryMapper;
         $this->featuredArticleMapper    = $featuredArticleMapper;
         $this->featuredSites            = $featuredSites;
@@ -63,6 +67,8 @@ class AddAction implements ServerMiddlewareInterface
         
         $images = $this->mapToArticleImageModels($data);
         
+        $media = $this->mapToArticleMediaModels($data);
+        
         $categories = $this->mapToArticleCategoryModels($data);
         
         $featuredSites = $this->mapToFeaturedArticleModel($data);
@@ -71,8 +77,8 @@ class AddAction implements ServerMiddlewareInterface
         $connection->beginTransaction();
         
         try {
-            $this->saveDatabase($article, $images, $categories, $featuredSites);
-            $this->saveElasticsearch($article, $images, $categories, $featuredSites);
+            $this->saveDatabase($article, $images, $media, $categories, $featuredSites);
+            $this->saveElasticsearch($article, $images, $media, $categories, $featuredSites);
             $responseData = [
                 'success' => true,
                 'message' => 'Article added',
@@ -95,7 +101,7 @@ class AddAction implements ServerMiddlewareInterface
         return new JsonResponse($responseData, $responseCode);
     }
     
-    private function saveElasticsearch(ArticleModel $article, array $images, array $categories, array $featuredSites)
+    private function saveElasticsearch(ArticleModel $article, array $images, array $media, array $categories, array $featuredSites)
     {
         $client = ClientBuilder::create()
                 ->setHosts($this->hosts)
@@ -120,10 +126,27 @@ class AddAction implements ServerMiddlewareInterface
             ]
         ];
         
-        $image = current($images);
-        $params['body']['image'] = $image->url;
+        if (count($images) > 0) {
+            $image = current($images);
+            $params['body']['image'] = $image->url;
+            
+            $imageUrls = [];
+            foreach ($images as $imageModel) {
+                $imageUrls[] = $imageModel->url;
+            }
+            $params['body']['images'] = $imageUrls;
+        }
         
-        $params['body']['featured'] = count($featuredSites);
+        if (count($media) > 0) {
+            $mediaCode = [];
+            foreach ($media as $mediaModel) {
+                $mediaCode[] = $mediaModel->url;
+            }
+            $params['body']['images'] = $mediaCode;
+        }
+        
+        
+        $params['body']['featured'] = count($featuredSites) > 0 ? true : false;
         
         foreach ($categories as $category) {
             $categoryData = $this->categories[$category->categoryId];
@@ -179,6 +202,21 @@ class AddAction implements ServerMiddlewareInterface
         return $images;
     }
     
+    private function mapToArticleMediaModels(array $data) : array
+    {
+        $images = [];
+        if (isset($data['media'])) {
+            foreach ($data['media'] as $url) {
+                $images[] = new ArticleMediaModel(array(
+                    'code'       => $url,
+                    'statusId'  => 2
+                ));
+            }
+        }
+        
+        return $images;
+    }
+    
     private function mapToArticleCategoryModels(array $data) : array
     {
         $categories = [];
@@ -211,13 +249,18 @@ class AddAction implements ServerMiddlewareInterface
         return $featured;
     }
     
-    private function saveDatabase(ArticleModel $article, array $images, array $categories, array $featuredArticles)
+    private function saveDatabase(ArticleModel $article, array $images, array $media, array $categories, array $featuredArticles)
     {
         $this->articleMapper->save($article);
         
         foreach ($images as $image) {
             $image->articleId = $article->id;
             $this->articleImageMapper->save($image);
+        }
+        
+        foreach ($media as $mediaRow) {
+            $mediaRow->articleId = $article->id;
+            $this->articleMediaMapper->save($mediaRow);
         }
         
         foreach ($categories as $category) {

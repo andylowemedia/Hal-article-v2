@@ -44,6 +44,7 @@ class ConfigProvider
                 Action\CustomFeedAction::class  => Action\CustomFeedFactory::class,
                 Mapper\Article::class           => Mapper\MapperFactory::class,
                 Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
+                Mapper\ArticleMedia::class      => Mapper\MapperFactory::class,
                 Mapper\Category::class          => Mapper\MapperFactory::class,
                 Mapper\ArticleCategory::class   => Mapper\MapperFactory::class,
                 Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
