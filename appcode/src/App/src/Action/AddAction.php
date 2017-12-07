@@ -121,7 +121,7 @@ class AddAction implements ServerMiddlewareInterface
                 'url' => $article->originalUrl,
                 'source' => $this->sources[$article->sourceId],
                 'publishDate' => $article->getPublishDate('c'),
-                'date' => $article->getPublishDate('c'),
+                'date' => $article->getDate('c'),
                 'status' => 2,
                 'articleTypeId' => $article->articleTypeId,
                 'sourceId' => $article->sourceId
