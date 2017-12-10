@@ -35,9 +35,11 @@ class ConfigProvider
             'invokables' => [
             ],
             'factories' => [
-                Command\CreateIndexCommand::class           => Command\CreateIndexCommandFactory::class,
-                Command\DeleteIndexCommand::class           => Command\DeleteIndexCommandFactory::class,
-                Command\BuildArticlesIndexCommand::class    => Command\BuildArticlesIndexCommandFactory::class,
+                Command\CreateIndexCommand::class               => Command\CreateIndexCommandFactory::class,
+                Command\CreateArticleHistoryIndexCommand::class => Command\CreateArticleHistoryIndexCommandFactory::class,
+                Command\DeleteIndexCommand::class               => Command\DeleteIndexCommandFactory::class,
+                Command\BuildArticlesIndexCommand::class        => Command\BuildArticlesIndexCommandFactory::class,
+                Command\BuildArticleHistoryIndexCommand::class  => Command\BuildArticleHistoryIndexCommandFactory::class,
             ]
         ];
     }

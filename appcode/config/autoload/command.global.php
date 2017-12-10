@@ -2,7 +2,9 @@
 return [
     'commands' => [
         'CreateIndexCommand',
+        'CreateArticleHistoryIndexCommand',
         'DeleteIndexCommand',
-        'BuildArticlesIndexCommand'
+        'BuildArticlesIndexCommand',
+        'BuildArticleHistoryIndexCommand',
     ]
 ];
