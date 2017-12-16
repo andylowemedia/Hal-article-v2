@@ -42,6 +42,8 @@ class ConfigProvider
                 Action\SearchAction::class      => Action\SearchFactory::class,
                 Action\CategoryAction::class    => Action\CategoryFactory::class,
                 Action\CustomFeedAction::class  => Action\CustomFeedFactory::class,
+                Action\HistoryAddAction::class  => Action\HistoryAddFactory::class,
+                
                 Mapper\Article::class           => Mapper\MapperFactory::class,
                 Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
                 Mapper\ArticleMedia::class      => Mapper\MapperFactory::class,

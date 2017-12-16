@@ -8,6 +8,10 @@ $app->post('/article', App\Action\AddAction::class, 'add');
 // $app->put('/article', App\Action\UpdateAction::class, 'update');
 // $app->delete('/article', App\Action\DeleteAction::class, 'delete');
 
+$app->post('/article/history/add', App\Action\HistoryAddAction::class, 'history-add');
+
+
+
 $app->get('/search', App\Action\SearchAction::class, 'search');
 $app->get('/summary', App\Action\SummaryAction::class, 'summary');
 $app->get('/custom-feed', App\Action\CustomFeedAction::class, 'custom-feed');
