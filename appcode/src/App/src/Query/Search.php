@@ -17,6 +17,10 @@ class Search extends QueryAbstract
         
         $client = $this->getClient();
         
+//        echo "<pre>";
+//        print_r($this->params);
+//        die();
+//        
         $results = $client->search($this->params);
         
         
@@ -24,7 +28,10 @@ class Search extends QueryAbstract
         $resultSet->setArrayObjectPrototype(new ArticleModel);
         $resultSet->elasticsearchInitialize($results['hits']);
         
-        return $resultSet->toArray();
+        return [
+            'results' => $resultSet->toArray(),
+            'total' => $results['hits']['total'],
+        ];
 
     }
 }

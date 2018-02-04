@@ -63,16 +63,23 @@ class CategoryAction implements ServerMiddlewareInterface
         
         $search = new \App\Query\Search($this->hosts);
         
+        
+        $page = isset($params['page']) ? $params['page'] : 1;
+        $from = (($page * $size) - $size);
+        
         $params['sort'] = ['publishDate:desc'];
-        $params['page'] = 1;
         $params['size'] = $size;
         $params['category'] = [$category->code];
         if (isset($params['image-only'])) {
             $params['exists'] = ['image'];
         }
+        $params['page'] = $from;
+        
+        $data = $search->buildClient()->fetch($params);
+        
         $results = [];
         
-        $results['source'] = $search->buildClient()->fetch($params);
+        $results['source'] = $data['results'];
         
         $results['code'] = $category->code;
         

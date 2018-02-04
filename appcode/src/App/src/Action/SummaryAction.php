@@ -18,41 +18,37 @@ class SummaryAction implements ServerMiddlewareInterface
     
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
+        $queryParams = $request->getQueryParams();
+        
         $date = new \DateTime();
         $date->sub(new \DateInterval('P3M'));
         
+        $pageSize = 100;
+        $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+        
+        
+        $from = (($page * $pageSize) - $pageSize);
         
         $params = [
             'index' => 'articles',
             'type'  => 'article',
-            'size'  => 65,
+            'size'  => $pageSize,
             'date-fr' => $date->format('c'),
             'sort' => 'publishDate:desc',
             'exists' => ['image'],
-            'filter' => ['featured' => '1']
+            'filter' => ['featured' => '1'],
+            'page' => $from
         ];
         
         $search = new \App\Query\Search($this->hosts);
-        $featured = $search->buildClient()->fetch($params);
+        $articles = $search->buildClient()->fetch($params);
         
-        $slugs = [];
-        
-        foreach ($featured as $article) {
-            $slugs[] = $article['slug'];
-        }
-        
-        $params['size'] = 99;
-        unset($params['exists']); // = ['featured'];
-        unset($params['filter']);
-        $params['excludes'] = ['slug' => $slugs];
-        
-        $latest = $search->fetch($params);
         
         return new JsonResponse([
-            'total' => 0,
+            'total' => $articles['total'],
+            'count' => count($articles['results']),
             'articles' => [
-                'featured' => $featured,
-                'latest' => $latest
+                'featured' => $articles['results'],
             ]
         ]);
     }

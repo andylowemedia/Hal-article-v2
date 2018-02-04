@@ -22,6 +22,11 @@ class SearchAction implements ServerMiddlewareInterface
         
         $search = new \App\Query\Search($this->hosts);
         
+        $size = 100;
+        $page = isset($params['page']) ? ($params['page'] - 1) : 0;
+
+        $params['page'] = ($page * $size);        
+        
         $response = $search->buildClient()->fetch($params);
         
         return new JsonResponse([
