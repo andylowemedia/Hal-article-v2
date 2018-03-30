@@ -14,6 +14,9 @@ use App\Mapper\ArticleMedia as ArticleMediaMapper;
 use App\Model\ArticleCategory as ArticleCategoryModel;
 use App\Mapper\ArticleCategory as ArticleCategoryMapper;
 
+use App\Model\ArticleKeyword as ArticleKeywordModel;
+use App\Mapper\ArticleKeyword as ArticleKeywordMapper;
+
 use App\Model\FeaturedArticle as FeaturedArticleModel;
 use App\Mapper\FeaturedArticle as FeaturedArticleMapper;
 
@@ -38,12 +41,13 @@ class AddAction implements ServerMiddlewareInterface
     private $articleMapper;
     private $articleImageMapper;
     private $articleCategoryMapper;
+    private $articleKeywordMapper;
     private $categories = [];
     private $systemCategories = [];
     private $featuredSites;
     private $sources = [];
 
-    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleMediaMapper $articleMediaMapper, ArticleCategoryMapper $articleCategoryMapper, FeaturedArticleMapper $featuredArticleMapper)
+    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleMediaMapper $articleMediaMapper, ArticleCategoryMapper $articleCategoryMapper, ArticleKeywordMapper $articleKeywordMapper, FeaturedArticleMapper $featuredArticleMapper)
     {
         $this->apiConfig                = $apiConfig;
         $this->hosts                    = $hosts;
@@ -52,6 +56,7 @@ class AddAction implements ServerMiddlewareInterface
         $this->articleImageMapper       = $articleImageMapper;
         $this->articleMediaMapper       = $articleMediaMapper;
         $this->articleCategoryMapper    = $articleCategoryMapper;
+        $this->articleKeywordMapper     = $articleKeywordMapper;
         $this->featuredArticleMapper    = $featuredArticleMapper;
         $this->featuredSites            = $featuredSites;
     }
@@ -71,14 +76,16 @@ class AddAction implements ServerMiddlewareInterface
         
         $categories = $this->mapToArticleCategoryModels($data);
         
+        $keywords = $this->mapToArticleKeywordModels($data);
+        
         $featuredSites = $this->mapToFeaturedArticleModel($data);
         
         $connection = $this->dbAdapter->driver->getConnection();
         $connection->beginTransaction();
         
         try {
-            $this->saveDatabase($article, $images, $media, $categories, $featuredSites);
-            $this->saveElasticsearch($article, $images, $media, $categories, $featuredSites);
+            $this->saveDatabase($article, $images, $media, $categories, $keywords, $featuredSites);
+            $this->saveElasticsearch($article, $images, $media, $categories, $keywords, $featuredSites);
             $responseData = [
                 'success' => true,
                 'message' => 'Article added',
@@ -101,7 +108,7 @@ class AddAction implements ServerMiddlewareInterface
         return new JsonResponse($responseData, $responseCode);
     }
     
-    private function saveElasticsearch(ArticleModel $article, array $images, array $media, array $categories, array $featuredSites)
+    private function saveElasticsearch(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredSites)
     {
         $client = ClientBuilder::create()
                 ->setHosts($this->hosts)
@@ -142,7 +149,7 @@ class AddAction implements ServerMiddlewareInterface
         if (count($media) > 0) {
             $mediaCode = [];
             foreach ($media as $mediaModel) {
-                $mediaCode[] = $mediaModel->url;
+                $mediaCode[] = $mediaModel->code;
             }
             $params['body']['media'] = $mediaCode;
         }
@@ -159,6 +166,11 @@ class AddAction implements ServerMiddlewareInterface
                 //$params['body']['displayCategories'][] = $this->categories[$categoryData['parentId']]['name'];
             }
         }
+        
+        foreach ($keywords as $keyword) {
+            $params['body']['keywords'][] =  $keyword->keyword;
+        }
+        
 
         $client->index($params);
         return $this;
@@ -223,17 +235,32 @@ class AddAction implements ServerMiddlewareInterface
     {
         $categories = [];
         
+        
         if (isset($data['categories'])) {
-            foreach ($data['categories'] as $categoryCode) {
-                if (isset($this->systemCategories[$categoryCode])) {
+            foreach ($data['categories'] as $categoryId) {
+                if (isset($this->categories[$categoryId])) {
                     $categories[] = new ArticleCategoryModel(array(
-                        'categoryId'  => $this->systemCategories[$categoryCode],
+                        'categoryId'  => $categoryId,
                     ));
                 }
             }
         }
-        
         return $categories;    
+    }
+    
+    private function mapToArticleKeywordModels(array $data) : array
+    {
+        $keywords = [];
+        
+        
+        if (isset($data['keywords'])) {
+            foreach ($data['keywords'] as $keyword) {
+                $keywords[] = new ArticleKeywordModel(array(
+                    'keyword'  => $keyword,
+                ));
+            }
+        }
+        return $keywords;    
     }
         
     private function mapToFeaturedArticleModel(array $data) : array
@@ -251,7 +278,7 @@ class AddAction implements ServerMiddlewareInterface
         return $featured;
     }
     
-    private function saveDatabase(ArticleModel $article, array $images, array $media, array $categories, array $featuredArticles)
+    private function saveDatabase(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredArticles)
     {
         $this->articleMapper->save($article);
         
@@ -270,6 +297,11 @@ class AddAction implements ServerMiddlewareInterface
             $this->articleCategoryMapper->save($category);
         }
         
+        foreach ($keywords as $keyword) {
+            $keyword->articleId = $article->id;
+            $this->articleKeywordMapper->save($keyword);
+        }
+        
         foreach ($featuredArticles as $featuredArticle) {
             $featuredArticle->articleId = $article->id;
             $this->featuredArticleMapper->save($featuredArticle);
@@ -281,7 +313,7 @@ class AddAction implements ServerMiddlewareInterface
     private function fetchCategories()
     {
         $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', $this->apiConfig['category'] . "?all-categories=true");
+        $res = $client->request('GET', $this->apiConfig['category'] . "/list?all-categories=true");
         
         $data = json_decode($res->getBody(), true);
         

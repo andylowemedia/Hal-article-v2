@@ -10,11 +10,11 @@ use Zend\Db\Sql\Sql;
 use Elasticsearch\Client as ElasticsearchClient;
 
 
-class CreateArticleHistoryIndexCommand extends Command
+class CreateIndexCommand extends Command
 {
     private $elasticsearchClient;
     
-    public function setElasticsearchClient(ElasticsearchClient $elasticsearchClient) : CreateArticleHistoryIndexCommand
+    public function setElasticsearchClient(ElasticsearchClient $elasticsearchClient) : CreateIndexCommand
     {
         $this->elasticsearchClient = $elasticsearchClient;
         return $this;
@@ -29,7 +29,7 @@ class CreateArticleHistoryIndexCommand extends Command
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('app:create-article-history-index')
+            ->setName('app:create-index')
 
             // the short description shown while running "php bin/console list"
             ->setDescription('Create Elasticsearch Index')
@@ -56,65 +56,75 @@ class CreateArticleHistoryIndexCommand extends Command
         $client = $this->getElasticsearchclient();
         
         $params = [
-            'index' => 'article-history',
+            'index' => 'articles',
             'body' => [
                 'settings' => [ 
                     'number_of_shards' => 1,
                     'number_of_replicas' => 0,
                 ],
                 'mappings' => [ 
-                    'article-history' => [  
+                    'article' => [  
 //                        "_timestamp" => [
 //                            "enabled" => "true"
 //                        ],
                         '_source' => [ 'enabled' => true],
                         'properties' => [
-                           'sourceId' => [
+                            'id' => [
                                 'type' => 'integer'
+                            ],
+                            'slug' => [
+                                'type' => 'keyword',
+                            ],
+                            'title' => [
+                                'type' => 'text'
+                            ],
+                            'subtitle' => [
+                                'type' => 'text'
+                            ],
+                            'summary' => [
+                                'type' => 'text'
+                            ],
+                            'content' => [
+                                'type' => 'text'
+                            ],
+                            'author' => [
+                                'type' => 'keyword'
                             ],
                             'url' => [
                                 'type' => 'keyword'
                             ],
-                            'message' => [
-                                'type' => 'text'
-                            ],
-                            'status' => [
+                            'articleTypeId' => [
                                 'type' => 'integer'
                             ],
-                            'date' => [
-                                'type' => 'date'
-                            ]
-                        ]
-                    ],
-                    'category-mapping' => [  
-                        '_source' => [ 'enabled' => true],
-                        'properties' => [
                            'sourceId' => [
                                 'type' => 'integer'
                             ],
-                            'typeId' => [
-                                'type' => 'integer'
-                            ],
-                            'categoryId' => [
-                                'type' => 'integer'
-                            ],
-                            'url' => [
+                            'source' => [
                                 'type' => 'keyword'
                             ],
-                            'value' => [
-                                'type' => 'keyword'
-                            ],
-                            'message' => [
-                                'type' => 'text'
-                            ],
-                            'status' => [
-                                'type' => 'integer'
+                            'publishDate' => [
+                                'type' => 'date',
                             ],
                             'date' => [
                                 'type' => 'date'
+                            ],
+                            'image' => [
+                                'type' => 'keyword'
+                            ],
+                            'images' => [
+                                'type' => 'keyword'
+                            ],
+                            'media' => [
+                                'type' => 'text'
+                            ],
+                            'featured' => [
+                                "type" => "boolean"
+                            ],
+                            'categories' => [
+                                "type" => "keyword"
                             ]
                         ]
-                    ],
+                    ]
                 ]
             ]
         ];

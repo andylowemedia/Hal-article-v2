@@ -49,6 +49,7 @@ class ConfigProvider
                 Mapper\ArticleMedia::class      => Mapper\MapperFactory::class,
                 Mapper\Category::class          => Mapper\MapperFactory::class,
                 Mapper\ArticleCategory::class   => Mapper\MapperFactory::class,
+                Mapper\ArticleKeyword::class    => Mapper\MapperFactory::class,
                 Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
                 Mapper\SourceHistory::class     => Mapper\MapperFactory::class,
                 ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,

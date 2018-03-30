@@ -10,6 +10,7 @@ class BuildArticlesIndexCommandFactory
     {
         return (new BuildArticlesIndexCommand)
                 ->setElasticsearchClient($container->get(ElasticsearchClient::class))
-                ->setArticlesDbAdapter($container->get('ArticlesDbAdapter'));
+                ->setArticlesDbAdapter($container->get('ArticlesDbAdapter'))
+                ->setApiConfig($container->get('config')['api']);
     }
 }

@@ -5,6 +5,7 @@ use Zend\Expressive\Container;
 use Zend\Expressive\Delegate;
 use Zend\Expressive\Helper;
 use Zend\Expressive\Middleware;
+use App\Middleware\Error;
 
 return [
     // Provides application-wide services.
@@ -26,14 +27,15 @@ return [
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories'  => [
             Application::class                => Container\ApplicationFactory::class,
-            Delegate\NotFoundDelegate::class  => Container\NotFoundDelegateFactory::class,
+            Delegate\NotFoundDelegate::class  => Error\NotFoundDelegateFactory::class,
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelper::class           => Helper\UrlHelperFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
 
             Zend\Stratigility\Middleware\ErrorHandler::class => Container\ErrorHandlerFactory::class,
-            Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
-            Middleware\NotFoundHandler::class                => Container\NotFoundHandlerFactory::class,
+//            Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
+            Middleware\NotFoundHandler::class                => Error\NotFoundHandlerFactory::class,
+            Middleware\ErrorResponseGenerator::class         => Error\JsonErrorResponseGeneratorFactory::class
         ],
     ],
 ];

@@ -122,6 +122,16 @@ class CreateIndexCommand extends Command
                             ],
                             'categories' => [
                                 "type" => "keyword"
+                            ],
+                            'displayCategories' => [
+                                "properties" => [
+                                    'name' => ["type" => "keyword"],
+                                    'code' => ["type" => "keyword"],
+                                ]
+                                
+                            ],
+                            'keywords' => [
+                                "type" => "keyword"
                             ]
                         ]
                     ]

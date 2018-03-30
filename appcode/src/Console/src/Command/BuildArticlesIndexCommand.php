@@ -15,6 +15,7 @@ class BuildArticlesIndexCommand extends Command
 {
     private $elasticsearchClient;
     private $articlesDbAdapter;
+    private $apiConfig;
     
     public function setElasticsearchClient(ElasticsearchClient $elasticsearchClient) : BuildArticlesIndexCommand
     {
@@ -36,6 +37,17 @@ class BuildArticlesIndexCommand extends Command
     public function getArticlesDbAdapter() : Adapter
     {
         return $this->articlesDbAdapter;
+    }
+    
+    public function setApiConfig(array $apiConfig) : BuildArticlesIndexCommand
+    {
+        $this->apiConfig = $apiConfig;
+        return $this;
+    }
+    
+    public function getApiConfig() : array
+    {
+        return $this->apiConfig;
     }
     
     protected function configure()
@@ -64,7 +76,15 @@ class BuildArticlesIndexCommand extends Command
             '',
         ]);
         
+        $guzzleClient = new \GuzzleHttp\Client();
+        $res = $guzzleClient->request('GET', $this->getApiConfig()['category'] . "/list?all-categories=true");
         
+        $categoryData = json_decode($res->getBody());
+        
+        $fullCategories = [];
+        foreach ($categoryData->categories as $categoryRow) {
+            $fullCategories[$categoryRow->id] = $categoryRow;
+        }
         
         $client = $this->getElasticsearchclient();
         
@@ -72,36 +92,20 @@ class BuildArticlesIndexCommand extends Command
          
         $sql = new Sql($adapter);
         
-        $fullCategorySelect = clone $sql->select()->from('categories');
-        
-        $fullCategoryStatement = $sql->prepareStatementForSqlObject($fullCategorySelect);
-        $categoryData = $fullCategoryStatement->execute();
-        
-        $fullCategories = [];
-        foreach ($categoryData as $categoryDataRow) {
-            $fullCategories[$categoryDataRow['code']] = $categoryDataRow['name'];
-        }
-        
         $categorySelect = clone $sql->select()
-                ->columns(array())
+                ->columns(array('categoryIds' => new Expression('GROUP_CONCAT(`category_id`)')))
                 ->from('article_category_mapper')
-                ->join('categories', 
-                        'categories.id = article_category_mapper.category_id', 
-                        array('categories' => new Expression('GROUP_CONCAT(`categories`.`code`)')))
                 ->where(array(
                     'articles.id = article_category_mapper.article_id'
                 ));
         
-        $topCategorySelect = clone $sql->select()
-                ->columns(array())
-                ->from('article_category_mapper')
-                ->join('categories', 
-                        'categories.id = article_category_mapper.category_id', array())
-                ->join(array('top_categories' => 'categories'), 'top_categories.id = categories.parent_id', array('categories' => new Expression('GROUP_CONCAT(`top_categories`.`code`)')))
+        $keywordsSelect = clone $sql->select()
+                ->columns(array('keywordIds' => new Expression('GROUP_CONCAT(`keyword`)')))
+                ->from('article_keyword_mapper')
                 ->where(array(
-                    'articles.id = article_category_mapper.article_id'
+                    'articles.id = article_keyword_mapper.article_id'
                 ));
-                
+        
         $sourceSelect = clone $sql->select()
                 ->columns(array('name'))
                 ->from('sources')
@@ -133,7 +137,7 @@ class BuildArticlesIndexCommand extends Command
                     'date',
                     'articleTypeId' => 'article_type_id',
                     'categories' => $categorySelect,
-                    'topCategories' => $topCategorySelect,
+                    'keywords' => $keywordsSelect,
                     'source' => $sourceSelect,
                     'featured' => $featuredArticlesSelect,
                     'source_id',
@@ -142,9 +146,8 @@ class BuildArticlesIndexCommand extends Command
                 ->from('articles')
                 ->where(array(
 //                    'status_id = 2',
-//                    'articles.id' => 31995
+//                    'articles.id' => 769736
                 ))
-//                ->limit(10000)
                 ->order('date DESC')
                 ;
         
@@ -152,24 +155,28 @@ class BuildArticlesIndexCommand extends Command
         $results = $statement->execute();
         
         foreach ($results as $result) {
+            
+            $keywords = explode(',', $result['keywords']);
             $categories = explode(',', $result['categories']);
             
             $displayCategory = [];
-   
+            $topCategories = [];
+            
+            $result['categories'] = [];
             foreach ($categories as $category) {
                 if (isset($fullCategories[$category])) {
+                    $result['categories'][] = $fullCategories[$category]->code;
                     $displayCategory[] = array(
-                        'code' => $category,
-                        'name' => $fullCategories[$category]
+                        'code' => $fullCategories[$category]->code,
+                        'name' => $fullCategories[$category]->name
                     );
+                    if (isset($fullCategories[$fullCategories[$category]->parentId])) {
+                        $topCategories[] = $fullCategories[$fullCategories[$category]->parentId]->code;
+                    }
                 }
             }
-            
-            $topCategories = explode(',', $result['topCategories']);
-            
-            $reorderedCategories = array_filter(array_unique(array_merge($topCategories, $categories)));
+            $reorderedCategories = array_filter(array_unique(array_merge($topCategories, $result['categories'])));
             sort($reorderedCategories);
-            
             
             $imageSelect = clone $sql->select()
                     ->columns(array('url'))
@@ -218,7 +225,7 @@ class BuildArticlesIndexCommand extends Command
                     'status' => $result['status_id'],
                     'articleTypeId' => $result['articleTypeId'],
                     'sourceId' => $result['source_id'],
-                    
+                    'keywords' => $keywords
                 ]
             ];
             
@@ -242,7 +249,6 @@ class BuildArticlesIndexCommand extends Command
                 $params['body']['displayCategories'] = $displayCategory;
             }
             print_r($params);
-            
             $response = $client->index($params);
             
             print_r($response);
@@ -259,22 +265,3 @@ class BuildArticlesIndexCommand extends Command
     
 
 }
-
-/*
- * curl -XPUT 'localhost:9200/articles?pretty' -H 'Content-Type: application/json' -d '{"mappings": {"article": {"properties": {"publish_date": {"type": "date" }}}}}'
-curl -XPUT 'localhost:9200/my_index/my_type/1?pretty' -H 'Content-Type: application/json' -d'
-{ "date": "2015-01-01" }
-'
-curl -XPUT 'localhost:9200/my_index/my_type/2?pretty' -H 'Content-Type: application/json' -d'
-{ "date": "2015-01-01T12:10:30Z" }
-'
-curl -XPUT 'localhost:9200/my_index/my_type/3?pretty' -H 'Content-Type: application/json' -d'
-{ "date": 1420070400001 }
-'
-curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: application/json' -d'
-{
-  "sort": { "date": "asc"} 
-}
-'
-
- */

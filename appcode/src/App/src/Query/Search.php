@@ -17,10 +17,6 @@ class Search extends QueryAbstract
         
         $client = $this->getClient();
         
-//        echo "<pre>";
-//        print_r($this->params);
-//        die();
-//        
         $results = $client->search($this->params);
         
         
