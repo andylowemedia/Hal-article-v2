@@ -12,7 +12,7 @@ class HealthCheckAction implements ServerMiddlewareInterface
     {
         return new JsonResponse([
             'success' => true,
-            'message' => 'Search Microservice is running correctly'
+            'message' => 'Article Microservice is running correctly'
         ]);
     }
 

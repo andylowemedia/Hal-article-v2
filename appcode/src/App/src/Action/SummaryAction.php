@@ -43,7 +43,6 @@ class SummaryAction implements ServerMiddlewareInterface
         $search = new \App\Query\Search($this->hosts);
         $articles = $search->buildClient()->fetch($params);
         
-        
         return new JsonResponse([
             'total' => $articles['total'],
             'count' => count($articles['results']),

@@ -4,9 +4,10 @@ $app->get('/', App\Action\HealthCheckAction::class, 'default-health-check');
 
 $app->get('/article', App\Action\ViewAction::class, 'view');
 $app->post('/article', App\Action\AddAction::class, 'add');
-// $app->patch('/article', App\Action\UpdateAction::class, 'partial-update');
-// $app->put('/article', App\Action\UpdateAction::class, 'update');
-// $app->delete('/article', App\Action\DeleteAction::class, 'delete');
+$app->put('/article', App\Action\EditAction::class, 'edit');
+$app->delete('/article', App\Action\DeleteAction::class, 'delete');
+
+$app->get('/related', App\Action\RelatedAction::class, 'related');
 
 $app->post('/article/history/add', App\Action\HistoryAddAction::class, 'history-add');
 

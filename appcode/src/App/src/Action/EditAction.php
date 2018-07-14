@@ -33,7 +33,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
 
 
-class AddAction implements ServerMiddlewareInterface
+class EditAction implements ServerMiddlewareInterface
 {
     private $hosts;
     private $apiConfig;
@@ -68,17 +68,28 @@ class AddAction implements ServerMiddlewareInterface
         $this->fetchSources();
         $this->fetchCategories();
         
-        $article = $this->mapToArticleModel($data);
+        $id = $data['id'];
+        
+        $article = $this->articleMapper->find($id);
+        
+        $this->articleImageMapper->deleteByParams(['article_id' => $article->id]);
+        $this->articleMediaMapper->deleteByParams(['article_id' => $article->id]);
+        $this->articleCategoryMapper->deleteByParams(['article_id' => $article->id]);
+        $this->articleKeywordMapper->deleteByParams(['article_id' => $article->id]);
+        $this->featuredArticleMapper->deleteByParams(['article_id' => $article->id]);
         
         $images = $this->mapToArticleImageModels($data);
-        
         $media = $this->mapToArticleMediaModels($data);
-        
         $categories = $this->mapToArticleCategoryModels($data);
-        
         $keywords = $this->mapToArticleKeywordModels($data);
         
         $featuredSites = $this->mapToFeaturedArticleModel($data);
+        
+        
+        $article->exchangeArray($data['article']);  
+        
+        $this->fetchSources();
+        $this->fetchCategories();
         
         $connection = $this->dbAdapter->driver->getConnection();
         $connection->beginTransaction();
@@ -88,7 +99,7 @@ class AddAction implements ServerMiddlewareInterface
             $this->saveElasticsearch($article, $images, $media, $categories, $keywords, $featuredSites);
             $responseData = [
                 'success' => true,
-                'message' => 'Article added',
+                'message' => 'Article Edited',
                 'article' => $article->toArray()
             ];
             $responseCode = 200;
@@ -176,7 +187,7 @@ class AddAction implements ServerMiddlewareInterface
         return $this;
     }
     
-    private function mapToArticleModel(array $data) : ArticleModel
+    private function mapToArticleModel(ArticleModel $article, array $data) : ArticleModel
     {
         $dateTime = new \DateTime();
         
@@ -218,17 +229,16 @@ class AddAction implements ServerMiddlewareInterface
     
     private function mapToArticleMediaModels(array $data) : array
     {
-        $images = [];
+        $media = [];
         if (isset($data['media'])) {
             foreach ($data['media'] as $url) {
-                $images[] = new ArticleMediaModel(array(
+                $media[] = new ArticleMediaModel(array(
                     'code'       => $url,
                     'statusId'  => 2
                 ));
             }
         }
-        
-        return $images;
+        return $media;
     }
     
     private function mapToArticleCategoryModels(array $data) : array

@@ -89,7 +89,7 @@ abstract class QueryAbstract
             'from' => $from,
             'body' => [
                 '_source' => [
-                    'slug', 'title', 'subtitle', 'summary', 'image', 'publishDate', 'author', 'source', 'categories', 'displayCategories', 'url'
+                    'slug', 'title', 'subtitle', 'summary', 'image', 'publishDate', 'author', 'source', 'categories', 'displayCategories', 'keywords', 'url'
                 ],
                 'track_scores' => true,
                 "min_score" => 1,
@@ -125,6 +125,18 @@ abstract class QueryAbstract
                             "fields" => ["title^100", "content^0.5"]
                         ]
                     ];
+        }
+        
+        if (isset($params['keywords'])) {
+            
+            $keywords = [];
+            foreach ($params['keywords'] as $keyword) {
+                $keywords['should'][] = ["term" => ["keywords" => $keyword]];
+            }
+            $this->params['body']['query']['bool']['must']['bool'] = $keywords;
+            $this->params['body']['query']['bool']['must_not'] = [
+                "term" => ["slug" => $params['slug']]
+            ];
         }
         
         if (isset($params["exists"])) {

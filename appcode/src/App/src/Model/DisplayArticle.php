@@ -13,6 +13,7 @@ class DisplayArticle extends ModelAbstract
     protected $source;
     protected $image;
     protected $displayCategories;
+    protected $keywords;
     
     public function setSlug($slug)
     {
@@ -151,4 +152,14 @@ class DisplayArticle extends ModelAbstract
         return $this->displayCategories;
     }
     
+    public function setKeywords($keywoods)
+    {
+        $this->keywords = array_filter($keywoods);
+        return $this;
+    }
+    
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
 }

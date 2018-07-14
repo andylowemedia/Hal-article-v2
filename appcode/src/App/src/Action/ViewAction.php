@@ -22,9 +22,19 @@ class ViewAction implements ServerMiddlewareInterface
     {
         $requestParams = $request->getQueryParams();
         
-        if (!isset($requestParams['index']) || !isset($requestParams['type']) || !isset($requestParams['slug'])) {
+        if (!isset($requestParams['index']) || !isset($requestParams['type']) || (!isset($requestParams['slug']) && !isset($requestParams['id']))) {
             throw new \InvalidArgumentException('Index, Type & Slug must be set in query parameters to continue');
         }
+        
+        
+        if (isset($requestParams['id'])) {
+            $key = '_id';
+            $value = $requestParams['id'];
+        } else {
+            $key = 'slug';
+            $value = strtolower($requestParams['slug']);
+        }
+        
         
         $params = [
             'index' => 'articles',
@@ -33,7 +43,7 @@ class ViewAction implements ServerMiddlewareInterface
             'body' => [
                 'query' => [
                     "term" => [
-                        'slug' => strtolower($requestParams['slug'])
+                        $key => $value
                     ]
                 ]
             ]
