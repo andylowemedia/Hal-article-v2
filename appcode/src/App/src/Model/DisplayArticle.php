@@ -259,7 +259,7 @@ class DisplayArticle extends ModelAbstract
      * Get Display Categories
      * @return array
      */
-    public function getDisplayCategories(): array
+    public function getDisplayCategories(): ?array
     {
         return $this->displayCategories;
     }
