@@ -22,7 +22,7 @@ class JsonErrorResponseGeneratorFactory
         $config = $container->has('config') ? $container->get('config') : [];
 
         $debug = isset($config['debug']) ? $config['debug'] : false;
-        
+
         return new JsonErrorResponseGenerator($debug);
     }
 }

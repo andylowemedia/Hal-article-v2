@@ -7,4 +7,3 @@ class Article extends ResultSetAbstract
 
 
 }
-

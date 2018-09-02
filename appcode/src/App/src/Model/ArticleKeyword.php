@@ -1,49 +1,86 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Model;
 
+/**
+ * Class ArticleKeyword
+ * @package App\Model
+ */
 class ArticleKeyword extends ModelAbstract
 {
 
-    protected $id = null;
+    /**
+     * @var int
+     */
+    protected $id;
 
-    protected $articleId = null;
+    /**
+     * @var int
+     */
+    protected $articleId;
 
-    protected $keyword = null;
+    /**
+     * @var string
+     */
+    protected $keyword;
 
-    public function setId($id)
+    /**
+     * Set ID
+     * @param int $id
+     * @return ArticleKeyword
+     */
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId()
+    /**
+     * Get ID
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setArticleId($articleId)
+    /**
+     * Set Article ID
+     * @param int $articleId
+     * @return ArticleKeyword
+     */
+    public function setArticleId(int $articleId): self
     {
         $this->articleId = $articleId;
         return $this;
     }
 
-    public function getArticleId()
+    /**
+     * Get Article ID
+     * @return int
+     */
+    public function getArticleId(): int
     {
         return $this->articleId;
     }
 
-    public function setKeyword(string $keyword)
+    /**
+     * Set Keyword
+     * @param string $keyword
+     * @return ArticleKeyword
+     */
+    public function setKeyword(string $keyword): self
     {
         $this->keyword = $keyword;
         return $this;
     }
 
-    public function getKeyword()
+    /**
+     * Get Keyword
+     * @return string
+     */
+    public function getKeyword(): string
     {
         return $this->keyword;
     }
-
-
 }
-

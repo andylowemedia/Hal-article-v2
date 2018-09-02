@@ -1,61 +1,110 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Model;
 
+/**
+ * Class FeaturedArticle
+ * @package App\Model
+ */
 class FeaturedArticle extends ModelAbstract
 {
+    /**
+     * @var int
+     */
+    protected $id;
 
-    protected $id = null;
+    /**
+     * @var int
+     */
+    protected $articleId;
 
-    protected $articleId = null;
+    /**
+     * @var int
+     */
+    protected $siteId;
 
-    protected $siteId = null;
-    
+    /**
+     * @var int
+     */
     protected $orderNo = 0;
 
-    public function setId($id)
+    /**
+     * Set ID
+     * @param int $id
+     * @return FeaturedArticle
+     */
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId()
+    /**
+     * Get ID
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setArticleId($articleId)
+    /**
+     * Set Article ID
+     * @param int $articleId
+     * @return FeaturedArticle
+     */
+    public function setArticleId(int $articleId): self
     {
         $this->articleId = $articleId;
         return $this;
     }
 
-    public function getArticleId()
+    /**
+     * Get Article ID
+     * @return int
+     */
+    public function getArticleId(): int
     {
         return $this->articleId;
     }
 
-    public function setSiteId($siteId)
+    /**
+     * Set Site ID
+     * @param int $siteId
+     * @return FeaturedArticle
+     */
+    public function setSiteId(int $siteId): self
     {
         $this->siteId = $siteId;
         return $this;
     }
 
-    public function getSiteId()
+    /**
+     * Get Site ID
+     * @return int
+     */
+    public function getSiteId(): int
     {
         return $this->siteId;
     }
-    
-    public function setOrderNo($orderNo)
+
+    /**
+     * Set Order No
+     * @param int $orderNo
+     * @return FeaturedArticle
+     */
+    public function setOrderNo(int $orderNo): self
     {
         $this->orderNo = $orderNo;
         return $this;
     }
-    
-    public function getOrderNo()
+
+    /**
+     * Get Order No
+     * @return int
+     */
+    public function getOrderNo(): int
     {
         return $this->orderNo;
     }
-    
 }
-

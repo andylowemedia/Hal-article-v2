@@ -1,88 +1,160 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Model;
 
+/**
+ * Class SourceHistory
+ * @package App\Model
+ */
 class SourceHistory extends ModelAbstract
 {
+    /**
+     * @var int
+     */
+    protected $id;
 
-    protected $id = null;
+    /**
+     * @var int
+     */
+    protected $sourceId;
 
-    protected $sourceId = null;
+    /**
+     * @var string
+     */
+    protected $url;
 
-    protected $url = null;
+    /**
+     * @var string
+     */
+    protected $message;
 
-    protected $message = null;
+    /**
+     * @var int
+     */
+    protected $statusId;
 
-    protected $statusId = null;
+    /**
+     * @var string
+     */
+    protected $date;
 
-    protected $date = null;
-
-    public function setId($id)
+    /**
+     * Set ID
+     * @param int $id
+     * @return SourceHistory
+     */
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId()
+    /**
+     * Get ID
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setSourceId($sourceId)
+    /**
+     * Set Source ID
+     * @param int $sourceId
+     * @return SourceHistory
+     */
+    public function setSourceId(int $sourceId): self
     {
         $this->sourceId = $sourceId;
         return $this;
     }
 
-    public function getSourceId()
+    /**
+     * Get Source ID
+     * @return int
+     */
+    public function getSourceId(): int
     {
         return $this->sourceId;
     }
 
-    public function setUrl($url)
+    /**
+     * Set URL
+     * @param string $url
+     * @return SourceHistory
+     */
+    public function setUrl(string $url): self
     {
         $this->url = $url;
         return $this;
     }
 
-    public function getUrl()
+    /**
+     * Get URL
+     * @return string
+     */
+    public function getUrl(): string
     {
         return $this->url;
     }
 
-    public function setMessage($message)
+    /**
+     * Set Message
+     * @param string $message
+     * @return SourceHistory
+     */
+    public function setMessage(string $message): self
     {
         $this->message = $message;
         return $this;
     }
 
-    public function getMessage()
+    /**
+     * Get Message
+     * @return string
+     */
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    public function setStatusId($statusId)
+    /**
+     * Set Status ID
+     * @param int $statusId
+     * @return SourceHistory
+     */
+    public function setStatusId(int $statusId): self
     {
         $this->statusId = $statusId;
         return $this;
     }
 
-    public function getStatusId()
+    /**
+     * Get Status ID
+     * @return int
+     */
+    public function getStatusId(): int
     {
         return $this->statusId;
     }
 
-    public function setDate($date)
+    /**
+     * Set Date
+     * @param string $date
+     * @return SourceHistory
+     */
+    public function setDate(string $date): self
     {
         $this->date = $date;
         return $this;
     }
 
-    public function getDate()
+    /**
+     * Get Date
+     * @return string
+     */
+    public function getDate(): string
     {
         return $this->date;
     }
-
-
 }
-

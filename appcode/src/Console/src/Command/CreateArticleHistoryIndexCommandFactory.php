@@ -6,9 +6,9 @@ use Interop\Container\ContainerInterface;
 
 class CreateArticleHistoryIndexCommandFactory
 {
-    public function __invoke(ContainerInterface $container) {
+    public function __invoke(ContainerInterface $container)
+    {
         return (new CreateArticleHistoryIndexCommand)
                 ->setElasticsearchClient($container->get(ElasticsearchClient::class));
     }
-    
 }

@@ -9,7 +9,7 @@ class ClientFactory
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('config');
-        
+
         return ClientBuilder::create()
                 ->setHosts($config['elasticsearch']['hosts'])
                 ->build();

@@ -1,7 +1,9 @@
 <?php
 
 namespace Console;
+
 use Console\Command;
+
 /**
  * The configuration provider for the App module
  *

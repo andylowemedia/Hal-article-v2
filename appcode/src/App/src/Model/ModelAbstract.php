@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace App\Model;
 
 use App\ResultSet\ResultSetAbstract;
 
 /**
- * Description of ModelAbstract
- *
- * @author andylowe
+ * Class ModelAbstract
+ * @package App\Model
  */
 abstract class ModelAbstract
 {
@@ -16,7 +16,7 @@ abstract class ModelAbstract
             $this->exchangeArray($data);
         }
     }
-    
+
     public function __set($name, $value)
     {
         //$method = 'set' . ucfirst($name);
@@ -39,7 +39,7 @@ abstract class ModelAbstract
 
     public function exchangeArray(array $options)
     {
-        
+
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($this->removeUnderScore($key));
@@ -50,13 +50,14 @@ abstract class ModelAbstract
         return $this;
     }
 
-    protected function removeUnderScore($column) {
+    protected function removeUnderScore($column)
+    {
         // preg_replace('/(^|_)([a-z])/e', 'strtoupper("\\2")', $text)
-        $colArray = explode("_",$column);
+        $colArray = explode("_", $column);
 
-        $property = NULL;
+        $property = null;
         $numWords = count($colArray);
-        for($n=0;$n<$numWords;$n++) {
+        for ($n=0; $n<$numWords; $n++) {
             if ($n > 0) {
                 $property .= ucwords($colArray[$n]);
             } else {
@@ -66,20 +67,20 @@ abstract class ModelAbstract
         return $property;
     }
 
-    protected function convertToUnderScore(array $data)
-    {
-        $newData = array();
-        foreach ($data as $key => $value) {
-            $newKey = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
-            $newData[$newKey] = $value;
-        }
-        
-        return $newData;
-    }
-    
+//    protected function convertToUnderScore(array $data)
+//    {
+//        $newData = [];
+//        foreach ($data as $key => $value) {
+//            $newKey = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
+//            $newData[$newKey] = $value;
+//        }
+//
+//        return $newData;
+//    }
+
     public function toArray()
     {
-        $data = array();
+        $data = [];
         foreach ($this as $key => $property) {
             if ($property instanceof ModelAbstract || $property instanceof ResultSetAbstract) {
                 if ($property instanceof ResultSetAbstract) {
@@ -95,10 +96,10 @@ abstract class ModelAbstract
         }
         return $data;
     }
-    
+
     public function toArraySql()
     {
-        $data = array();
+        $data = [];
         foreach ($this as $key => $property) {
             $newKey = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
             if ($property instanceof ModelAbstract) {
@@ -112,5 +113,4 @@ abstract class ModelAbstract
         }
         return $data;
     }
-
 }

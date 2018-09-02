@@ -7,4 +7,3 @@ class FeaturedArticle extends ResultSetAbstract
 
 
 }
-

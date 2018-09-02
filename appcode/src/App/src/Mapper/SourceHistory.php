@@ -4,13 +4,15 @@ namespace App\Mapper;
 
 class SourceHistory extends MapperAbstract
 {
+    /**
+     * @var array
+     */
+    protected $excludeList = [
 
-    protected $excludeList = array(
-        
-    );
+    ];
 
+    /**
+     * @var string
+     */
     protected $tableName = 'source_history';
-
-
 }
-

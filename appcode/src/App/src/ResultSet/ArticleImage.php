@@ -7,4 +7,3 @@ class ArticleImage extends ResultSetAbstract
 
 
 }
-

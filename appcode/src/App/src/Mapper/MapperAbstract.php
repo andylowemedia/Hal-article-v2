@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace App\Mapper;
 
 use App\Model\ModelAbstract;
 
+use App\ResultSet\ResultSetAbstract;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql;
 
 /**
  * Description of MapperAbstract
@@ -12,45 +15,70 @@ use Zend\Db\TableGateway\TableGateway;
  */
 abstract class MapperAbstract
 {
-    //protected $excludeList = array();
-    protected $tableGateway;
-    
-    public function __construct()
-    {
-        if (!isset($this->excludeList) || !is_array($this->excludeList)) {
-            throw new MapperException("Exclude list must be set as an array");
-        }
-    }
-    
-    public function setTableGateway(TableGateway $tableGateway)
+    /**
+     * @var TableGateway
+     */
+    private $tableGateway;
+
+    /**
+     * @var string
+     */
+    protected $tableName;
+
+    /**
+     * Sets Zend DB Table Gateway
+     * @param TableGateway $tableGateway
+     * @return MapperAbstract
+     */
+    public function setTableGateway(TableGateway $tableGateway): self
     {
         $this->tableGateway = $tableGateway;
         return $this;
     }
-    
-    public function getTableGateway()
+
+    /**
+     * Gets Zend DB Table Gateway
+     * @return TableGateway
+     */
+    public function getTableGateway(): TableGateway
     {
         return $this->tableGateway;
     }
-    
-    public function setTableName(string $tableName)
+
+    /**
+     * Sets table name
+     * @param string $tableName
+     * @return MapperAbstract
+     */
+    public function setTableName(string $tableName): self
     {
         $this->tableName = $tableName;
         return $this;
     }
-    
-    public function getTableName()
+
+    /**
+     * Gets table name
+     * @return string
+     */
+    public function getTableName(): string
     {
         return $this->tableName;
     }
-    
-    public function count($where = null, $group = null)
+
+    /**
+     * Count query method
+     * @param null $where
+     * @param null $group
+     * @return int
+     * @throws MapperException
+     */
+    public function count($where = null, $group = null): int
     {
         $sql = $this->tableGateway->getSql();
-        if ($where instanceof \Zend\Db\Sql\Select) {
+        if ($where instanceof Sql\Select) {
             $select = $where;
         } else {
-            $select = $sql->select()->columns(array('count'=>new Sql\Expression('count(id)')));
+            $select = $sql->select()->columns(['count'=>new Sql\Expression('count(id)')]);
             if ($where) {
                 $select->where($where);
             }
@@ -58,17 +86,26 @@ abstract class MapperAbstract
                 $select->group($group);
             }
         }
+
         $statement = $sql->prepareStatementForSqlObject($select);
         $results   = $statement->execute()->current();
         if (!isset($results['count'])) {
             throw new MapperException("Results must contain 'count' field");
         }
-        return $results['count'];
+        return (int) $results['count'];
     }
 
-    public function fetchAll($where = null, $order = null, $limit = null, $offset = 0)
+    /**
+     * Fetch All method for generic queries mapping to the preset data model
+     * @param null $where
+     * @param null $order
+     * @param null $limit
+     * @param int $offset
+     * @return ResultSetAbstract
+     */
+    public function fetchAll($where = null, $order = null, $limit = null, $offset = 0): ResultSetAbstract
     {
-        if ($where instanceof \Zend\Db\Sql\Select) {
+        if ($where instanceof Sql\Select) {
             $select = $where;
         } else {
             $select = $this->tableGateway->getSql()->select();
@@ -88,17 +125,27 @@ abstract class MapperAbstract
         return $resultSet;
     }
 
-    public function find($id)
+    /**
+     * Find individual row and map to preset data model by id
+     * @param int $id
+     * @return ModelAbstract
+     */
+    public function find(int $id): ModelAbstract
     {
-        $id  = (int) $id;
-        $rowset = $this->tableGateway->select(array('id' => $id));
+        $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset->current();
         return $row;
     }
-    
-    public function findByParams($params, $order = null)
+
+    /**
+     * Find individual row and map to preset data model by params
+     * @param $params
+     * @param null $order
+     * @return ModelAbstract
+     */
+    public function findByParams($params, $order = null): ModelAbstract
     {
-        if ($params instanceof \Zend\Db\Sql\Select) {
+        if ($params instanceof Sql\Select) {
             $select = $params;
         } else {
             $select = $this->tableGateway->getSql()->select();
@@ -108,47 +155,64 @@ abstract class MapperAbstract
                 $select->order($order);
             }
         }
-        
+
         $rowset = $this->tableGateway->selectWith($select);
         $row = $rowset->current();
         return $row;
     }
 
-    public function save(ModelAbstract $model)
+    /**
+     * @param ModelAbstract $model
+     * @return int
+     * @throws MapperException
+     */
+    public function save(ModelAbstract $model): int
     {
         $data = $this->changeData($model->toArray());
 
-        $id = (int)$model->id;
+        $id = (int) $model->id;
         if ($id == 0) {
             unset($data['id']);
             $this->tableGateway->insert($data);
             $result = $this->tableGateway->getLastInsertValue();
             $model->id = $result;
         } else {
-            if ($this->find($id)) {
-                $result = $this->tableGateway->update($data, array('id' => $id));
-            } else {
-                throw new MapperException('ID does not exist');
-            }
+            $result = $this->tableGateway->update($data, ['id' => $id]);
         }
-        return $result;
+        return (int) $result;
     }
 
-    public function delete($id)
+    /**
+     * Deletes record by id
+     * @param int $id
+     * @return MapperAbstract
+     */
+    public function delete(int $id): self
     {
-        $this->tableGateway->delete(array('id' => $id));
+        $this->tableGateway->delete(['id' => $id]);
         return $this;
     }
-    
-    public function deleteByParams(array $where)
+
+    /**
+     * Deletes records by parameters
+     * @param array $where
+     * @return MapperAbstract
+     */
+    public function deleteByParams(array $where): self
     {
         $this->tableGateway->delete($where);
         return $this;
     }
-    
-    protected function changeData(array $data)
+
+    /**
+     * Run filtering through filtering methods
+     * @param array $data
+     * @return array
+     * @throws MapperException
+     */
+    protected function changeData(array $data): array
     {
-        $newData = array();
+        $newData = [];
         foreach ($data as $key => $value) {
             if ($this->checkInExcludeList($key)) {
                 continue;
@@ -160,12 +224,27 @@ abstract class MapperAbstract
         return $newData;
     }
 
-    protected function checkInExcludeList($key)
+    /**
+     * Check if key is in exclude list
+     * @param string $key
+     * @return bool
+     * @throws MapperException
+     */
+    protected function checkInExcludeList(string $key): bool
     {
+        if (!isset($this->excludeList) || !is_array($this->excludeList)) {
+            throw new MapperException('Exclude list should be set');
+        }
+
         return in_array($key, $this->excludeList);
     }
 
-    protected function convertToUnderScore($key)
+    /**
+     * Converts key from camel case to underscore
+     * @param string $key
+     * @return string
+     */
+    protected function convertToUnderScore(string $key): string
     {
         $newKey = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
         return $newKey;

@@ -7,4 +7,3 @@ class ArticleMedia extends ResultSetAbstract
 
 
 }
-

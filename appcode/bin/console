@@ -14,9 +14,8 @@ $config = $container->get('config');
 $application = new Application();
 
 foreach ($config['commands'] as $commandName) {
-    $commandClass = 'Console\\Command\\' . $commandName;
-    if ($container->has($commandClass)) {
-        $application->add($container->get($commandClass));
+    if ($container->has($commandName)) {
+        $application->add($container->get($commandName));
     }
 }
 

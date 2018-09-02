@@ -21,7 +21,8 @@ class NotFoundDelegate extends ZendNotFoundDelegate
             'method'    => $request->getMethod(),
             'uri'       => (string) $request->getUri()
         ];
-        
-        return new JsonResponse($responseData, 404);;
+
+        return new JsonResponse($responseData, 404);
+        ;
     }
 }

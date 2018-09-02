@@ -2,25 +2,24 @@ version: '3'
 services:
   web:
     container_name: 'hal-article-web'
-#    image: "nginx"
-    build: 
-     context: .
-     dockerfile: nginx/Dockerfile
+    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/nginx:latest"
+    environment:
+      SITE_NAME: 'hal-article-v2.local'
+      PROTOCOL: 'http'
+      SERVER_LANG: 'php'
     ports:
-      - "83:83"
+      - "8082:80"
     volumes:
       - ./appcode:/var/www/html/
-      - ./nginx/site.conf:/etc/nginx/conf.d/site.conf
-      
+
     links:
-      - php
+      - php:php-fpm
       
   php:
     container_name: 'hal-article-php'
-#    image: php:7.1.5-fpm
-    build: 
+    build:
      context: .
-     dockerfile: php/Dockerfile
+     dockerfile: Dockerfile
     volumes:
       - ./appcode:/var/www/html/
 

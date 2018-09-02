@@ -12,6 +12,17 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory suffix=".php">./src/*/src/Handler</directory>
+                <directory suffix=".php">./src/App/src/Middleware/Error</directory>
+                <directory suffix=".php">./src/*/src/Command</directory>
+                <file>./src/App/src/ConfigProvider.php</file>
+                <file>./src/Console/src/ConfigProvider.php</file>
+            </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-html" target="./public/coverage" />
+    </logging>
+
 </phpunit>

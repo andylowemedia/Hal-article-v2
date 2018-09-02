@@ -9,7 +9,6 @@ use Zend\Stratigility\Utils;
 
 use Zend\Diactoros\Response\JsonResponse;
 
-
 class JsonErrorResponseGenerator
 {
     /**
@@ -48,19 +47,19 @@ EOT;
     public function __invoke($e, ServerRequestInterface $request, ResponseInterface $response)
     {
         return new JsonResponse(
-            $this->prepareResponseData($e), 
-            $e->getCode(), 
+            $this->prepareResponseData($e),
+            $e->getCode(),
             $response->getHeaders()
         );
     }
-    
+
     private function prepareResponseData($e)
     {
         $responseData = [
             'success' => false,
             'message' => $e->getMessage()
         ];
-        
+
         if ($this->debug) {
             $responseData['exception']  = get_class($e);
             $responseData['fileName']   = $e->getFile();
@@ -68,8 +67,7 @@ EOT;
             $responseData['message']    = $e->getMessage();
             $responseData['stackTrace'] = $e->getTraceAsString();
         }
-        
+
         return $responseData;
     }
-
 }

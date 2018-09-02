@@ -2,13 +2,21 @@
 
 namespace App\Mapper;
 
+/**
+ * Class Article
+ * @package App\Mapper
+ */
 class Article extends MapperAbstract
 {
+    /**
+     * @var array
+     */
+    protected $excludeList = [
 
-    protected $excludeList = array(
-        
-    );
+    ];
 
+    /**
+     * @var string
+     */
     protected $tableName = 'articles';
 }
-

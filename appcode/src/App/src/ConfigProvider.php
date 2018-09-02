@@ -36,17 +36,17 @@ class ConfigProvider
     {
         return [
             'factories'  => [
-                Action\ViewAction::class        => Action\ViewFactory::class,
-                Action\AddAction::class         => Action\AddFactory::class,
-                Action\EditAction::class        => Action\EditFactory::class,
-                Action\DeleteAction::class      => Action\DeleteFactory::class,
-                Action\SummaryAction::class     => Action\SummaryFactory::class,
-                Action\SearchAction::class      => Action\SearchFactory::class,
-                Action\CategoryAction::class    => Action\CategoryFactory::class,
-                Action\CustomFeedAction::class  => Action\CustomFeedFactory::class,
-                Action\HistoryAddAction::class  => Action\HistoryAddFactory::class,
-                Action\RelatedAction::class     => Action\RelatedFactory::class,
-                
+                Handler\ViewHandler::class        => Handler\ViewFactory::class,
+                Handler\AddHandler::class         => Handler\AddFactory::class,
+                Handler\EditHandler::class        => Handler\EditFactory::class,
+                Handler\DeleteHandler::class      => Handler\DeleteFactory::class,
+                Handler\SummaryHandler::class     => Handler\SummaryFactory::class,
+                Handler\SearchHandler::class      => Handler\SearchFactory::class,
+                Handler\CategoryHandler::class    => Handler\CategoryFactory::class,
+                Handler\CustomFeedHandler::class  => Handler\CustomFeedFactory::class,
+                Handler\HistoryAddHandler::class  => Handler\HistoryAddFactory::class,
+                Handler\RelatedHandler::class     => Handler\RelatedFactory::class,
+
                 Mapper\Article::class           => Mapper\MapperFactory::class,
                 Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
                 Mapper\ArticleMedia::class      => Mapper\MapperFactory::class,

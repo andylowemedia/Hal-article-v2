@@ -1,101 +1,185 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Model;
 
+/**
+ * Class Category
+ * @package App\Model
+ */
 class Category extends ModelAbstract
 {
+    /**
+     * @var int
+     */
+    protected $id;
 
-    protected $id = null;
+    /**
+     * @var string
+     */
+    protected $fullPath;
 
-    protected $fullPath = null;
+    /**
+     * @var int
+     */
+    protected $parentId;
 
-    protected $parentId = null;
+    /**
+     * @var bool
+     */
+    protected $baseLevel;
 
-    protected $baseLevel = null;
+    /**
+     * @var string
+     */
+    protected $code;
 
-    protected $code = null;
+    /**
+     * @var string
+     */
+    protected $name;
 
-    protected $name = null;
+    /**
+     * @var int
+     */
+    protected $statusId;
 
-    protected $statusId = null;
-
-    public function setId($id)
+    /**
+     * Set ID
+     * @param int $id
+     * @return Category
+     */
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId()
+    /**
+     * Get ID
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setFullPath($fullPath)
+    /**
+     * Set Full Path
+     * @param string $fullPath
+     * @return Category
+     */
+    public function setFullPath(string $fullPath): self
     {
         $this->fullPath = $fullPath;
         return $this;
     }
 
-    public function getFullPath()
+    /**
+     * Get Full Path
+     * @return string
+     */
+    public function getFullPath(): string
     {
         return $this->fullPath;
     }
 
-    public function setParentId($parentId)
+    /**
+     * Set Parent ID
+     * @param int $parentId
+     * @return Category
+     */
+    public function setParentId(int $parentId): self
     {
         $this->parentId = $parentId;
         return $this;
     }
 
-    public function getParentId()
+    /**
+     * Get Parent ID
+     * @return int
+     */
+    public function getParentId(): int
     {
         return $this->parentId;
     }
 
-    public function setBaseLevel($baseLevel)
+    /**
+     * Set Base Level
+     * @param bool $baseLevel
+     * @return Category
+     */
+    public function setBaseLevel(bool $baseLevel): self
     {
         $this->baseLevel = $baseLevel;
         return $this;
     }
 
-    public function getBaseLevel()
+    /**
+     * Get Base Level
+     * @return bool
+     */
+    public function getBaseLevel(): bool
     {
         return $this->baseLevel;
     }
 
-    public function setCode($code)
+    /**
+     * Set Code
+     * @param string $code
+     * @return Category
+     */
+    public function setCode(string $code): self
     {
         $this->code = $code;
         return $this;
     }
 
-    public function getCode()
+    /**
+     * Get Code
+     * @return string
+     */
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    public function setName($name)
+    /**
+     * Set Name
+     * @param string $name
+     * @return Category
+     */
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    public function getName()
+    /**
+     * Get Name
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setStatusId($statusId)
+    /**
+     * Set Status ID
+     * @param int $statusId
+     * @return Category
+     */
+    public function setStatusId(int $statusId): self
     {
         $this->statusId = $statusId;
         return $this;
     }
 
-    public function getStatusId()
+    /**
+     * Get Status ID
+     * @return int
+     */
+    public function getStatusId(): int
     {
         return $this->statusId;
     }
-
-
 }
-

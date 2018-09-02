@@ -1,164 +1,285 @@
 <?php
+declare(strict_types=1);
 namespace App\Model;
 
+/**
+ * Class DisplayArticle
+ * @package App\Model
+ */
 class DisplayArticle extends ModelAbstract
 {
+    /**
+     * @var string
+     */
     protected $slug;
+
+    /**
+     * @var string
+     */
     protected $title;
+
+    /**
+     * @var string
+     */
     protected $subtitle;
+
+    /**
+     * @var string
+     */
     protected $summary;
+
+    /**
+     * @var string
+     */
     protected $author;
+
+    /**
+     * @var string
+     */
     protected $url;
+
+    /**
+     * @var string
+     */
     protected $publishDate;
+
+    /**
+     * @var string
+     */
     protected $source;
+
+    /**
+     * @var string
+     */
     protected $image;
+
+    /**
+     * @var array
+     */
     protected $displayCategories;
+
+    /**
+     * @var array
+     */
     protected $keywords;
-    
-    public function setSlug($slug)
+
+    /**
+     * Set slug
+     * @param string $slug
+     * @return DisplayArticle
+     */
+    public function setSlug(string $slug): self
     {
-        if (!is_string($slug) || $slug === '') {
-            throw new ModelException('Slug must be set as a string', 500);
-        }
         $this->slug = $slug;
         return $this;
     }
-    
-    public function getSlug()
+
+    /**
+     * Get slug
+     * @return string
+     */
+    public function getSlug(): string
     {
-        if (!is_string($this->slug) || $this->slug === '') {
-            throw new ModelException('Slug must be set as a string', 500);
-        }
         return $this->slug;
     }
-    
-    public function setTitle($title)
+
+    /**
+     * Set title
+     * @param string $title
+     * @return DisplayArticle
+     */
+    public function setTitle(string $title): self
     {
-        if (!is_string($title) || $title === '') {
-            throw new ModelException('Title must be set as a string', 500);
-        }
         $this->title = $title;
         return $this;
     }
-    
-    public function getTitle()
+
+    /**
+     * Get Title
+     * @return string
+     */
+    public function getTitle(): string
     {
-        if (!is_string($this->title) || $this->title === '') {
-            throw new ModelException('Title must be set as a string', 500);
-        }
         return $this->title;
     }
-    
-    public function setSubtitle($subtitle)
+
+    /**
+     * Set subtitle
+     * @param string $subtitle
+     * @return DisplayArticle
+     */
+    public function setSubtitle(string $subtitle): self
     {
-        $this->subtitle = (string) $subtitle;
+        $this->subtitle = $subtitle;
         return $this;
     }
-    
-    public function getSubtitle()
+
+    /**
+     * Get subtitle
+     * @return string
+     */
+    public function getSubtitle(): string
     {
-        return (string) $this->subtitle;
+        return $this->subtitle;
     }
-    
-    public function setSummary($summary)
+
+    /**
+     * Set summary
+     * @param string $summary
+     * @return DisplayArticle
+     */
+    public function setSummary(string $summary): self
     {
-        if (!is_string($summary)) {
-            throw new ModelException('Summary must be set as a string', 500);
-        }
         $this->summary = $summary;
         return $this;
     }
-    
-    public function getSummary()
+
+    /**
+     * Get summary
+     * @return string
+     */
+    public function getSummary(): string
     {
-        if (!is_string($this->summary)) {
-            throw new ModelException('Summary must be set as a string', 500);
-        }
         return $this->summary;
     }
-    
-    public function setAuthor($author)
+
+    /**
+     * Set author
+     * @param string $author
+     * @return DisplayArticle
+     */
+    public function setAuthor(string $author): self
     {
-        if (!is_string($author)) {
-            throw new ModelException('Author must be set as a string', 500);
-        }
         $this->author = $author;
         return $this;
     }
-    
-    public function getAuthor()
+
+    /**
+     * Get author
+     * @return string
+     */
+    public function getAuthor(): string
     {
         return $this->author;
     }
-    
-    public function setUrl($url)
+
+    /**
+     * Set url
+     * @param string $url
+     * @return DisplayArticle
+     */
+    public function setUrl(string $url): self
     {
         $this->url = $url;
         return $this;
     }
-    
-    public function getUrl()
+
+    /**
+     * Get url
+     * @return string
+     */
+    public function getUrl(): string
     {
         return $this->url;
     }
-    
-    public function setPublishDate($publishDate)
+
+    /**
+     * Set publish date
+     * @param string $publishDate
+     * @return DisplayArticle
+     */
+    public function setPublishDate(string $publishDate): self
     {
-        if (!is_string($publishDate)) {
-            throw new Models\ModelException('Date must be a string');
-        }
         $this->publishDate = new \DateTime(str_replace('at', '', $publishDate));
         return $this;
     }
-    
-    public function getPublishDate($format = 'Y-m-d H:i:s')
+
+    /**
+     * Get publish date
+     * @param string $format
+     * @return string
+     */
+    public function getPublishDate(string $format = 'Y-m-d H:i:s'): string
     {
-        if (!($this->publishDate instanceof \DateTime)) {
-            throw new ModelException('Date must be a DateTime object');
-        }
         return $this->publishDate->format($format);
     }
-    
-    public function setSource($source)
+
+    /**
+     * Set source
+     * @param string $source
+     * @return DisplayArticle
+     */
+    public function setSource(string $source): self
     {
         $this->source = $source;
         return $this;
     }
-    
-    public function getSource()
+
+    /**
+     * Get source
+     * @return string
+     */
+    public function getSource(): string
     {
         return $this->source;
     }
-    
-    public function setImage($image)
+
+    /**
+     * Set image
+     * @param string $image
+     * @return DisplayArticle
+     */
+    public function setImage(string $image): self
     {
         $this->image = $image;
         return $this;
     }
-    
-    public function getImage()
+
+    /**
+     * Get image
+     * @return string
+     */
+    public function getImage(): string
     {
         return $this->image;
     }
-    
-    public function setDisplayCategories($displayCategories)
+
+    /**
+     * Set Display Categories
+     * @param array $displayCategories
+     * @return DisplayArticle
+     */
+    public function setDisplayCategories(array $displayCategories): self
     {
         $this->displayCategories = $displayCategories;
         return $this;
     }
-    
-    public function getDisplayCategories()
+
+    /**
+     * Get Display Categories
+     * @return array
+     */
+    public function getDisplayCategories(): array
     {
         return $this->displayCategories;
     }
-    
-    public function setKeywords($keywoods)
+
+    /**
+     * Set Keywords
+     * @param array $keywords
+     * @return DisplayArticle
+     */
+    public function setKeywords(array $keywords): self
     {
-        $this->keywords = array_filter($keywoods);
+        $this->keywords = array_filter($keywords);
         return $this;
     }
-    
-    public function getKeywords()
+
+    /**
+     * Get Keywords
+     * @return array
+     */
+    public function getKeywords(): array
     {
         return $this->keywords;
     }

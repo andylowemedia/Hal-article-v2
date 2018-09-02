@@ -13,18 +13,18 @@ use Elasticsearch\Client as ElasticsearchClient;
 class DeleteIndexCommand extends Command
 {
     private $elasticsearchClient;
-    
+
     public function setElasticsearchClient(ElasticsearchClient $elasticsearchClient) : DeleteIndexCommand
     {
         $this->elasticsearchClient = $elasticsearchClient;
         return $this;
     }
-    
+
     public function getElasticsearchclient() : ElasticsearchClient
     {
         return $this->elasticsearchClient;
     }
-    
+
     protected function configure()
     {
         $this
@@ -39,7 +39,6 @@ class DeleteIndexCommand extends Command
             ->setHelp('')
             ->addArgument('data-index', InputArgument::REQUIRED)
         ;
- 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,12 +48,12 @@ class DeleteIndexCommand extends Command
             '==========================',
             '',
         ]);
-        
+
         $client = $this->getElasticsearchclient();
-        
+
         $params = ['index' => $input->getArgument('data-index')];
         $response = $client->indices()->delete($params);
-        
+
 //            $params = [
 //                'index' => 'articles-test',
 //                'type' => 'article',
@@ -63,13 +62,11 @@ class DeleteIndexCommand extends Command
 //
 //            // Delete doc at /my_index/my_type/my_id
 //            $response = $client->delete($params);
-            
+
             print_r($response);
-            
+
             $output->writeln([
             'Index Deleted',
-        ]);
+            ]);
     }
-    
-
 }

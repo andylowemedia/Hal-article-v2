@@ -15,42 +15,41 @@ abstract class ResultSetAbstract extends ResultSet
         // its safe to get numbers from an array
         $first = current($dataSource['hits']);
         reset($dataSource['hits']);
-        
+
         $this->fieldCount = count($first);
         $this->dataSource = new ArrayIterator($dataSource['hits']);
-        
+
         $this->count = $dataSource['total'];
         $this->buffer = -1; // array's are a natural buffer
 
         return $this;
     }
-    
+
     public function current()
     {
-        if ($this->buffer === null) {
-            $this->buffer = -2; // implicitly disable buffering from here on
-        } elseif (is_array($this->buffer) && isset($this->buffer[$this->position])) {
-            return $this->buffer[$this->position];
-        }
+//        if ($this->buffer === null) {
+//            $this->buffer = -2; // implicitly disable buffering from here on
+//        } elseif (is_array($this->buffer) && isset($this->buffer[$this->position])) {
+//            return $this->buffer[$this->position];
+//        }
         $data = $this->dataSource->current();
-        if (is_array($this->buffer)) {
-            $this->buffer[$this->position] = $data;
-        }
+//        if (is_array($this->buffer)) {
+//            $this->buffer[$this->position] = $data;
+//        }
 
-        if ($this->returnType === self::TYPE_ARRAYOBJECT && is_array($data)) {
-            /** @var $ao ArrayObject */
-            $ao = clone $this->arrayObjectPrototype;
-            if ($ao instanceof ArrayObject || method_exists($ao, 'exchangeArray')) {
-                $dataSource = $data;
-                if (isset($data['_source'])) {
-                    $dataSource = $data['_source'];
-                }
-                $ao->exchangeArray($dataSource);
+//        if ($this->returnType !== self::TYPE_ARRAYOBJECT || !is_array($data)) {
+//            return $data;
+//        }
+
+        /** @var $ao ArrayObject */
+        $ao = clone $this->arrayObjectPrototype;
+        if ($ao instanceof ArrayObject || method_exists($ao, 'exchangeArray')) {
+            $dataSource = $data;
+            if (isset($data['_source'])) {
+                $dataSource = $data['_source'];
             }
-            return $ao;
+            $ao->exchangeArray($dataSource);
         }
-
-        return $data;
-
+        return $ao;
     }
 }

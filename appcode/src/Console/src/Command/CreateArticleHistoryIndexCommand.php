@@ -9,22 +9,21 @@ use Zend\Db\Sql\Sql;
 
 use Elasticsearch\Client as ElasticsearchClient;
 
-
 class CreateArticleHistoryIndexCommand extends Command
 {
     private $elasticsearchClient;
-    
+
     public function setElasticsearchClient(ElasticsearchClient $elasticsearchClient) : CreateArticleHistoryIndexCommand
     {
         $this->elasticsearchClient = $elasticsearchClient;
         return $this;
     }
-    
+
     public function getElasticsearchclient() : ElasticsearchClient
     {
         return $this->elasticsearchClient;
     }
-    
+
     protected function configure()
     {
         $this
@@ -38,32 +37,31 @@ class CreateArticleHistoryIndexCommand extends Command
             // the "--help" option
             ->setHelp('')
         ;
- 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        
+
         $output->writeln([
             'Create Elasticsearch index',
             '==========================',
             '',
         ]);
-        
-        
-        
+
+
+
         $client = $this->getElasticsearchclient();
-        
+
         $params = [
             'index' => 'article-history',
             'body' => [
-                'settings' => [ 
+                'settings' => [
                     'number_of_shards' => 1,
                     'number_of_replicas' => 0,
                 ],
-                'mappings' => [ 
-                    'article-history' => [  
+                'mappings' => [
+                    'article-history' => [
 //                        "_timestamp" => [
 //                            "enabled" => "true"
 //                        ],
@@ -86,7 +84,7 @@ class CreateArticleHistoryIndexCommand extends Command
                             ]
                         ]
                     ],
-                    'category-mapping' => [  
+                    'category-mapping' => [
                         '_source' => [ 'enabled' => true],
                         'properties' => [
                            'sourceId' => [
@@ -119,14 +117,10 @@ class CreateArticleHistoryIndexCommand extends Command
             ]
         ];
         $response = $client->indices()->create($params);
-        
+
         print_r($response);
         die();
-        
-        
     }
-    
-
 }
 
 /*
@@ -142,7 +136,7 @@ curl -XPUT 'localhost:9200/my_index/my_type/3?pretty' -H 'Content-Type: applicat
 '
 curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: application/json' -d'
 {
-  "sort": { "date": "asc"} 
+  "sort": { "date": "asc"}
 }
 '
 

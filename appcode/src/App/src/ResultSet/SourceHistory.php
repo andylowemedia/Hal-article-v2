@@ -7,4 +7,3 @@ class SourceHistory extends ResultSetAbstract
 
 
 }
-

@@ -7,4 +7,3 @@ class Category extends ResultSetAbstract
 
 
 }
-
