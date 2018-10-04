@@ -15,7 +15,7 @@ pipeline {
 
             echo "Build script"
             pwd
-            ls -lah
+            ls -lah'''
       }
     }
     stage('test') {
