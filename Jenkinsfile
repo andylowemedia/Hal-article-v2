@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-        image 'php:latest'
-        args '-p 3000:3000'
+        image '540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/php:latest'
+        args '-p 9000:9000'
     }
   }
   environment {
