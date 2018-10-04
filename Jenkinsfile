@@ -14,7 +14,7 @@ pipeline {
         sh '''#!/bin/bash
 
             echo "Build script"
-            mkdir /var/coverage/reports
+            mkdir -p /var/coverage/reports
             docker run -v /var/coverage/reports:/var/www/html/public/coverage
             cd appcode
             composer install
