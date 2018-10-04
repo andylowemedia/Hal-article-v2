@@ -16,7 +16,7 @@ pipeline {
             echo "Build script"
             cd appcode
             composer install
-            vendor/bin/phpunit
+            vendor/bin/phpunit --coverage-clover "reports/coverage.xml"
             '''
       }
     }
