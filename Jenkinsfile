@@ -25,6 +25,10 @@ pipeline {
             echo "Test script"
             cd appcode
             vendor/bin/phpunit
+
+            vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0
+            dry canRunOnFailed: true, pattern: "build/logs/pmd-cpd.xml"
+            
             '''
         step([
             $class: 'CloverPublisher',

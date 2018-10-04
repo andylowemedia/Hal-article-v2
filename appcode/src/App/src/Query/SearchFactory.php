@@ -2,7 +2,6 @@
 
 namespace App\Query;
 
-
 use Elasticsearch\Client;
 use Interop\Container\ContainerInterface;
 
