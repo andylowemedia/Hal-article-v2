@@ -1,76 +1,56 @@
 <?php
 namespace App\Query;
 
-use Elasticsearch\ClientBuilder;
+use Elasticsearch\Client;
 
 /**
- * Description of QueryAbstract
- *
- * @author andylowe
+ * Class QueryAbstract
+ * @package App\Query
  */
 abstract class QueryAbstract
 {
-    protected $hosts = [];
-
+    /**
+     * @var array
+     */
     protected $params = [];
 
+    /**
+     * @var Client
+     */
     private $client;
 
-    public function __construct(array $hosts)
-    {
-        $this->setHosts($hosts);
-    }
-
-    public function setHosts(array $hosts)
-    {
-        $this->hosts = $hosts;
-        return $this;
-    }
-
-    public function getHosts()
-    {
-        if (!is_array($this->hosts) || empty($this->hosts)) {
-            throw new \InvalidArgumentException('Hosts must be an array of IP addresses');
-        }
-        return $this->hosts;
-    }
-
-    public function setParams(array $params)
-    {
-        $this->params = $params;
-        return $this;
-    }
-
-    public function getParams()
+    public function getParams(): array
     {
         return $this->params;
     }
 
-    public function setClient($client)
+    /**
+     * Set Elasticsearch client
+     * @param Client $client
+     * @return QueryAbstract
+     */
+    public function setClient(Client $client): self
     {
         $this->client = $client;
         return $this;
     }
 
-    public function getClient()
+    /**
+     * Get Elasticsearch client
+     * @return Client
+     */
+    public function getClient(): Client
     {
         return $this->client;
     }
 
-    public function buildClient()
+    /**
+     * Build client parameters
+     * @param array $params
+     * @return QueryAbstract
+     */
+    public function buildClientParams(array $params): self
     {
-        $this->setClient(ClientBuilder::create()
-                ->setHosts($this->getHosts())
-                ->build());
-        return $this;
-    }
-
-    protected function buildClientParams(array $params)
-    {
-//        echo "<pre>";
-//        print_r($params);
-//        die;
-//
         if (!isset($params['index'])) {
             throw new \InvalidArgumentException('Index must be set');
         }
@@ -103,32 +83,31 @@ abstract class QueryAbstract
             ]
         ];
 
-        if (isset($params['date-fr'])) {
-            $params['date-fr'] = str_replace(' ', '+', $params['date-fr']);
-        }
+        $this->buildFilteringParams($params);
 
-        if (isset($params['date-to'])) {
-            $params['date-to'] = str_replace(' ', '+', $params['date-to']);
-        }
+        $this->buildSortParams($params);
 
-        if (isset($params['sort'])) {
-            if (is_array($params['sort'])) {
-                $sort = $params['sort'];
-            } else {
-                $sort = [$params['sort']];
-            }
-            $this->params['sort'] = $sort;
-        }
+        $this->buildDateParams($params);
 
+        return $this;
+    }
+
+    /**
+     * Build filtering parameters into query
+     * @param array $params
+     * @return QueryAbstract
+     */
+    private function buildFilteringParams(array $params): self
+    {
         if (isset($params['search'])) {
             $this->params['body']['query']['bool']['must'][] =
-                    [
-                        "multi_match" => [
-                            "query" => $params['search'],
-                            "type" => "phrase",
-                            "fields" => ["title^100", "content^0.5"]
-                        ]
-                    ];
+                [
+                    "multi_match" => [
+                        "query" => $params['search'],
+                        "type" => "phrase",
+                        "fields" => ["title^100", "content^0.5"]
+                    ]
+                ];
         }
 
         if (isset($params['keywords'])) {
@@ -161,29 +140,66 @@ abstract class QueryAbstract
 
         if (isset($params['article-type'])) {
             $this->params['body']['query']['bool']['must'][] =
-                        ["match_phrase" => ['articleTypeId' => $params['article-type']]];
+                ["match_phrase" => ['articleTypeId' => $params['article-type']]];
         }
 
 
         if (isset($params['sourceId']) && is_array($params['sourceId'])) {
             foreach ($params['sourceId'] as $sourceId) {
                 $this->params['body']['query']['bool']['must'][] =
-                        ["match_phrase" => ['sourceId' => $sourceId]];
+                    ["match_phrase" => ['sourceId' => $sourceId]];
             }
         }
 
         if (isset($params['category']) && is_array($params['category'])) {
             foreach ($params['category'] as $category) {
                 $this->params['body']['query']['bool']['must'][] =
-                        ["match_phrase" => ['categories' => $category]];
+                    ["match_phrase" => ['categories' => $category]];
             }
         }
 
         if (isset($params['filter']) && is_array($params['filter'])) {
             foreach ($params['filter'] as $key => $value) {
                 $this->params['body']['query']['bool']['must'][] =
-                        ["match_phrase" => [$key => $value]];
+                    ["match_phrase" => [$key => $value]];
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Build sort parameters into query
+     * @param array $params
+     * @return QueryAbstract
+     */
+    private function buildSortParams(array $params): self
+    {
+        if (isset($params['sort'])) {
+            if (is_array($params['sort'])) {
+                $sort = $params['sort'];
+            } else {
+                $sort = [$params['sort']];
+            }
+            $this->params['sort'] = $sort;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Build date parameters into query
+     * @param array $params
+     * @return QueryAbstract
+     */
+    private function buildDateParams(array $params): self
+    {
+        if (isset($params['date-fr'])) {
+            $params['date-fr'] = str_replace(' ', '+', $params['date-fr']);
+        }
+
+        if (isset($params['date-to'])) {
+            $params['date-to'] = str_replace(' ', '+', $params['date-to']);
         }
 
         if (isset($params['date-fr']) && isset($this->params['body']['query']['bool']['must'])) {
@@ -199,10 +215,6 @@ abstract class QueryAbstract
                 $this->params['body']['query']['bool']['must']["range"]["publishDate"]["lte"] = $params['date-to'];
             }
         }
-
-//        echo "<pre>";
-//        print_r($this->params);
-//        die;
 
         return $this;
     }

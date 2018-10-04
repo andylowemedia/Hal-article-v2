@@ -5,14 +5,15 @@ namespace App\Handler;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
+use App\Query\Summary;
 
 class SummaryHandler implements RequestHandlerInterface
 {
-    private $hosts;
+    private $summary;
 
-    public function __construct(array $hosts)
+    public function __construct(Summary $summary)
     {
-        $this->hosts = $hosts;
+        $this->summary = $summary;
     }
 
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
@@ -39,14 +40,13 @@ class SummaryHandler implements RequestHandlerInterface
             'page' => $from
         ];
 
-        $search = new \App\Query\Search($this->hosts);
-        $articles = $search->buildClient()->fetch($params);
+        $articles = $this->summary->fetch($params);
 
         return new JsonResponse([
-            'total' => $articles['total'],
-            'count' => count($articles['results']),
+            'total' => 0,
+            'count' => count($articles),
             'articles' => [
-                'featured' => $articles['results'],
+                'featured' => $articles,
             ]
         ]);
     }

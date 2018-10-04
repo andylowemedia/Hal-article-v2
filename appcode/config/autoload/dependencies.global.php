@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Middleware\Error\JsonErrorResponseGeneratorFactory;
+use Zend\Expressive\Middleware\ErrorResponseGenerator;
+use App\Middleware\Error\NotFoundHandler;
+use App\Middleware\Error\NotFoundHandlerFactory;
+
 return [
     // Provides application-wide services.
     // We recommend using fully-qualified class names whenever possible as
@@ -20,6 +25,8 @@ return [
         ],
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories'  => [
+            ErrorResponseGenerator::class       => JsonErrorResponseGeneratorFactory::class,
+            NotFoundHandler::class              => NotFoundHandlerFactory::class
             // Fully\Qualified\ClassName::class => Fully\Qualified\FactoryName::class,
         ],
     ],

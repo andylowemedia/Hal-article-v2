@@ -1,6 +1,7 @@
 <?php
 namespace App\Query;
 
+use App\Model\DisplayArticle as ArticleModel;
 use App\ResultSet\Article as ArticleResultSet;
 
 /**
@@ -17,8 +18,13 @@ class Summary extends QueryAbstract
 
         $client = $this->getClient();
 
-        $results = new ArticleResultSet($client->search($this->params));
+        $results = $client->search($this->getParams());
 
-        return $results->toArray();
+        $resultSet = new ArticleResultSet();
+        $resultSet
+            ->setArrayObjectPrototype(new ArticleModel)
+            ->elasticsearchInitialize($results['hits']);
+
+        return $resultSet->toArray();
     }
 }

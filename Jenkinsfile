@@ -5,7 +5,8 @@ pipeline {
       steps {
         sh '''#!/bin/bash
 
-echo "Build script"'''
+echo "Build script"
+docker-compose build --no-cache && docker-compose up -d'''
       }
     }
     stage('test') {

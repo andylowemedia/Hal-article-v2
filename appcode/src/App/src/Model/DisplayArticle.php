@@ -11,57 +11,57 @@ class DisplayArticle extends ModelAbstract
     /**
      * @var string
      */
-    protected $slug;
+    protected $slug = '';
 
     /**
      * @var string
      */
-    protected $title;
+    protected $title = '';
 
     /**
      * @var string
      */
-    protected $subtitle;
+    protected $subtitle = '';
 
     /**
      * @var string
      */
-    protected $summary;
+    protected $summary = '';
 
     /**
      * @var string
      */
-    protected $author;
+    protected $author = '';
 
     /**
      * @var string
      */
-    protected $url;
+    protected $url = '';
 
     /**
-     * @var string
+     * @var \DateTime
      */
     protected $publishDate;
 
     /**
      * @var string
      */
-    protected $source;
+    protected $source = '';
 
     /**
      * @var string
      */
-    protected $image;
+    protected $image = '';
 
     /**
      * @var array
      */
-    protected $displayCategories;
+    protected $displayCategories = [];
 
     /**
      * @var array
      */
-    protected $keywords;
+    protected $keywords = [];
 
     /**
      * Set slug
@@ -108,9 +108,9 @@ class DisplayArticle extends ModelAbstract
      * @param string $subtitle
      * @return DisplayArticle
      */
-    public function setSubtitle(string $subtitle): self
+    public function setSubtitle(?string $subtitle): self
     {
-        $this->subtitle = $subtitle;
+        $this->subtitle = (string) $subtitle;
         return $this;
     }
 

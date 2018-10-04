@@ -1,9 +1,7 @@
 #!/usr/bin/env php
 <?php
-//ini_set('memory_limit','8G');
 chdir(dirname(__DIR__));
 use Symfony\Component\Console\Application;
-use Console\Command;
 
 require 'vendor/autoload.php';
 $container = require 'config/container.php';

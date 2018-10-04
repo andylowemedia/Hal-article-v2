@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Query\Search;
+use App\Query\SearchFactory;
+use App\Query\Summary;
+use App\Query\SummaryFactory;
 use Elasticsearch\Client as ElasticsearchClient;
 
 /**
@@ -55,7 +59,10 @@ class ConfigProvider
                 Mapper\ArticleKeyword::class    => Mapper\MapperFactory::class,
                 Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
                 Mapper\SourceHistory::class     => Mapper\MapperFactory::class,
+
                 ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,
+                Summary::class                  => SummaryFactory::class,
+                Search::class                   => SearchFactory::class
             ],
 //            'abstract_factories' => [
 //                Mapper\MapperFactory::class

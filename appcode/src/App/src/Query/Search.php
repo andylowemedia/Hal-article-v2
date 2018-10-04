@@ -21,8 +21,9 @@ class Search extends QueryAbstract
         $results = $client->search($this->params);
 
         $resultSet = new ArticleResultSet();
-        $resultSet->setArrayObjectPrototype(new ArticleModel);
-        $resultSet->elasticsearchInitialize($results['hits']);
+        $resultSet
+            ->setArrayObjectPrototype(new ArticleModel)
+            ->elasticsearchInitialize($results['hits']);
 
         return [
             'results' => $resultSet->toArray(),

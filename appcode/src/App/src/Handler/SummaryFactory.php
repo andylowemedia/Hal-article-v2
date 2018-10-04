@@ -2,14 +2,15 @@
 
 namespace App\Handler;
 
+use App\Query\Summary;
 use Interop\Container\ContainerInterface;
 
 class SummaryFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        $config = $container->get('config');
+        $client = $container->get(Summary::class);
 
-        return new SummaryHandler($config['elasticsearch']['hosts']);
+        return new SummaryHandler($client);
     }
 }

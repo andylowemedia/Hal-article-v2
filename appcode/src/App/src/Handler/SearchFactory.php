@@ -2,14 +2,15 @@
 
 namespace App\Handler;
 
+use App\Query\Search;
 use Interop\Container\ContainerInterface;
 
 class SearchFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        $config = $container->get('config');
+        $client = $container->get(Search::class);
 
-        return new SearchHandler($config['elasticsearch']['hosts']);
+        return new SearchHandler($client);
     }
 }

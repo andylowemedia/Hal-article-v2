@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use App\Query\Search;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
@@ -9,14 +10,14 @@ use Zend\Diactoros\Response\JsonResponse;
 class CategoryHandler implements RequestHandlerInterface
 {
     private $apiConfig = [];
-    private $hosts = [];
+    private $searchClient;
     private $response = [];
     private $topLevel = false;
 
-    public function __construct(array $config, array $hosts)
+    public function __construct(array $config, Search $search)
     {
         $this->apiConfig = $config;
-        $this->hosts = $hosts;
+        $this->search = $search;
     }
 
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
@@ -60,7 +61,7 @@ class CategoryHandler implements RequestHandlerInterface
     {
         $params = $request->getQueryParams();
 
-        $search = new \App\Query\Search($this->hosts);
+        $search = $this->search;
 
 
         $page = isset($params['page']) ? $params['page'] : 1;
@@ -74,7 +75,7 @@ class CategoryHandler implements RequestHandlerInterface
         }
         $params['page'] = $from;
 
-        $data = $search->buildClient()->fetch($params);
+        $data = $search->fetch($params);
 
         $results = [];
 

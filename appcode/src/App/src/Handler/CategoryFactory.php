@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use App\Query\Search;
 use Interop\Container\ContainerInterface;
 
 class CategoryFactory
@@ -10,6 +11,8 @@ class CategoryFactory
     {
         $config = $container->get('config');
 
-        return new CategoryHandler($config['api'], $config['elasticsearch']['hosts']);
+        $search = $container->get(Search::class);
+
+        return new CategoryHandler($config['api'], $search);
     }
 }
