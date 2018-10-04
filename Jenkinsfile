@@ -18,7 +18,7 @@ pipeline {
             docker run -v /var/coverage/reports:/var/www/html/public/coverage
             cd appcode
             composer install
-            vendor/bin/phpunit --coverage-clover "coverage/coverage.xml"
+            vendor/bin/phpunit --coverage-clover "/var/www/html/public/coverage/coverage.xml"
             '''
         step([
             $class: 'CloverPublisher',
