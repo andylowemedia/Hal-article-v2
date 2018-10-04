@@ -23,6 +23,7 @@
     </filter>
     <logging>
         <log type="coverage-html" target="./public/coverage" />
+        <log type="coverage-clover" target="./public/coverage/coverage.xml"/>
     </logging>
 
 </phpunit>
