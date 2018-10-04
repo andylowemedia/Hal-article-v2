@@ -41,19 +41,7 @@ pipeline {
       }
     }
     stage('deploy') {
-
-      steps {
-        sh '''#!/bin/bash
-
-        echo "deploy script"
-
-        docker build -t low-emedia/hal-article .
-
-        docker tag low-emedia/hal-article:latest 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
-
-        docker push 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
-        '''
-      }
+      docker.build('latest');
     }
   }
 }
