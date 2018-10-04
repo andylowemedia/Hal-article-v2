@@ -7,6 +7,7 @@ pipeline {
 
 echo "Build script"
 pwd
+ls -lah
 docker-compose build --no-cache && docker-compose up -d'''
       }
     }
