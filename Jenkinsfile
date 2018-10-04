@@ -1,14 +1,21 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+        image 'php:latest'
+        args '-p 3000:3000'
+    }
+  }
+  environment {
+    CI = 'true'
+  }
   stages {
     stage('build') {
       steps {
         sh '''#!/bin/bash
 
-echo "Build script"
-pwd
-ls -lah
-docker-compose build --no-cache && docker-compose up -d'''
+            echo "Build script"
+            pwd
+            ls -lah
       }
     }
     stage('test') {
