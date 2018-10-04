@@ -16,7 +16,7 @@ pipeline {
             echo "Build script"
             cd appcode
             composer install
-            vendor/bin/phpunit --coverage-clover "/var/www/html/public/coverage/coverage.xml"
+            vendor/bin/phpunit
             '''
         step([
             $class: 'CloverPublisher',
