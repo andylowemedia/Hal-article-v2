@@ -14,8 +14,8 @@ pipeline {
         sh '''#!/bin/bash
 
             echo "Build script"
-            pwd
-            ls -lah'''
+            composer -V
+            '''
       }
     }
     stage('test') {
