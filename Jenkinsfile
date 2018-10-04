@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
         image '540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/php:latest'
-        args '-p 9000:9000  -v /var/coverage/reports:/var/www/html/public/coverage'
+        args '-p 9000:9000  -v /var/coverage/reports:/var/www/html/public/coverage -td'
     }
   }
   environment {
