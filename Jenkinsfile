@@ -20,7 +20,7 @@ pipeline {
             '''
         step([
             $class: 'CloverPublisher',
-            cloverReportDir: '/var/jenkins_home/workspace/Hal-article-v2_master-MFE27IPE4OFEQG3PAJLPWKELSBSUKMXDAH3E6LEH5FRKYRARS3SQ/appcode/public/coverage',
+            cloverReportDir: 'appcode/public/coverage',
             cloverReportFileName: 'coverage.xml',
             healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
             unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
