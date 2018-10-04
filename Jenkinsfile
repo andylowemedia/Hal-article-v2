@@ -28,7 +28,7 @@ pipeline {
 
             vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0
             dry canRunOnFailed: true, pattern: "build/logs/pmd-cpd.xml"
-            
+
             '''
         step([
             $class: 'CloverPublisher',
@@ -41,10 +41,18 @@ pipeline {
       }
     }
     stage('deploy') {
+
       steps {
         sh '''#!/bin/bash
 
-echo "deploy script"'''
+        echo "deploy script"
+
+        docker build -t low-emedia/hal-article .
+
+        docker tag low-emedia/hal-article:latest 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
+
+        docker push 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
+        '''
       }
     }
   }
