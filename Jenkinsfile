@@ -14,15 +14,13 @@ pipeline {
         sh '''#!/bin/bash
 
             echo "Build script"
-            mkdir -p /var/coverage/reports
-            docker run -v /var/coverage/reports:/var/www/html/public/coverage
             cd appcode
             composer install
             vendor/bin/phpunit --coverage-clover "/var/www/html/public/coverage/coverage.xml"
             '''
         step([
             $class: 'CloverPublisher',
-            cloverReportDir: '/var/coverage/reports',
+            cloverReportDir: '/var/www/html/public/coverage',
             cloverReportFileName: 'coverage.xml',
             healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
             unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
