@@ -14,7 +14,9 @@ pipeline {
         sh '''#!/bin/bash
 
             echo "Build script"
-            composer -V
+            cd appcode
+            composer install
+            vendor/bin/phpunit
             '''
       }
     }
