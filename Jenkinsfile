@@ -41,11 +41,11 @@ pipeline {
       }
     }
     stage('deploy') {
+      steps {
       dockerfile {
         filename 'Dockerfile'
         additionalBuildArgs  '-t low-emedia/hal-article .'
       }
-      steps {
         sh '''#!/bin/bash
 
         echo "deploy script"
