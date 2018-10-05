@@ -1,29 +1,16 @@
 pipeline {
-  agent {
-    docker {
-        image '540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/php:latest'
-        args '-p 9000:9000'
-    }
-  }
+  agent none
   environment {
     CI = 'true'
   }
   stages {
-    stage('setup') {
-      steps {
-        sh '''#!/bin/bash
-
-            echo "Setup script"
-            cd appcode
-            composer install
-            '''
-      }
-    }
     stage('test') {
+      agent { dockerfile true }
       steps {
         sh '''#!/bin/bash
             echo "Test script"
             cd appcode
+            composer install
             vendor/bin/phpunit
 
             vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0
@@ -41,18 +28,16 @@ pipeline {
       }
     }
     stage('build') {
-        agent {
-          dockerfile {
-            filename 'Dockerfile'
-            label 'low-emedia/hal-article'
-          }
+        agent any
+        steps {
+            echo "Build script"
+            script {
+                    docker.build("low-emedia/hal-article")
+                    docker.withRegistry('https://540688370389.dkr.ecr.eu-west-1.amazonaws.com', 'ecr:eu-west-1:aws-lowemedia') {
+                        docker.image("low-emedia/hal-article").push('latest')
+                    }
+            }
         }
-      steps {
-        sh '''#!/bin/bash
-
-        echo "deploy script"
-        '''
-      }
     }
   }
 }
