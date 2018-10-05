@@ -41,12 +41,16 @@ pipeline {
       }
     }
     stage('deploy') {
-
+      dockerfile {
+        filename 'Dockerfile'
+        additionalBuildArgs  '-t low-emedia/hal-article .'
+      }
       steps {
         sh '''#!/bin/bash
 
         echo "deploy script"
         echo "Build Image"
+        docker -
         docker build -t low-emedia/hal-article .
         echo "Tag Image"
         docker tag low-emedia/hal-article:latest 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
