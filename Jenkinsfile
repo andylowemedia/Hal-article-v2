@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh '''#!/bin/bash
 
-            echo "Build script"
+            echo "Setup script"
             cd appcode
             composer install
             '''
@@ -40,22 +40,17 @@ pipeline {
         ])
       }
     }
-    stage('deploy') {
+    stage('build') {
+        agent {
+          dockerfile {
+            filename 'Dockerfile'
+            additionalBuildArgs  '-t low-emedia/hal-article .'
+          }
+        }
       steps {
-      dockerfile {
-        filename 'Dockerfile'
-        additionalBuildArgs  '-t low-emedia/hal-article .'
-      }
         sh '''#!/bin/bash
 
         echo "deploy script"
-        echo "Build Image"
-        docker -
-        docker build -t low-emedia/hal-article .
-        echo "Tag Image"
-        docker tag low-emedia/hal-article:latest 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
-        echo "Push Image"
-        docker push 540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:latest
         '''
       }
     }
