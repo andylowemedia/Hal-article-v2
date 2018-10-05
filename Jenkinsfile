@@ -44,7 +44,7 @@ pipeline {
         agent {
           dockerfile {
             filename 'Dockerfile'
-            additionalBuildArgs  '-t low-emedia/hal-article .'
+            label 'low-emedia/hal-article'
           }
         }
       steps {
