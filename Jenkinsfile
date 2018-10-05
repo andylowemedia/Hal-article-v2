@@ -27,14 +27,19 @@ pipeline {
         ])
       }
     }
+
+    def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+
     stage('build') {
+
+
         agent any
         steps {
             echo "Build script"
             script {
-                    docker.build("low-emedia/hal-article")
+                    docker.build("low-emedia/hal-article:${tag}")
                     docker.withRegistry('https://540688370389.dkr.ecr.eu-west-1.amazonaws.com', 'ecr:eu-west-1:aws-lowemedia') {
-                        docker.image("low-emedia/hal-article").push('latest')
+                        docker.image("low-emedia/hal-article").push(tag)
                     }
             }
         }
