@@ -31,7 +31,12 @@ pipeline {
     stage('build') {
         agent any
         steps {
+            sh '''#!/bin/bash
             echo "Build script"
+            cd appcode
+            composer install
+            '''
+            
             script {
                     def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
 
