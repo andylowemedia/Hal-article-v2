@@ -29,7 +29,7 @@ pipeline {
     }
 
     stage('build') {
-        agent { dockerfile true }
+        agent any
         steps {
             echo "Build script"
             script {

@@ -4,4 +4,6 @@ COPY /appcode /var/www/html
 
 VOLUME /var/www/html
 
+RUN composer install --no-interaction --verbose
+
 CMD ["/usr/local/bin/run.sh"];
