@@ -27,7 +27,7 @@ return [
     ],
     'elasticsearch' => [
         'hosts' => [
-            getenv('ELASTICSEARCH_ARTICLE_HOST'),
+//            getenv('ELASTICSEARCH_ARTICLE_HOST'),
             '10.211.55.29:9200'
 //            'vpc-the-hal-project-dkvpkqeip7fitqat3ke5fsrz64.eu-west-1.es.amazonaws.com:80'
         ],

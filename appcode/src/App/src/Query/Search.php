@@ -20,13 +20,18 @@ class Search extends QueryAbstract
 
         $results = $client->search($this->params);
 
-        $resultSet = new ArticleResultSet();
-        $resultSet
-            ->setArrayObjectPrototype(new ArticleModel)
-            ->elasticsearchInitialize($results['hits']);
 
+        if (empty($results['hits']['hits'])) {
+            $data = [];
+        } else {
+            $resultSet = new ArticleResultSet();
+            $resultSet
+                ->setArrayObjectPrototype(new ArticleModel)
+                ->elasticsearchInitialize($results['hits']);
+            $data = $resultSet->toArray();
+        }
         return [
-            'results' => $resultSet->toArray(),
+            'results' => $data,
             'total' => $results['hits']['total'],
         ];
     }

@@ -86,7 +86,7 @@ class Article extends ModelAbstract
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     /**

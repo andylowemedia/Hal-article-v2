@@ -16,9 +16,7 @@ class Summary extends QueryAbstract
     {
         $this->buildClientParams($params);
 
-        $client = $this->getClient();
-
-        $results = $client->search($this->getParams());
+        $results = $this->getClient()->search($this->getParams());
 
         $resultSet = new ArticleResultSet();
         $resultSet

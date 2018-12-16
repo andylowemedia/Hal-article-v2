@@ -142,7 +142,7 @@ class AddHandler implements RequestHandlerInterface
         $featuredSites = $this->mapToFeaturedArticleModel($data);
 
         $connection = $this->dbAdapter->driver->getConnection();
-        $connection->beginTransHandler();
+        $connection->beginTransaction();
 
         try {
             $this->saveDatabase($article, $images, $media, $categories, $keywords, $featuredSites);
@@ -431,7 +431,7 @@ class AddHandler implements RequestHandlerInterface
         $client = new \GuzzleHttp\Client();
         $res = $client->request('GET', $this->apiConfig['category'] . "/list?all-categories=true");
 
-        $data = json_decode($res->getBody(), true);
+        $data = \json_decode((string) $res->getBody(), true);
 
         foreach ($data['categories'] as $row) {
             $this->systemCategories[$row['code']] = $row['id'];

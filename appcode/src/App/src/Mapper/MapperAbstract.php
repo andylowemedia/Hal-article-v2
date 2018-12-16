@@ -174,12 +174,12 @@ abstract class MapperAbstract
         if ($id == 0) {
             unset($data['id']);
             $this->tableGateway->insert($data);
-            $result = $this->tableGateway->getLastInsertValue();
+            $result = (int) $this->tableGateway->getLastInsertValue();
             $model->id = $result;
         } else {
-            $result = $this->tableGateway->update($data, ['id' => $id]);
+            $result = (int) $this->tableGateway->update($data, ['id' => $id]);
         }
-        return (int) $result;
+        return $result;
     }
 
     /**
