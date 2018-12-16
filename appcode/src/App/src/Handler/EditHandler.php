@@ -320,7 +320,7 @@ class EditHandler implements RequestHandlerInterface
         $client = new \GuzzleHttp\Client();
         $res = $client->request('GET', $this->apiConfig['category'] . "/list?all-categories=true");
 
-        $data = json_decode($res->getBody(), true);
+        $data = \json_decode($res->getBody()->getContents(), true);
 
         foreach ($data['categories'] as $row) {
             $this->systemCategories[$row['code']] = $row['id'];

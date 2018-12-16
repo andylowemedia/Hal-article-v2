@@ -17,12 +17,12 @@ services:
       
   php:
     container_name: 'hal-article-php'
-    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:0.4.0"
-#    build:
-#     context: .
-#     dockerfile: Dockerfile
+#    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:0.4.0"
+    build:
+     context: .
+     dockerfile: Dockerfile
     environment:
-      APP_ENV: 'production'
+      APP_ENV: 'development'
       COMPOSER_INSTALL: 'true'
 
       DB_ARTICLE_HOST: ''

@@ -40,7 +40,7 @@ class CategoryHandler implements RequestHandlerInterface
         $client = new \GuzzleHttp\Client();
         $res = $client->request('GET', $this->apiConfig['category'] . '/category/code/' . $request->getAttribute('slug'));
 
-        $data = json_decode($res->getBody());
+        $data = \json_decode($res->getBody()->getContents());
 
         if ((!isset($params['group']) || $params['group'] !== 'true')
                 && $this->topLevel === false

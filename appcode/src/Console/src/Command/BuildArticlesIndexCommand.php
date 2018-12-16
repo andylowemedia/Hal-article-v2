@@ -80,7 +80,7 @@ class BuildArticlesIndexCommand extends Command
         $guzzleClient = new \GuzzleHttp\Client();
         $res = $guzzleClient->request('GET', $this->getApiConfig()['category'] . "/list?all-categories=true");
 
-        $categoryData = json_decode($res->getBody());
+        $categoryData = \json_decode($res->getBody()->getContents());
 
         $fullCategories = [];
         foreach ($categoryData->categories as $categoryRow) {
