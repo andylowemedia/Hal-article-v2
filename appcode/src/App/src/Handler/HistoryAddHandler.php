@@ -30,7 +30,7 @@ class HistoryAddHandler implements RequestHandlerInterface
         $client = $this->elasticsearchClient;
 
         $connection = $this->dbAdapter->driver->getConnection();
-        $connection->beginTransHandler();
+        $connection->beginTransaction();
 
         try {
             $sourceHistory = new SourceHistoryModel;
