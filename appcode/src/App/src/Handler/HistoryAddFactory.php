@@ -3,16 +3,16 @@ namespace App\Handler;
 
 use Interop\Container\ContainerInterface;
 use App\Mapper\SourceHistory as SourceHistoryMapper;
-use Elasticsearch\Client as ElasticsearchClient;
-use Zend\Db\Adapter\Adapter;
 
 class HistoryAddFactory
 {
     public function __invoke(ContainerInterface $container)
     {
+        $config = $container->get('config');
+
         return new HistoryAddHandler(
             $container->get(SourceHistoryMapper::class),
-            $container->get(ElasticsearchClient::class),
+            $config['elasticsearch']['hosts'],
             $container->get('ArticlesDbAdapter')
         );
     }

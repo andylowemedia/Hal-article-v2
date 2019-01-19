@@ -330,7 +330,7 @@ class AddHandler implements RequestHandlerInterface
             foreach ($data['categories'] as $categoryCode) {
                 if (isset($this->systemCategories[$categoryCode])) {
                     $categories[] = new ArticleCategoryModel([
-                        'categoryId'  => $this->systemCategories[$categoryCode],
+                        'categoryId'  => (int) $this->systemCategories[$categoryCode],
                     ]);
                 }
             }

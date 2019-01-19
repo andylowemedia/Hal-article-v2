@@ -8,26 +8,29 @@ use Zend\Diactoros\Response\JsonResponse;
 use App\Mapper\SourceHistory as SourceHistoryMapper;
 use App\Model\SourceHistory as SourceHistoryModel;
 
-use Elasticsearch\Client as ElasticsearchClient;
+use Elasticsearch\ClientBuilder;
 use Zend\Db\Adapter\Adapter;
 
 class HistoryAddHandler implements RequestHandlerInterface
 {
     private $sourceHistoryMapper;
-    private $elasticsearchClient;
+    private $hosts;
     private $dbAdapter;
 
-    public function __construct(SourceHistoryMapper $sourceHistoryMapper, ElasticsearchClient $elasticsearchClient, Adapter $dbAdapter)
+    public function __construct(SourceHistoryMapper $sourceHistoryMapper, array $hosts, Adapter $dbAdapter)
     {
         $this->sourceHistoryMapper  = $sourceHistoryMapper;
-        $this->elasticsearchClient  = $elasticsearchClient;
+        $this->hosts                = $hosts;
         $this->dbAdapter            = $dbAdapter;
     }
 
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
         $data = $request->getParsedBody();
-        $client = $this->elasticsearchClient;
+
+        $client = ClientBuilder::create()
+            ->setHosts($this->hosts)
+            ->build();
 
         $connection = $this->dbAdapter->driver->getConnection();
         $connection->beginTransaction();
