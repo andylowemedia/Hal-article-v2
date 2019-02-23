@@ -21,9 +21,9 @@ pipeline {
             $class: 'CloverPublisher',
             cloverReportDir: 'appcode/public/coverage',
             cloverReportFileName: 'coverage.xml',
-            healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
-            unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-            failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+            healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100], // optional, default is: method=70, conditional=80, statement=80
+            unhealthyTarget: [methodCoverage: 90, conditionalCoverage: 90, statementCoverage: 90], // optional, default is none
+            failingTarget: [methodCoverage: 80, conditionalCoverage: 80, statementCoverage: 80]     // optional, default is none
         ])
       }
     }

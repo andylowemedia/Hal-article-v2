@@ -278,12 +278,12 @@ class Article extends ModelAbstract
 
     /**
      * Sets source ID
-     * @param int $sourceId
+     * @param $sourceId
      * @return Article
      */
-    public function setSourceId(int $sourceId): self
+    public function setSourceId($sourceId): self
     {
-        $this->sourceId = $sourceId;
+        $this->sourceId = (int) $sourceId;
         return $this;
     }
 
@@ -298,12 +298,12 @@ class Article extends ModelAbstract
 
     /**
      * Sets article type ID
-     * @param int $articleTypeId
+     * @param $articleTypeId
      * @return Article
      */
-    public function setArticleTypeId(int $articleTypeId): self
+    public function setArticleTypeId($articleTypeId): self
     {
-        $this->articleTypeId = $articleTypeId;
+        $this->articleTypeId = (int) $articleTypeId;
         return $this;
     }
 
@@ -364,12 +364,12 @@ class Article extends ModelAbstract
 
     /**
      * Sets status ID
-     * @param int $statusId
+     * @param $statusId
      * @return Article
      */
-    public function setStatusId(int $statusId): self
+    public function setStatusId($statusId): self
     {
-        $this->statusId = $statusId;
+        $this->statusId = (int) $statusId;
         return $this;
     }
 

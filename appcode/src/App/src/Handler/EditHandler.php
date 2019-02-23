@@ -29,6 +29,7 @@ use Elasticsearch\ClientBuilder;
 
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\JsonResponse;
 
 class EditHandler implements RequestHandlerInterface
@@ -59,16 +60,14 @@ class EditHandler implements RequestHandlerInterface
         $this->featuredSites            = $featuredSites;
     }
 
-    public function handle(ServerRequestInterface $request) : JsonResponse
+    public function handle(ServerRequestInterface $request) : ResponseInterface
     {
         $data = \json_decode($request->getBody()->getContents(), true);
 
         $this->fetchSources();
         $this->fetchCategories();
 
-        $id = $data['id'];
-
-        $article = $this->articleMapper->find($id);
+        $article = $this->articleMapper->find($data['id']);
 
         $this->articleImageMapper->deleteByParams(['article_id' => $article->id]);
         $this->articleMediaMapper->deleteByParams(['article_id' => $article->id]);
@@ -90,7 +89,7 @@ class EditHandler implements RequestHandlerInterface
         $this->fetchCategories();
 
         $connection = $this->dbAdapter->driver->getConnection();
-        $connection->beginTransHandler();
+        $connection->beginTransaction();
 
         try {
             $this->saveDatabase($article, $images, $media, $categories, $keywords, $featuredSites);

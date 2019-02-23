@@ -25,10 +25,10 @@ class ArticleCategory extends ModelAbstract
 
     /**
      * Set ID
-     * @param int $id
+     * @param $id
      * @return ArticleCategory
      */
-    public function setId(int $id): self
+    public function setId($id): self
     {
         $this->id = $id;
         return $this;
@@ -45,12 +45,12 @@ class ArticleCategory extends ModelAbstract
 
     /**
      * Set article ID
-     * @param int $articleId
+     * @param $articleId
      * @return ArticleCategory
      */
-    public function setArticleId(int $articleId): self
+    public function setArticleId($articleId): self
     {
-        $this->articleId = $articleId;
+        $this->articleId = (int) $articleId;
         return $this;
     }
 
@@ -65,12 +65,12 @@ class ArticleCategory extends ModelAbstract
 
     /**
      * Set Category ID
-     * @param int $categoryId
+     * @param $categoryId
      * @return ArticleCategory
      */
-    public function setCategoryId(int $categoryId): self
+    public function setCategoryId($categoryId): self
     {
-        $this->categoryId = $categoryId;
+        $this->categoryId = (int) $categoryId;
         return $this;
     }
 
