@@ -11,7 +11,7 @@ pipeline {
             echo "Test script"
             cd appcode
             composer install
-            vendor/bin/phpunit
+            vendor/bin/phpunit . || exit 0
 
             vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0
             dry canRunOnFailed: true, pattern: "build/logs/pmd-cpd.xml"
@@ -21,10 +21,11 @@ pipeline {
             $class: 'CloverPublisher',
             cloverReportDir: 'appcode/public/coverage',
             cloverReportFileName: 'coverage.xml',
-            healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100], // optional, default is: method=70, conditional=80, statement=80
-            unhealthyTarget: [methodCoverage: 90, conditionalCoverage: 90, statementCoverage: 90], // optional, default is none
-            failingTarget: [methodCoverage: 80, conditionalCoverage: 80, statementCoverage: 80]     // optional, default is none
+            healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100],
+            unhealthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100],
+            failingTarget: [methodCoverage: 90, conditionalCoverage: 90, statementCoverage: 100]
         ])
+
       }
     }
 
