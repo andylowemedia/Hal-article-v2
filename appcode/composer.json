@@ -7,7 +7,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "elasticsearch/elasticsearch": "^5.2",
         "guzzlehttp/guzzle": "^6.3",
         "http-interop/http-middleware": "^0.4.1",
