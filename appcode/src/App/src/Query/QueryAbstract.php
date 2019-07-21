@@ -59,9 +59,9 @@ abstract class QueryAbstract
             throw new \InvalidArgumentException('Type must be set');
         }
 
-        $size = isset($params['size']) ? $params['size'] : 100;
+        $size = isset($params['size']) ? $params['size'] : 102;
 
-        $from = isset($params['page']) ? ($params['page'] - 1) : 0;
+        $from = isset($params['page']) ? ($params['page']) : 0;
         if ($from < 0) {
             $from = 0;
         }
@@ -73,7 +73,18 @@ abstract class QueryAbstract
             'from' => $from,
             'body' => [
                 '_source' => [
-                    'slug', 'title', 'subtitle', 'summary', 'image', 'publishDate', 'author', 'source', 'categories', 'displayCategories', 'keywords', 'url'
+                    'slug',
+                    'title',
+                    'subtitle',
+                    'summary',
+                    'image',
+                    'publishDate',
+                    'author',
+                    'source',
+                    'categories',
+                    'displayCategories',
+                    'keywords',
+                    'url'
                 ],
                 'track_scores' => true,
                 "min_score" => 1,

@@ -38,7 +38,10 @@ class CategoryHandler implements RequestHandlerInterface
         $this->response['totalCount'] = 0;
 
         $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', $this->apiConfig['category'] . '/category/code/' . $request->getAttribute('slug'));
+        $res = $client->request(
+            'GET',
+            $this->apiConfig['category'] . '/category/code/' . $request->getAttribute('slug')
+        );
 
         $data = \json_decode($res->getBody()->getContents());
 

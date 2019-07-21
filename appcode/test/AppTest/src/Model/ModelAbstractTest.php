@@ -27,21 +27,17 @@ class ModelAbstractTest extends TestCase
         $model->id;
     }
 
-    /**
-     * @expectedException \App\Model\ModelException
-     */
     public function testSetMagicMethodThrowExceptionWhenMethodDoesNotExists()
     {
+        $this->expectException(\App\Model\ModelException::class);
         $model = $this->getMockBuilder(ModelAbstract::class)
             ->getMockForAbstractClass();
         $model->id = 1;
     }
 
-    /**
-     * @expectedException \App\Model\ModelException
-     */
     public function testGetMagicMethodThrowExceptionWhenMethodDoesNotExists()
     {
+        $this->expectException(\App\Model\ModelException::class);
         $model = $this->getMockBuilder(ModelAbstract::class)
             ->getMockForAbstractClass();
         $model->id;

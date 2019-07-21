@@ -51,22 +51,22 @@ class DeleteIndexCommand extends Command
 
         $client = $this->getElasticsearchclient();
 
-        $params = ['index' => $input->getArgument('data-index')];
+//        $params = ['index' => $input->getArgument('data-index')];
+//
+//        $response = $client->indices()->delete($params);
+
+
+        $params = [
+            'index' => 'articles',
+        ];
+
+        // Delete doc at /my_index/my_type/my_id
         $response = $client->indices()->delete($params);
 
-//            $params = [
-//                'index' => 'articles-test',
-//                'type' => 'article',
-//                'id' => '618700'
-//            ];
-//
-//            // Delete doc at /my_index/my_type/my_id
-//            $response = $client->delete($params);
+        print_r($response);
 
-            print_r($response);
-
-            $output->writeln([
-            'Index Deleted',
-            ]);
+        $output->writeln([
+        'Index Deleted',
+        ]);
     }
 }

@@ -10,7 +10,7 @@ class FeaturedArticleTest extends TestCase
 {
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -116,12 +116,12 @@ class BuildArticlesIndexCommand extends Command
                 ;
 
         $featuredArticlesSelect = clone $sql->select()
-                ->columns(['featured' => new Expression('IF (`id`, true, false)')])
+                ->columns(['featured' => new Expression('IF (id, true, false)')])
                 ->from('featured_articles')
                 ->where([
                     'featured_articles.article_id = articles.id'
                 ])
-                ->limit(1)
+//                ->limit(1)
                 ;
 
         $select = $sql->select()
@@ -146,12 +146,12 @@ class BuildArticlesIndexCommand extends Command
                 ])
                 ->from('articles')
                 ->where([
-//                    'status_id = 2',
+                    'status_id = 2',
 //                    'articles.id' => 769736
                 ])
                 ->order('date DESC')
+            ->limit(10000)
                 ;
-
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();
 

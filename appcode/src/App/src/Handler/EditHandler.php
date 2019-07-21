@@ -46,8 +46,18 @@ class EditHandler implements RequestHandlerInterface
     private $featuredSites;
     private $sources = [];
 
-    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleMediaMapper $articleMediaMapper, ArticleCategoryMapper $articleCategoryMapper, ArticleKeywordMapper $articleKeywordMapper, FeaturedArticleMapper $featuredArticleMapper)
-    {
+    public function __construct(
+        array $hosts,
+        array $apiConfig,
+        array $featuredSites,
+        Adapter $dbAdapter,
+        ArticleMapper $articleMapper,
+        ArticleImageMapper $articleImageMapper,
+        ArticleMediaMapper $articleMediaMapper,
+        ArticleCategoryMapper $articleCategoryMapper,
+        ArticleKeywordMapper $articleKeywordMapper,
+        FeaturedArticleMapper $featuredArticleMapper
+    ) {
         $this->apiConfig                = $apiConfig;
         $this->hosts                    = $hosts;
         $this->dbAdapter                = $dbAdapter;
@@ -113,8 +123,14 @@ class EditHandler implements RequestHandlerInterface
         return new JsonResponse($responseData, $responseCode);
     }
 
-    private function saveElasticsearch(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredSites)
-    {
+    private function saveElasticsearch(
+        ArticleModel $article,
+        array $images,
+        array $media,
+        array $categories,
+        array $keywords,
+        array $featuredSites
+    ) {
         $client = ClientBuilder::create()
                 ->setHosts($this->hosts)
                 ->build();
@@ -282,8 +298,14 @@ class EditHandler implements RequestHandlerInterface
         return $featured;
     }
 
-    private function saveDatabase(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredArticles)
-    {
+    private function saveDatabase(
+        ArticleModel $article,
+        array $images,
+        array $media,
+        array $categories,
+        array $keywords,
+        array $featuredArticles
+    ) {
         $this->articleMapper->save($article);
 
         foreach ($images as $image) {
@@ -323,7 +345,11 @@ class EditHandler implements RequestHandlerInterface
 
         foreach ($data['categories'] as $row) {
             $this->systemCategories[$row['code']] = $row['id'];
-            $this->categories[$row['id']] = ['code' => $row['code'], 'name' => $row['name'], 'parentId' => $row['parentId']];
+            $this->categories[$row['id']] = [
+                'code' => $row['code'],
+                'name' => $row['name'],
+                'parentId' => $row['parentId']
+            ];
         }
 
         return $this;

@@ -102,8 +102,19 @@ class AddHandler implements RequestHandlerInterface
      * @param ArticleKeywordMapper $articleKeywordMapper
      * @param FeaturedArticleMapper $featuredArticleMapper
      */
-    public function __construct(array $hosts, array $apiConfig, array $featuredSites, Adapter $dbAdapter, ArticleMapper $articleMapper, ArticleImageMapper $articleImageMapper, ArticleMediaMapper $articleMediaMapper, ArticleCategoryMapper $articleCategoryMapper, ArticleKeywordMapper $articleKeywordMapper, FeaturedArticleMapper $featuredArticleMapper)
-    {
+    public function __construct(
+        array $hosts,
+        array $apiConfig,
+        array $featuredSites,
+        Adapter $dbAdapter,
+        ArticleMapper $articleMapper,
+        ArticleImageMapper $articleImageMapper,
+        ArticleMediaMapper $articleMediaMapper,
+        ArticleCategoryMapper $articleCategoryMapper,
+        ArticleKeywordMapper $articleKeywordMapper,
+        FeaturedArticleMapper $featuredArticleMapper
+    ) {
+
         $this->apiConfig                = $apiConfig;
         $this->hosts                    = $hosts;
         $this->dbAdapter                = $dbAdapter;
@@ -177,8 +188,14 @@ class AddHandler implements RequestHandlerInterface
      * @return AddHandler
      * @throws \App\Model\ModelException
      */
-    private function saveElasticsearch(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredSites): self
-    {
+    private function saveElasticsearch(
+        ArticleModel $article,
+        array $images,
+        array $media,
+        array $categories,
+        array $keywords,
+        array $featuredSites
+    ): self {
         $client = ClientBuilder::create()
                 ->setHosts($this->hosts)
                 ->build();
@@ -389,8 +406,14 @@ class AddHandler implements RequestHandlerInterface
      * @return AddHandler
      * @throws \App\Mapper\MapperException
      */
-    private function saveDatabase(ArticleModel $article, array $images, array $media, array $categories, array $keywords, array $featuredArticles): self
-    {
+    private function saveDatabase(
+        ArticleModel $article,
+        array $images,
+        array $media,
+        array $categories,
+        array $keywords,
+        array $featuredArticles
+    ): self {
         $this->articleMapper->save($article);
 
         foreach ($images as $image) {
@@ -435,7 +458,11 @@ class AddHandler implements RequestHandlerInterface
 
         foreach ($data['categories'] as $row) {
             $this->systemCategories[$row['code']] = $row['id'];
-            $this->categories[$row['id']] = ['code' => $row['code'], 'name' => $row['name'], 'parentId' => $row['parentId']];
+            $this->categories[$row['id']] = [
+                'code' => $row['code'],
+                'name' => $row['name'],
+                'parentId' => $row['parentId']
+            ];
         }
 
         return $this;

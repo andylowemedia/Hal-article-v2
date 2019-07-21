@@ -16,7 +16,7 @@ abstract class ResultSetAbstract extends ResultSet
         $first = current($dataSource['hits']);
         reset($dataSource['hits']);
 
-        $this->fieldCount = count($first);
+        $this->fieldCount = $first === false ? 0 : count($first);
         $this->dataSource = new ArrayIterator($dataSource['hits']);
 
         $this->count = $dataSource['total'];

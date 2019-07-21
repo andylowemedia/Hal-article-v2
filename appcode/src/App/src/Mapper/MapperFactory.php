@@ -9,8 +9,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MapperFactory
 {
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): MapperAbstract
-    {
+    public function __invoke(
+        ContainerInterface $container,
+        string $requestedName,
+        array $options = null
+    ): MapperAbstract {
         $mapperClass = $requestedName;
         $modelClass = str_replace('Mapper', 'Model', $mapperClass);
         $resultSetClass = str_replace('Mapper', 'ResultSet', $mapperClass);

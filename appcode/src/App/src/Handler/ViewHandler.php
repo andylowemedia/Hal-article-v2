@@ -21,7 +21,9 @@ class ViewHandler implements RequestHandlerInterface
     {
         $requestParams = $request->getQueryParams();
 
-        if (!isset($requestParams['index']) || !isset($requestParams['type']) || (!isset($requestParams['slug']) && !isset($requestParams['id']))) {
+        if (!isset($requestParams['index']) ||
+            !isset($requestParams['type']) ||
+            (!isset($requestParams['slug']) && !isset($requestParams['id']))) {
             throw new \InvalidArgumentException('Index, Type & Slug must be set in query parameters to continue');
         }
 

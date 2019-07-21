@@ -11,7 +11,7 @@ class QueryAbstractTest extends TestCase
 {
     private $queryAbstract;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class QueryAbstractTest extends TestCase
         $expected = [
             'index' => 'articles',
             'type' => 'article',
-            'size' => 100,
+            'size' => 102,
             'from' => 0,
             'body' => [
                 '_source' => [
@@ -79,7 +79,7 @@ class QueryAbstractTest extends TestCase
         $expected = [
             'index' => 'articles',
             'type' => 'article',
-            'size' => 100,
+            'size' => 102,
             'from' => 0,
             'body' => [
                 '_source' => [
@@ -107,19 +107,15 @@ class QueryAbstractTest extends TestCase
         $this->assertEquals($expected, $this->queryAbstract->getParams());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testBuildingParamsThrowsExceptionWhenMissingIndex()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->queryAbstract->buildClientParams([]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testBuildingParamsThrowsExceptionWhenMissingType()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->queryAbstract->buildClientParams([
             'index' => 'articles',
         ]);

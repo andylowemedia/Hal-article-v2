@@ -9,7 +9,7 @@ class ArticleTest extends TestCase
 {
     private $article;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -42,11 +42,9 @@ class ArticleTest extends TestCase
         $this->assertEquals('soemthing-else', $this->article->slug);
     }
 
-    /**
-     * @expectedException \App\Model\ModelException
-     */
     public function testCreateSlugThrowsException()
     {
+        $this->expectException(\App\Model\ModelException::class);
         $this->article->title = '';
         $this->article->createSlug();
     }
@@ -81,13 +79,10 @@ class ArticleTest extends TestCase
         $this->assertEquals('soemthing else', $this->article->summary);
     }
 
-    /**
-     * @expectedException \App\Model\ModelException
-     */
     public function testCreateSummaryThrowsExceptionWhenNoContentIsSet()
     {
+        $this->expectException(\App\Model\ModelException::class);
         $this->article->content = '';
-
         $this->article->createSummary();
     }
 

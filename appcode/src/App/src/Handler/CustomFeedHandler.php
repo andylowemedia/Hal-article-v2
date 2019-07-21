@@ -31,12 +31,20 @@ class CustomFeedHandler implements RequestHandlerInterface
                 'min_score' => $queryParams['threshold'],
                 'query' => [
                     'bool' => [
+                        "must" => [
+                            [
+                                "match" => [
+                                    "articleTypeId" => "1"
+                                ]
+                            ],
+                        ],
                         'filter' => [
                             'range' => [
                                 'publishDate' => [
                                     'gte' => $queryParams['start-date']
                                 ]
-                            ]
+                            ],
+
                         ]
                     ]
                 ]

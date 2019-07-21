@@ -22,11 +22,9 @@ class ResultSetTest extends TestCase
         $this->assertEquals($data, $resultSet->current());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testResultSetElasticsearchInitialiseFailsWhenDataSourceIsNotArray()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $resultSet = $this->getMockBuilder(ResultSetAbstract::class)
             ->getMockForAbstractClass();
 

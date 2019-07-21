@@ -20,7 +20,7 @@ class MapperAbstractTest extends TestCase
 {
     private $dbAdapter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,8 +56,6 @@ class MapperAbstractTest extends TestCase
 
     public function testCountMakesACountQuery()
     {
-
-
         $result = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['current'])
             ->getMockForAbstractClass();
@@ -166,11 +164,10 @@ class MapperAbstractTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \App\Mapper\MapperException
-     */
     public function testCountMakesACountQueryWithAResultWithNoCount()
     {
+        $this->expectException(\App\Mapper\MapperException::class);
+
         $result = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['current'])
             ->getMockForAbstractClass();
@@ -445,11 +442,10 @@ class MapperAbstractTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \App\Mapper\MapperException
-     */
     public function testSaveMethodForInsertingWhereNoExcludeListHasBeenSet()
     {
+        $this->expectException(\App\Mapper\MapperException::class);
+
         $modelAbstract = $this->getMockBuilder(ModelAbstract::class)
             ->setMethods(['setId', 'getId', 'setFirstName', 'getFirstName', 'toArray'])
             ->getMockForAbstractClass();

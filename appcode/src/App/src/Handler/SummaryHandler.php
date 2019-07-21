@@ -23,7 +23,7 @@ class SummaryHandler implements RequestHandlerInterface
         $date = new \DateTime();
         $date->sub(new \DateInterval('P3M'));
 
-        $pageSize = 100;
+        $pageSize = 102;
         $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
 
 

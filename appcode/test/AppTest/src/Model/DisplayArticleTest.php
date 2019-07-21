@@ -9,7 +9,7 @@ class DisplayArticleTest extends TestCase
 {
     private $article;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

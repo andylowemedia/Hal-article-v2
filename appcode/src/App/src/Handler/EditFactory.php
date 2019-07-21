@@ -23,6 +23,17 @@ class EditFactory
         $articleKeywordMapper = $container->get(ArticleKeywordMapper::class);
         $featuredArticleMapper = $container->get(FeaturedArticleMapper::class);
 
-        return new EditHandler($config['elasticsearch']['hosts'], $config['api'], $config['featured']['sites'], $dbAdapter, $articleMapper, $articleImageMapper, $articleMediaMapper, $articleCategoryMapper, $articleKeywordMapper, $featuredArticleMapper);
+        return new EditHandler(
+            $config['elasticsearch']['hosts'],
+            $config['api'],
+            $config['featured']['sites'],
+            $dbAdapter,
+            $articleMapper,
+            $articleImageMapper,
+            $articleMediaMapper,
+            $articleCategoryMapper,
+            $articleKeywordMapper,
+            $featuredArticleMapper
+        );
     }
 }
