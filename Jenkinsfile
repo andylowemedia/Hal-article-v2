@@ -13,6 +13,7 @@ pipeline {
             composer install
             vendor/bin/phpunit
 
+            mkdir -p build/logs
             vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor .
 
             '''
