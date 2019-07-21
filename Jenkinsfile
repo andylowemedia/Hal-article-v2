@@ -14,7 +14,6 @@ pipeline {
             vendor/bin/phpunit
 
             vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor .
-            dry canRunOnFailed: true, pattern: "build/logs/pmd-cpd.xml"
 
             '''
         step([
