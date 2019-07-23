@@ -25,9 +25,9 @@ return [
             ],
         ],
     ],
-//    'elasticsearch' => [
-//        'hosts' => [
-//            getenv('ELASTICSEARCH_ARTICLE_HOST'),
-//        ],
-//    ]
+    'elasticsearch' => [
+        'hosts' => [
+            getenv('ELASTICSEARCH_ARTICLE_HOST'),
+        ],
+    ]
 ];
