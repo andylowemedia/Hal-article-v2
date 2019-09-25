@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Handler\RelatedFactory;
+use App\Handler\RelatedHandler;
+use App\Mapper\MapperFactory;
+use App\Mapper\SourceHistory;
 use App\Query\Search;
 use App\Query\SearchFactory;
 use App\Query\Summary;
@@ -50,6 +54,7 @@ class ConfigProvider
                 Handler\CustomFeedHandler::class  => Handler\CustomFeedFactory::class,
                 Handler\HistoryAddHandler::class  => Handler\HistoryAddFactory::class,
                 Handler\RelatedHandler::class     => Handler\RelatedFactory::class,
+                Handler\UpdateSocialPostsHandler::class => Handler\UpdateSocialPostsHandlerFactory::class,
 
                 Mapper\Article::class           => Mapper\MapperFactory::class,
                 Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
@@ -59,6 +64,8 @@ class ConfigProvider
                 Mapper\ArticleKeyword::class    => Mapper\MapperFactory::class,
                 Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
                 Mapper\SourceHistory::class     => Mapper\MapperFactory::class,
+                Mapper\SocialMedia::class       => Mapper\MapperFactory::class,
+                Mapper\ArticleSocialMediaPost::class => Mapper\MapperFactory::class,
 
                 ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,
                 Summary::class                  => SummaryFactory::class,

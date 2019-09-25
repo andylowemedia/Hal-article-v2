@@ -1,2 +1,4 @@
 nbproject/
-/.idea/
+.idea/
+.DS_Store
+appcode/public/coverage/

@@ -9,6 +9,8 @@ class HealthCheckHandler implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
+//        sleep(20);
+
         return new JsonResponse([
             'success' => true,
             'message' => 'Article Microservice is running correctly'

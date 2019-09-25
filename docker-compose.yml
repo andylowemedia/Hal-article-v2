@@ -25,12 +25,12 @@ services:
       APP_ENV: 'development'
       COMPOSER_INSTALL: 'true'
 
-      DB_ARTICLE_HOST: ''
-      DB_ARTICLE_SCHEMA: ''
-      DB_ARTICLE_USER: ''
-      DB_ARTICLE_PASSWORD: ''
+      DB_ARTICLE_HOST: '10.211.55.29'
+      DB_ARTICLE_SCHEMA: 'hal-articles'
+      DB_ARTICLE_USER: 'admin'
+      DB_ARTICLE_PASSWORD: 'Alyssaj0nes!'
 
-      ELASTICSEARCH_ARTICLE_HOST: ''
+      ELASTICSEARCH_ARTICLE_HOST: '10.211.55.29:9200'
 
       MICROSERVICE_CATEGORY_URL: 'hal-category-web'
 

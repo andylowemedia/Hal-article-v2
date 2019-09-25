@@ -130,7 +130,7 @@ abstract class MapperAbstract
      * @param int $id
      * @return ModelAbstract
      */
-    public function find(int $id): ModelAbstract
+    public function find(int $id): ?ModelAbstract
     {
         $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset->current();

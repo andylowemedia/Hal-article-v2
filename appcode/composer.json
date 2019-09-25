@@ -8,6 +8,7 @@
     },
     "require": {
         "php": "^7.3",
+        "ext-json": "^1.7",
         "elasticsearch/elasticsearch": "^5.2",
         "guzzlehttp/guzzle": "^6.3",
         "http-interop/http-middleware": "^0.4.1",

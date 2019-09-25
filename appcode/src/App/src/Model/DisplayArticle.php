@@ -9,6 +9,11 @@ namespace App\Model;
 class DisplayArticle extends ModelAbstract
 {
     /**
+     * @var int
+     */
+    protected $id = 0;
+
+    /**
      * @var string
      */
     protected $slug = '';
@@ -62,6 +67,31 @@ class DisplayArticle extends ModelAbstract
      * @var array
      */
     protected $keywords = [];
+
+    /**
+     * @var array
+     */
+    protected $posted = [];
+
+    /**
+     * Set article ID
+     * @param int $id
+     * @return DisplayArticle
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Get article ID
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * Set slug
@@ -282,5 +312,16 @@ class DisplayArticle extends ModelAbstract
     public function getKeywords(): array
     {
         return $this->keywords;
+    }
+
+    public function setPosted(array $posted): self
+    {
+        $this->posted = $posted;
+        return $this;
+    }
+
+    public function getPosted(): ?array
+    {
+        return $this->posted;
     }
 }

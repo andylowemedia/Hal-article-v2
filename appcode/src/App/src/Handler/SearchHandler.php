@@ -25,6 +25,9 @@ class SearchHandler implements RequestHandlerInterface
 
         $params['page'] = ($page * $size);
 
+
+
+
         $response = $this->search->fetch($params);
 
         return new JsonResponse([

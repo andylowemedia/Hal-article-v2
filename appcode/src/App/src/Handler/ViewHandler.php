@@ -58,9 +58,16 @@ class ViewHandler implements RequestHandlerInterface
 
         $result = current($results['hits']['hits']);
 
+        if (empty($result)) {
+            throw new \InvalidArgumentException('Article Not Found', 404);
+        }
+
         $article = $result['_source'];
 
         $article['id'] = $result['_id'];
+
+
+
 
         return new JsonResponse([
             'article' => $article

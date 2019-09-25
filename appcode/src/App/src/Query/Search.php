@@ -20,7 +20,6 @@ class Search extends QueryAbstract
 
         $results = $client->search($this->params);
 
-
         if (empty($results['hits']['hits'])) {
             $data = [];
         } else {

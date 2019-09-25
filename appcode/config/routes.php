@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Handler\EditHandler;
 use Psr\Container\ContainerInterface;
 use Zend\Expressive\Application;
 use Zend\Expressive\MiddlewareFactory;
@@ -38,6 +39,9 @@ $app->get('/', App\Handler\HealthCheckHandler::class, 'default-health-check');
 $app->get('/article', App\Handler\ViewHandler::class, 'view');
 $app->post('/article', App\Handler\AddHandler::class, 'add');
 $app->put('/article', App\Handler\EditHandler::class, 'edit');
+
+$app->patch('/article', App\Handler\UpdateSocialPostsHandler::class, 'update-social-posts');
+
 $app->delete('/article', App\Handler\DeleteHandler::class, 'delete');
 
 $app->get('/related', App\Handler\RelatedHandler::class, 'related');

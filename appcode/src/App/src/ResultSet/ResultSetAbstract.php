@@ -33,6 +33,9 @@ abstract class ResultSetAbstract extends ResultSet
 //            return $this->buffer[$this->position];
 //        }
         $data = $this->dataSource->current();
+        if (empty($data)) {
+            return null;
+        }
 //        if (is_array($this->buffer)) {
 //            $this->buffer[$this->position] = $data;
 //        }
@@ -47,9 +50,13 @@ abstract class ResultSetAbstract extends ResultSet
             $dataSource = $data;
             if (isset($data['_source'])) {
                 $dataSource = $data['_source'];
+                $dataSource['id'] = (int) $data['_id'];
             }
-            $ao->exchangeArray($dataSource);
+            if (is_array($dataSource)) {
+                $ao->exchangeArray($dataSource);
+            }
         }
+
         return $ao;
     }
 }

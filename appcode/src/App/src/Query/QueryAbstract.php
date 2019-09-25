@@ -73,6 +73,7 @@ abstract class QueryAbstract
             'from' => $from,
             'body' => [
                 '_source' => [
+                    'id',
                     'slug',
                     'title',
                     'subtitle',
@@ -84,15 +85,20 @@ abstract class QueryAbstract
                     'categories',
                     'displayCategories',
                     'keywords',
-                    'url'
+                    'posted',
+                    'url',
                 ],
                 'track_scores' => true,
-                "min_score" => 1,
                 'query' => [
                     "bool" => []
                 ]
             ]
         ];
+
+        if (isset($params['min-score'])) {
+            $this->params['body']['min_source'] = $params['min-score'];
+        }
+
 
         $this->buildFilteringParams($params);
 
@@ -141,6 +147,15 @@ abstract class QueryAbstract
             }
         }
 
+        if (isset($params["not-exists"])) {
+            foreach ($params["not-exists"] as $field) {
+                $this->params['body']['query']['bool']['must_not'][] =
+                    ['exists' => [
+                        'field' => $field
+                    ]];
+            }
+        }
+
         if (isset($params["excludes"])) {
             foreach ($params["excludes"] as $key => $field) {
                 foreach ($field as $value) {
@@ -172,6 +187,13 @@ abstract class QueryAbstract
         if (isset($params['filter']) && is_array($params['filter'])) {
             foreach ($params['filter'] as $key => $value) {
                 $this->params['body']['query']['bool']['must'][] =
+                    ["match_phrase" => [$key => $value]];
+            }
+        }
+
+        if (isset($params['not-filter']) && is_array($params['not-filter'])) {
+            foreach ($params['not-filter'] as $key => $value) {
+                $this->params['body']['query']['bool']['must_not'][] =
                     ["match_phrase" => [$key => $value]];
             }
         }
