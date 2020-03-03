@@ -5,7 +5,7 @@ namespace App\Handler;
 use App\Query\Search;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class CategoryHandler implements RequestHandlerInterface
 {
@@ -36,6 +36,9 @@ class CategoryHandler implements RequestHandlerInterface
 
         $this->response['count'] = 0;
         $this->response['totalCount'] = 0;
+
+        print_r($request->getAttribute('slug'));
+        die;
 
         $client = new \GuzzleHttp\Client();
         $res = $client->request(

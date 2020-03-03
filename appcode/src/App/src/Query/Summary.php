@@ -1,8 +1,8 @@
 <?php
 namespace App\Query;
 
-use App\Model\DisplayArticle as ArticleModel;
-use App\ResultSet\Article as ArticleResultSet;
+use App\Entity\DisplayArticleEntity as ArticleModel;
+use App\ResultSet\ArticleResultSet as ArticleResultSet;
 
 /**
  * Description of Search

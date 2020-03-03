@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Handler\RelatedFactory;
+use App\Handler\RelatedHandlerFactory;
 use App\Handler\RelatedHandler;
 use App\Mapper\MapperFactory;
-use App\Mapper\SourceHistory;
+use App\Mapper\SourceHistoryMapper;
 use App\Query\Search;
 use App\Query\SearchFactory;
 use App\Query\Summary;
@@ -44,28 +44,28 @@ class ConfigProvider
     {
         return [
             'factories'  => [
-                Handler\ViewHandler::class        => Handler\ViewFactory::class,
-                Handler\AddHandler::class         => Handler\AddFactory::class,
-                Handler\EditHandler::class        => Handler\EditFactory::class,
-                Handler\DeleteHandler::class      => Handler\DeleteFactory::class,
-                Handler\SummaryHandler::class     => Handler\SummaryFactory::class,
-                Handler\SearchHandler::class      => Handler\SearchFactory::class,
-                Handler\CategoryHandler::class    => Handler\CategoryFactory::class,
-                Handler\CustomFeedHandler::class  => Handler\CustomFeedFactory::class,
-                Handler\HistoryAddHandler::class  => Handler\HistoryAddFactory::class,
-                Handler\RelatedHandler::class     => Handler\RelatedFactory::class,
+                Handler\ViewHandler::class        => Handler\ViewHandlerFactory::class,
+                Handler\AddHandler::class         => Handler\AddHandlerFactory::class,
+                Handler\EditHandler::class        => Handler\EditHandlerFactory::class,
+                Handler\DeleteHandler::class      => Handler\DeleteHandlerFactory::class,
+                Handler\SummaryHandler::class     => Handler\SummaryHandlerFactory::class,
+                Handler\SearchHandler::class      => Handler\SearchHandlerFactory::class,
+                Handler\CategoryHandler::class    => Handler\CategoryHandlerFactory::class,
+                Handler\CustomFeedHandler::class  => Handler\CustomFeedHandlerFactory::class,
+                Handler\HistoryAddHandler::class  => Handler\HistoryAddHandlerFactory::class,
+                Handler\RelatedHandler::class     => Handler\RelatedHandlerFactory::class,
                 Handler\UpdateSocialPostsHandler::class => Handler\UpdateSocialPostsHandlerFactory::class,
 
-                Mapper\Article::class           => Mapper\MapperFactory::class,
-                Mapper\ArticleImage::class      => Mapper\MapperFactory::class,
-                Mapper\ArticleMedia::class      => Mapper\MapperFactory::class,
-                Mapper\Category::class          => Mapper\MapperFactory::class,
-                Mapper\ArticleCategory::class   => Mapper\MapperFactory::class,
-                Mapper\ArticleKeyword::class    => Mapper\MapperFactory::class,
-                Mapper\FeaturedArticle::class   => Mapper\MapperFactory::class,
-                Mapper\SourceHistory::class     => Mapper\MapperFactory::class,
-                Mapper\SocialMedia::class       => Mapper\MapperFactory::class,
-                Mapper\ArticleSocialMediaPost::class => Mapper\MapperFactory::class,
+                Mapper\ArticleMapper::class           => Mapper\MapperFactory::class,
+                Mapper\ArticleImageMapper::class      => Mapper\MapperFactory::class,
+                Mapper\ArticleMediaMapper::class      => Mapper\MapperFactory::class,
+                Mapper\CategoryMapper::class          => Mapper\MapperFactory::class,
+                Mapper\ArticleCategoryMapper::class   => Mapper\MapperFactory::class,
+                Mapper\ArticleKeywordMapper::class    => Mapper\MapperFactory::class,
+                Mapper\FeaturedArticleMapper::class   => Mapper\MapperFactory::class,
+                Mapper\SourceHistoryMapper::class     => Mapper\MapperFactory::class,
+                Mapper\SocialMediaMapper::class       => Mapper\MapperFactory::class,
+                Mapper\ArticleSocialMediaPostMapper::class => Mapper\MapperFactory::class,
 
                 ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,
                 Summary::class                  => SummaryFactory::class,

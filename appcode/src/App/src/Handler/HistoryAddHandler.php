@@ -3,13 +3,13 @@ namespace App\Handler;
 
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
-use App\Mapper\SourceHistory as SourceHistoryMapper;
-use App\Model\SourceHistory as SourceHistoryModel;
+use App\Mapper\SourceHistoryMapper as SourceHistoryMapper;
+use App\Entity\SourceHistoryEntity as SourceHistoryModel;
 
 use Elasticsearch\ClientBuilder;
-use Zend\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Adapter;
 
 class HistoryAddHandler implements RequestHandlerInterface
 {
@@ -68,7 +68,7 @@ class HistoryAddHandler implements RequestHandlerInterface
 
             $responseData = [
                 'success' => true,
-                'message' => 'Article History added',
+                'message' => 'ArticleMapper History added',
                 'article' => $sourceHistory->toArray()
             ];
             $responseCode = 200;

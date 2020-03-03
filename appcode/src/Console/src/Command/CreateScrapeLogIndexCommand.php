@@ -5,7 +5,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Zend\Db\Sql\Sql;
+use Laminas\Db\Sql\Sql;
 
 use Elasticsearch\Client as ElasticsearchClient;
 

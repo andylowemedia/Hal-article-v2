@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace App\Mapper;
 
-use App\Model\ModelAbstract;
+use App\Entity\EntityAbstract;
 
 use App\ResultSet\ResultSetAbstract;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql;
+use Laminas\Db\TableGateway\TableGateway;
+use Laminas\Db\Sql;
 
 /**
  * Description of MapperAbstract
@@ -128,9 +128,9 @@ abstract class MapperAbstract
     /**
      * Find individual row and map to preset data model by id
      * @param int $id
-     * @return ModelAbstract
+     * @return EntityAbstract
      */
-    public function find(int $id): ?ModelAbstract
+    public function find(int $id): ?EntityAbstract
     {
         $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset->current();
@@ -141,9 +141,9 @@ abstract class MapperAbstract
      * Find individual row and map to preset data model by params
      * @param $params
      * @param null $order
-     * @return ModelAbstract
+     * @return EntityAbstract
      */
-    public function findByParams($params, $order = null): ModelAbstract
+    public function findByParams($params, $order = null): EntityAbstract
     {
         if ($params instanceof Sql\Select) {
             $select = $params;
@@ -162,11 +162,11 @@ abstract class MapperAbstract
     }
 
     /**
-     * @param ModelAbstract $model
+     * @param EntityAbstract $model
      * @return int
      * @throws MapperException
      */
-    public function save(ModelAbstract $model): int
+    public function save(EntityAbstract $model): int
     {
         $data = $this->changeData($model->toArray());
 

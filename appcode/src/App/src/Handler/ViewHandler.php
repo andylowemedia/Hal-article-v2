@@ -4,13 +4,14 @@ namespace App\Handler;
 
 use Elasticsearch\ClientBuilder;
 
+use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class ViewHandler implements RequestHandlerInterface
 {
-    private $hosts;
+    private array $hosts;
 
     public function __construct(array $hosts)
     {
@@ -19,22 +20,8 @@ class ViewHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
-        $requestParams = $request->getQueryParams();
+        $slug = $request->getAttribute('slug');
 
-        if (!isset($requestParams['index']) ||
-            !isset($requestParams['type']) ||
-            (!isset($requestParams['slug']) && !isset($requestParams['id']))) {
-            throw new \InvalidArgumentException('Index, Type & Slug must be set in query parameters to continue');
-        }
-
-
-        if (isset($requestParams['id'])) {
-            $key = '_id';
-            $value = $requestParams['id'];
-        } else {
-            $key = 'slug';
-            $value = strtolower($requestParams['slug']);
-        }
 
 
         $params = [
@@ -43,8 +30,8 @@ class ViewHandler implements RequestHandlerInterface
 
             'body' => [
                 'query' => [
-                    "term" => [
-                        $key => $value
+                    'term' => [
+                        'slug' => $slug
                     ]
                 ]
             ]
@@ -59,15 +46,11 @@ class ViewHandler implements RequestHandlerInterface
         $result = current($results['hits']['hits']);
 
         if (empty($result)) {
-            throw new \InvalidArgumentException('Article Not Found', 404);
+            return new EmptyResponse(404);
         }
 
         $article = $result['_source'];
-
         $article['id'] = $result['_id'];
-
-
-
 
         return new JsonResponse([
             'article' => $article

@@ -10,11 +10,24 @@ services:
     ports:
       - "8082:80"
     volumes:
-      - ./appcode:/var/www/html/
+      - ./appcode:/var/www/html:cached
 
     links:
       - php:php-fpm
-      
+
+  mysql:
+    container_name: 'hal-article-mysql'
+    build:
+      context: .
+      dockerfile: mysql/Dockerfile
+    ports:
+      - "3325:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_DATABASE: 'hal-articles'
+
   php:
     container_name: 'hal-article-php'
 #    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:0.4.0"
@@ -24,18 +37,88 @@ services:
     environment:
       APP_ENV: 'development'
       COMPOSER_INSTALL: 'true'
-
-      DB_ARTICLE_HOST: '10.211.55.29'
+      DB_ARTICLE_HOST: 'hal-article-mysql'
       DB_ARTICLE_SCHEMA: 'hal-articles'
-      DB_ARTICLE_USER: 'admin'
-      DB_ARTICLE_PASSWORD: 'Alyssaj0nes!'
-
-      ELASTICSEARCH_ARTICLE_HOST: '10.211.55.29:9200'
-
+      DB_ARTICLE_USER: 'root'
+      DB_ARTICLE_PASSWORD: 'admin'
+      ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch:9200'
       MICROSERVICE_CATEGORY_URL: 'hal-category-web'
 
     volumes:
-      - ./appcode:/var/www/html/
+      - ./appcode:/var/www/html:cached
+
+    depends_on:
+      - mysql
+      - elasticsearch
+
+  elasticsearch:
+    container_name: 'hal-article-elasticsearch'
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:5.5.3'
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    volumes:
+      #      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.conf:/etc/elasticsearch/elasticsearch.yml
+    depends_on:
+      - mysql
+    environment:
+      - 'cluster.name=docker-cluster'
+      - 'bootstrap.memory_lock=true'
+#      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+#  elasticsearch2:
+#    container_name: 'hal-article-elasticsearch-2'
+#    image: 'docker.elastic.co/elasticsearch/elasticsearch:5.5.3'
+#    ports:
+#      - "9202:9200"
+#      - "9302:9300"
+#    volumes:
+#      #      - ./elasticsearch/data:/usr/share/elasticsearch/data
+#      - ./elasticsearch/config/elasticsearch.conf:/etc/elasticsearch/elasticsearch.yml
+#    depends_on:
+#      - elasticsearch
+#      - mysql
+#    environment:
+#      - 'cluster.name=docker-cluster'
+#      - 'bootstrap.memory_lock=true'
+#      - 'xpack.security.enabled=false'
+#      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+#      - "discovery.zen.ping.unicast.hosts=hal-article-elasticsearch"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#
+#  elasticsearch3:
+#    container_name: 'hal-article-elasticsearch-3'
+#    image: 'docker.elastic.co/elasticsearch/elasticsearch:5.5.3'
+#    ports:
+#      - "9203:9200"
+#      - "9303:9300"
+#    volumes:
+#      #      - ./elasticsearch/data:/usr/share/elasticsearch/data
+#      - ./elasticsearch/config/elasticsearch.conf:/etc/elasticsearch/elasticsearch.yml
+#    depends_on:
+#      - elasticsearch
+#      - elasticsearch2
+#      - mysql
+#    environment:
+#      - 'cluster.name=docker-cluster'
+#      - 'bootstrap.memory_lock=true'
+#      - 'xpack.security.enabled=false'
+#      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+#      - "discovery.zen.ping.unicast.hosts=hal-article-elasticsearch"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
 
 networks:
     default:

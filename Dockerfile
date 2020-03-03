@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 RUN mv /etc/localtime /etc/localtime.bak \
     && ln -s /usr/share/zoneinfo/Europe/London /etc/localtime

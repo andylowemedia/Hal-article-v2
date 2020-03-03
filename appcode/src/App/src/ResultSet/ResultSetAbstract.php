@@ -1,7 +1,7 @@
 <?php
 namespace App\ResultSet;
 
-use Zend\Db\ResultSet\ResultSet;
+use Laminas\Db\ResultSet\ResultSet;
 use ArrayObject;
 use ArrayIterator;
 

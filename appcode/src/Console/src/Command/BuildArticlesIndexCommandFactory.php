@@ -8,9 +8,10 @@ class BuildArticlesIndexCommandFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        return (new BuildArticlesIndexCommand)
-                ->setElasticsearchClient($container->get(ElasticsearchClient::class))
-                ->setArticlesDbAdapter($container->get('ArticlesDbAdapter'))
-                ->setApiConfig($container->get('config')['api']);
+        return new BuildArticlesIndexCommand(
+            $container->get(ElasticsearchClient::class),
+            $container->get('ArticlesDbAdapter'),
+            $container->get('config')['api']
+        );
     }
 }

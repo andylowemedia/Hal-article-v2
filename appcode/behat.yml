@@ -1,0 +1,8 @@
+# behat.yml
+default:
+  suites:
+    articles:
+      contexts:
+        - HealthCheckContext
+        - ViewContext
+        - SearchContext

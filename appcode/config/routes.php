@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use App\Handler\EditHandler;
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Application;
-use Zend\Expressive\MiddlewareFactory;
+use Mezzio\Application;
+use Mezzio\MiddlewareFactory;
 /**
  * Setup routes with a single request method:
  *
@@ -28,34 +28,35 @@ use Zend\Expressive\MiddlewareFactory;
  * $app->route(
  *     '/contact',
  *     App\Handler\ContactHandler::class,
- *     Zend\Expressive\Router\Route::HTTP_METHOD_ANY,
+ *     Mezzio\Router\Route::HTTP_METHOD_ANY,
  *     'contact'
  * );
  */
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-$app->get('/health-check', App\Handler\HealthCheckHandler::class, 'health-check');
-$app->get('/', App\Handler\HealthCheckHandler::class, 'default-health-check');
+    $app->get('/health-check', App\Handler\HealthCheckHandler::class, 'health-check');
+    $app->get('/', App\Handler\HealthCheckHandler::class, 'default-health-check');
 
-$app->get('/article', App\Handler\ViewHandler::class, 'view');
-$app->post('/article', App\Handler\AddHandler::class, 'add');
-$app->put('/article', App\Handler\EditHandler::class, 'edit');
+    $app->get('/custom-feed', App\Handler\CustomFeedHandler::class, 'custom-feed');
+    $app->get('/search', App\Handler\SearchHandler::class, 'search');
+    $app->get('/{slug}', App\Handler\ViewHandler::class, 'view')
+        ->setOptions([
+            'tokens' => [
+                'slug' => '[0-9a-zA-Z-]+'
+            ]
+        ]);
+    $app->post('/', App\Handler\AddHandler::class, 'add');
+    $app->put('/{id}', App\Handler\EditHandler::class, 'edit');
+    $app->delete('/{id}', App\Handler\DeleteHandler::class, 'delete');
 
-$app->patch('/article', App\Handler\UpdateSocialPostsHandler::class, 'update-social-posts');
 
-$app->delete('/article', App\Handler\DeleteHandler::class, 'delete');
+//    $app->get('/related', App\Handler\RelatedHandler::class, 'related');
+//    $app->get('/summary', App\Handler\SummaryHandler::class, 'summary');
+    //$app->post('/article/history/add', App\Handler\HistoryAddHandler::class, 'history-add');
 
-$app->get('/related', App\Handler\RelatedHandler::class, 'related');
+    //$app->patch('/article', App\Handler\UpdateSocialPostsHandler::class, 'update-social-posts');
 
-$app->post('/article/history/add', App\Handler\HistoryAddHandler::class, 'history-add');
-
-
-
-$app->get('/search', App\Handler\SearchHandler::class, 'search');
-$app->get('/summary', App\Handler\SummaryHandler::class, 'summary');
-$app->get('/custom-feed', App\Handler\CustomFeedHandler::class, 'custom-feed');
-
-$app->get('/category/code/{slug}', App\Handler\CategoryHandler::class, 'category')
-    ->setOptions([
-        'tokens' => ['slug' => '[0-9a-zA-Z-]+'],
-    ]);
+    //$app->get('/category/code/{slug}', App\Handler\CategoryHandler::class, 'category')
+    //    ->setOptions([
+    //        'tokens' => ['slug' => '[0-9a-zA-Z-]+'],
+    //    ]);
 };

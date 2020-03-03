@@ -4,17 +4,17 @@ namespace AppTest\Mapper;
 
 use App\Mapper\MapperAbstract;
 use App\Mapper\MapperException;
-use App\Model\ModelAbstract;
+use App\Entity\EntityAbstract;
 use App\ResultSet\ResultSetAbstract;
 use PHPUnit\Framework\TestCase;
-use Zend\Db\Adapter\AdapterInterface;
-use Zend\Db\Adapter\Driver\ResultInterface;
-use Zend\Db\Adapter\Driver\StatementInterface;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\ResultSet\ResultSetInterface;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\Expression;
-use Zend\Db\TableGateway\TableGateway;
+use Laminas\Db\Adapter\AdapterInterface;
+use Laminas\Db\Adapter\Driver\ResultInterface;
+use Laminas\Db\Adapter\Driver\StatementInterface;
+use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\Expression;
+use Laminas\Db\TableGateway\TableGateway;
 
 class MapperAbstractTest extends TestCase
 {
@@ -287,7 +287,7 @@ class MapperAbstractTest extends TestCase
 
     public function testFindMethodMakesQuery()
     {
-        $result = $this->getMockBuilder(ModelAbstract::class)
+        $result = $this->getMockBuilder(EntityAbstract::class)
             ->getMockForAbstractClass();
 
         $results = $this->getMockBuilder(ResultSet::class)
@@ -321,7 +321,7 @@ class MapperAbstractTest extends TestCase
     {
         $sql = new Sql($this->dbAdapter);
 
-        $result = $this->getMockBuilder(ModelAbstract::class)
+        $result = $this->getMockBuilder(EntityAbstract::class)
             ->getMockForAbstractClass();
 
         $results = $this->getMockBuilder(ResultSet::class)
@@ -362,7 +362,7 @@ class MapperAbstractTest extends TestCase
     {
         $sql = new Sql($this->dbAdapter);
 
-        $result = $this->getMockBuilder(ModelAbstract::class)
+        $result = $this->getMockBuilder(EntityAbstract::class)
             ->getMockForAbstractClass();
 
         $results = $this->getMockBuilder(ResultSet::class)
@@ -397,7 +397,7 @@ class MapperAbstractTest extends TestCase
 
     public function testSaveMethodForInserting()
     {
-        $modelAbstract = $this->getMockBuilder(ModelAbstract::class)
+        $modelAbstract = $this->getMockBuilder(EntityAbstract::class)
             ->setMethods(['setId', 'getId', 'setFirstName', 'getFirstName', 'toArray'])
             ->getMockForAbstractClass();
 
@@ -446,7 +446,7 @@ class MapperAbstractTest extends TestCase
     {
         $this->expectException(\App\Mapper\MapperException::class);
 
-        $modelAbstract = $this->getMockBuilder(ModelAbstract::class)
+        $modelAbstract = $this->getMockBuilder(EntityAbstract::class)
             ->setMethods(['setId', 'getId', 'setFirstName', 'getFirstName', 'toArray'])
             ->getMockForAbstractClass();
 
@@ -478,7 +478,7 @@ class MapperAbstractTest extends TestCase
 
     public function testSaveMethodForUpdating()
     {
-        $modelAbstract = $this->getMockBuilder(ModelAbstract::class)
+        $modelAbstract = $this->getMockBuilder(EntityAbstract::class)
             ->setMethods(['setId', 'getId', 'setFirstName', 'getFirstName', 'toArray'])
             ->getMockForAbstractClass();
 

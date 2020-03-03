@@ -3,9 +3,10 @@
 namespace App\Handler;
 
 use App\Query\Search;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class SearchHandler implements RequestHandlerInterface
 {
@@ -16,24 +17,28 @@ class SearchHandler implements RequestHandlerInterface
         $this->search = $search;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/search",
+     *     @OA\Response(response="200", description="Search articles")
+     * )
+     */
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
         $params = $request->getQueryParams();
 
-        $size = 100;
-        $page = isset($params['page']) ? ($params['page'] - 1) : 0;
-
-        $params['page'] = ($page * $size);
-
-
-
-
         $response = $this->search->fetch($params);
 
+        $count = count($response['results']);
+
+        if ($count === 0) {
+            return new EmptyResponse(404);
+        }
+
         return new JsonResponse([
-            'total' => 0, // $response['totalCount'],
-            'count' => 0, // $response['count'],
-            'articles' => $response
+            'total' => $response['total'],
+            'count' => count($response['results']),
+            'articles' => $response['results']
         ]);
     }
 }

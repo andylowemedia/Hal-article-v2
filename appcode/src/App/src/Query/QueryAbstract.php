@@ -61,10 +61,11 @@ abstract class QueryAbstract
 
         $size = isset($params['size']) ? $params['size'] : 102;
 
-        $from = isset($params['page']) ? ($params['page']) : 0;
+        $from = isset($params['page']) ? ($params['page'] * $params['size']) : 0;
         if ($from < 0) {
             $from = 0;
         }
+
 
         $this->params = [
             'index' => $params['index'],
@@ -156,33 +157,13 @@ abstract class QueryAbstract
             }
         }
 
-        if (isset($params["excludes"])) {
-            foreach ($params["excludes"] as $key => $field) {
-                foreach ($field as $value) {
-                    $this->params['body']['query']['bool']['must_not'][]['match_phrase'] = [$key => $value];
-                }
-            }
-        }
-
-        if (isset($params['article-type'])) {
-            $this->params['body']['query']['bool']['must'][] =
-                ["match_phrase" => ['articleTypeId' => $params['article-type']]];
-        }
-
-
-        if (isset($params['sourceId']) && is_array($params['sourceId'])) {
-            foreach ($params['sourceId'] as $sourceId) {
-                $this->params['body']['query']['bool']['must'][] =
-                    ["match_phrase" => ['sourceId' => $sourceId]];
-            }
-        }
-
-        if (isset($params['category']) && is_array($params['category'])) {
-            foreach ($params['category'] as $category) {
-                $this->params['body']['query']['bool']['must'][] =
-                    ["match_phrase" => ['categories' => $category]];
-            }
-        }
+//        if (isset($params["excludes"])) {
+//            foreach ($params["excludes"] as $key => $field) {
+//                foreach ($field as $value) {
+//                    $this->params['body']['query']['bool']['must_not'][]['match_phrase'] = [$key => $value];
+//                }
+//            }
+//        }
 
         if (isset($params['filter']) && is_array($params['filter'])) {
             foreach ($params['filter'] as $key => $value) {

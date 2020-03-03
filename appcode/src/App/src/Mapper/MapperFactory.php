@@ -1,11 +1,8 @@
 <?php
 namespace App\Mapper;
 
-use Zend\Db\TableGateway\TableGateway;
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\AbstractFactoryInterface;
-
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Db\TableGateway\TableGateway;
+use Psr\Container\ContainerInterface;
 
 class MapperFactory
 {
@@ -15,11 +12,11 @@ class MapperFactory
         array $options = null
     ): MapperAbstract {
         $mapperClass = $requestedName;
-        $modelClass = str_replace('Mapper', 'Model', $mapperClass);
+        $entityClass = str_replace('Mapper', 'Entity', $mapperClass);
         $resultSetClass = str_replace('Mapper', 'ResultSet', $mapperClass);
 
         $resultSet = new $resultSetClass;
-        $resultSet->setArrayObjectPrototype(new $modelClass());
+        $resultSet->setArrayObjectPrototype(new $entityClass());
 
         $adapter = $container->get('ArticlesDbAdapter');
 

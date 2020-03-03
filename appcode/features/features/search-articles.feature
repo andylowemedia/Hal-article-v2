@@ -1,0 +1,56 @@
+Feature: Search Articles By Query String
+  Search articles in Elasticsearch index
+
+  Scenario: Searching article index filter by category Current Affairs size of 5
+    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article index filter by category Entertainment size of 5
+    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=entertainment&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&filter[categories]=entertainment&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article index filter by category Weather
+    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=weather"
+    When a 404 search response is be received
+    Then an empty search response will be returned
+
+  Scenario: Searching article index filter by category that is not Entertainment size of 5
+    Given the microservice search URL is loaded "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article index filter by term brexit size of 5
+    Given the microservice search URL is loaded "/search?index=articles&type=article&search=brexit&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&search=brexit&size=5" search content will be returned in a JSON format
+
+#  Scenario: Searching article index filter and exclude term brexit size of 5
+#    Given the microservice search URL is loaded "/search?index=articles&type=article&excludes=brexit&size=5"
+#    When a 200 search response is be received
+#    Then URL "/search?index=articles&type=article&excludes=brexit&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article index filter by term obscure search
+    Given the microservice search URL is loaded "/search?index=articles&type=article&search=obscure+search"
+    When a 404 search response is be received
+    Then an empty search response will be returned
+
+  Scenario: Searching article making sure image exists and is not empty
+    Given the microservice search URL is loaded "/search?index=articles&type=article&exists[]=image&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&exists[]=image&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article making sure image does not exist
+    Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists[]=image&size=5"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&not-exists[]=image&size=5" search content will be returned in a JSON format
+
+  Scenario: Searching article making sure image does not exist and ordered by publish date descending
+    Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists[]=image&size=5&sort=publishDate:desc"
+    When a 200 search response is be received
+    Then URL "/search?index=articles&type=article&not-exists[]=image&size=5&sort=publishDate:desc" search content will be returned in a JSON format
+
+# date from
+# date to
+# keywords

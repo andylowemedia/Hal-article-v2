@@ -2,35 +2,35 @@
 declare(strict_types=1);
 namespace App\Handler;
 
-use App\Model\Article as ArticleModel;
-use App\Mapper\Article as ArticleMapper;
+use App\Entity\ArticleEntity as ArticleModel;
+use App\Mapper\ArticleMapper as ArticleMapper;
 
-use App\Model\ArticleImage as ArticleImageModel;
-use App\Mapper\ArticleImage as ArticleImageMapper;
+use App\Entity\ArticleImageEntity as ArticleImageModel;
+use App\Mapper\ArticleImageMapper as ArticleImageMapper;
 
-use App\Model\ArticleMedia as ArticleMediaModel;
-use App\Mapper\ArticleMedia as ArticleMediaMapper;
+use App\Entity\ArticleMediaEntity as ArticleMediaModel;
+use App\Mapper\ArticleMediaMapper as ArticleMediaMapper;
 
-use App\Model\ArticleCategory as ArticleCategoryModel;
-use App\Mapper\ArticleCategory as ArticleCategoryMapper;
+use App\Entity\ArticleCategoryEntity as ArticleCategoryModel;
+use App\Mapper\ArticleCategoryMapper as ArticleCategoryMapper;
 
-use App\Model\ArticleKeyword as ArticleKeywordModel;
-use App\Mapper\ArticleKeyword as ArticleKeywordMapper;
+use App\Entity\ArticleKeywordEntity as ArticleKeywordModel;
+use App\Mapper\ArticleKeywordMapper as ArticleKeywordMapper;
 
-use App\Model\FeaturedArticle as FeaturedArticleModel;
-use App\Mapper\FeaturedArticle as FeaturedArticleMapper;
+use App\Entity\FeaturedArticleEntity as FeaturedArticleModel;
+use App\Mapper\FeaturedArticleMapper as FeaturedArticleMapper;
 
-//use App\Model\SourceHistory as SourceHistoryModel;
+//use App\Model\SourceHistoryMapper as SourceHistoryModel;
 
 use Psr\Http\Message\ResponseInterface;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Sql;
 
 use Elasticsearch\ClientBuilder;
 
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class AddHandler implements RequestHandlerInterface
 {
@@ -130,7 +130,7 @@ class AddHandler implements RequestHandlerInterface
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws \App\Model\ModelException
+     * @throws \App\Entity\EntityException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle(ServerRequestInterface $request) : ResponseInterface
@@ -160,7 +160,7 @@ class AddHandler implements RequestHandlerInterface
             $this->saveElasticsearch($article, $images, $media, $categories, $keywords, $featuredSites);
             $responseData = [
                 'success' => true,
-                'message' => 'Article added',
+                'message' => 'ArticleMapper added',
                 'article' => $article->toArray()
             ];
             $responseCode = 200;
@@ -178,18 +178,18 @@ class AddHandler implements RequestHandlerInterface
     }
 
     /**
-     * @todo Refactor into a service
-     * @param ArticleModel $article
+     * @param ArticleEntity $article
      * @param array $images
      * @param array $media
      * @param array $categories
      * @param array $keywords
      * @param array $featuredSites
      * @return AddHandler
-     * @throws \App\Model\ModelException
+     * @throws \App\Entity\EntityException
+     *@todo Refactor into a service
      */
     private function saveElasticsearch(
-        ArticleModel $article,
+        ArticleEntity $article,
         array $images,
         array $media,
         array $categories,
@@ -263,18 +263,18 @@ class AddHandler implements RequestHandlerInterface
     }
 
     /**
-     * @todo Refactor into a service
      * @param array $data
-     * @return ArticleModel
-     * @throws \App\Model\ModelException
+     * @return ArticleEntity
+     * @throws \App\Entity\EntityException
+     *@todo Refactor into a service
      */
-    private function mapToArticleModel(array $data) : ArticleModel
+    private function mapToArticleModel(array $data) : ArticleEntity
     {
         $dateTime = new \DateTime();
 
         $publishDate = new \DateTime($data['publishDate']);
 
-        $article = new ArticleModel([
+        $article = new ArticleEntity([
             'title'             => $data['title'],
             'subtitle'          => $data['subtitle'],
             'summary'           => $data['summary'],
@@ -396,8 +396,7 @@ class AddHandler implements RequestHandlerInterface
     }
 
     /**
-     * @todo Refactor into a service
-     * @param ArticleModel $article
+     * @param ArticleEntity $article
      * @param array $images
      * @param array $media
      * @param array $categories
@@ -405,9 +404,10 @@ class AddHandler implements RequestHandlerInterface
      * @param array $featuredArticles
      * @return AddHandler
      * @throws \App\Mapper\MapperException
+     *@todo Refactor into a service
      */
     private function saveDatabase(
-        ArticleModel $article,
+        ArticleEntity $article,
         array $images,
         array $media,
         array $categories,

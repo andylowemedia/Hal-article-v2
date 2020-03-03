@@ -44,6 +44,7 @@ class QueryAbstractTest extends TestCase
             'from' => 0,
             'body' => [
                 '_source' => [
+                    'id',
                     'slug',
                     'title',
                     'subtitle',
@@ -55,10 +56,11 @@ class QueryAbstractTest extends TestCase
                     'categories',
                     'displayCategories',
                     'keywords',
+                    'posted',
                     'url'
                 ],
                 'track_scores' => 1,
-                'min_score' => 1,
+//                'min_score' => 1,
                 'query' => [
                     'bool' => []
                 ]
@@ -83,6 +85,7 @@ class QueryAbstractTest extends TestCase
             'from' => 0,
             'body' => [
                 '_source' => [
+                    'id',
                     'slug',
                     'title',
                     'subtitle',
@@ -94,10 +97,11 @@ class QueryAbstractTest extends TestCase
                     'categories',
                     'displayCategories',
                     'keywords',
+                    'posted',
                     'url'
                 ],
                 'track_scores' => 1,
-                'min_score' => 1,
+//                'min_score' => 1,
                 'query' => [
                     'bool' => []
                 ]

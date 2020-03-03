@@ -2,18 +2,18 @@
 
 namespace AppTest\Mapper;
 
-use App\Mapper\Article;
+use App\Mapper\ArticleMapper;
 use App\Mapper\MapperFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
-use Zend\Db\Adapter\AdapterInterface;
+use Laminas\Db\Adapter\AdapterInterface;
 
 class MapperFactoryTest extends TestCase
 {
     public function testFactoryReturnsExpectedMapperInstance()
     {
         $container = $this->getMockBuilder(ContainerInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
 
         $adapter = $this->getMockBuilder(AdapterInterface::class)
@@ -23,8 +23,8 @@ class MapperFactoryTest extends TestCase
             ->method('get')
             ->willReturn($adapter);
 
-        $result = (new MapperFactory())($container, Article::class);
+        $result = (new MapperFactory())($container, ArticleMapper::class);
 
-        $this->assertInstanceOf(Article::class, $result);
+        $this->assertInstanceOf(ArticleMapper::class, $result);
     }
 }

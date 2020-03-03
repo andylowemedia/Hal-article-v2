@@ -1,8 +1,8 @@
 <?php
 namespace App\Query;
 
-use App\ResultSet\Article as ArticleResultSet;
-use App\Model\DisplayArticle as ArticleModel;
+use App\ResultSet\ArticleResultSet as ArticleResultSet;
+use App\Entity\DisplayArticleEntity;
 
 /**
  * Description of Search
@@ -20,12 +20,13 @@ class Search extends QueryAbstract
 
         $results = $client->search($this->params);
 
+
         if (empty($results['hits']['hits'])) {
             $data = [];
         } else {
             $resultSet = new ArticleResultSet();
             $resultSet
-                ->setArrayObjectPrototype(new ArticleModel)
+                ->setArrayObjectPrototype(new DisplayArticleEntity)
                 ->elasticsearchInitialize($results['hits']);
             $data = $resultSet->toArray();
         }

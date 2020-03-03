@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Middleware\Error\JsonErrorResponseGeneratorFactory;
-use Zend\Expressive\Middleware\ErrorResponseGenerator;
+use Mezzio\Middleware\ErrorResponseGenerator;
 use App\Middleware\Error\NotFoundHandler;
 use App\Middleware\Error\NotFoundHandlerFactory;
 

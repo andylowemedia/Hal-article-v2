@@ -2,8 +2,8 @@
 
 namespace App\Handler;
 
-use App\Mapper\ArticleSocialMediaPost;
-use App\Mapper\SocialMedia;
+use App\Mapper\ArticleSocialMediaPostMapper;
+use App\Mapper\SocialMediaMapper;
 use Psr\Container\ContainerInterface;
 
 class UpdateSocialPostsHandlerFactory
@@ -17,8 +17,8 @@ class UpdateSocialPostsHandlerFactory
             $config['elasticsearch']['hosts'],
             $config['api'],
             $dbAdapter,
-            $container->get(ArticleSocialMediaPost::class),
-            $container->get(SocialMedia::class)
+            $container->get(ArticleSocialMediaPostMapper::class),
+            $container->get(SocialMediaMapper::class)
         );
     }
 }

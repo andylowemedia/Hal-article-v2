@@ -3,8 +3,8 @@ namespace App\Middleware\Error;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
-use Zend\Expressive\Handler\NotFoundHandler as ZendNotFoundHandler;
+use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Handler\NotFoundHandler as ZendNotFoundHandler;
 
 class NotFoundHandler extends ZendNotFoundHandler
 {

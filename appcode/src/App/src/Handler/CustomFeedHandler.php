@@ -3,10 +3,10 @@ namespace App\Handler;
 
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use Elasticsearch\Client as ElasticsearchClient;
-use App\ResultSet\Article as ArticleResultSet;
-use App\Model\DisplayArticle as ArticleModel;
+use App\ResultSet\ArticleResultSet as ArticleResultSet;
+use App\Entity\DisplayArticleEntity as ArticleModel;
 
 class CustomFeedHandler implements RequestHandlerInterface
 {

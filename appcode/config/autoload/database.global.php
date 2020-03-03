@@ -1,5 +1,5 @@
 <?php
-use Zend\Db\Adapter\AdapterAbstractServiceFactory;
+use Laminas\Db\Adapter\AdapterAbstractServiceFactory;
 
 return [
     'dependencies' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppTest\ResultSet;
 
 use App\ResultSet\ResultSetAbstract;
@@ -16,6 +18,7 @@ class ResultSetTest extends TestCase
         $resultSet->elasticsearchInitialize($this->createTestData());
 
         $data = new \ArrayObject([
+            'id' => 1,
             'title' => 'Test title for article'
         ]);
 

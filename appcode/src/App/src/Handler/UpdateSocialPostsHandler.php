@@ -3,15 +3,15 @@
 namespace App\Handler;
 
 use App\Mapper\MapperAbstract;
-use Zend\Db\Adapter\Adapter;
-use App\Model\ArticleSocialMediaPost as ArticleSocialMediaPostModel;
+use Laminas\Db\Adapter\Adapter;
+use App\Entity\ArticleSocialMediaPostEntity as ArticleSocialMediaPostModel;
 
 use Elasticsearch\ClientBuilder;
 
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class UpdateSocialPostsHandler implements RequestHandlerInterface
 {
@@ -49,7 +49,7 @@ class UpdateSocialPostsHandler implements RequestHandlerInterface
 
             $responseData = [
                 'success' => true,
-                'message' => 'Article Updated',
+                'message' => 'ArticleMapper Updated',
             ];
             $responseCode = 200;
             $connection->commit();
