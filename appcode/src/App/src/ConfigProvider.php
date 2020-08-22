@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Aws\SqsEvents;
 use App\Handler\RelatedHandlerFactory;
 use App\Handler\RelatedHandler;
 use App\Mapper\MapperFactory;
@@ -10,6 +11,7 @@ use App\Query\Search;
 use App\Query\SearchFactory;
 use App\Query\Summary;
 use App\Query\SummaryFactory;
+use Aws\Sqs\SqsClient;
 use Elasticsearch\Client as ElasticsearchClient;
 
 /**
@@ -69,7 +71,8 @@ class ConfigProvider
 
                 ElasticsearchClient::class      => Elasticsearch\ClientFactory::class,
                 Summary::class                  => SummaryFactory::class,
-                Search::class                   => SearchFactory::class
+                Search::class                   => SearchFactory::class,
+                SqsClient::class                => SqsEvents::class
             ],
 //            'abstract_factories' => [
 //                Mapper\MapperFactory::class

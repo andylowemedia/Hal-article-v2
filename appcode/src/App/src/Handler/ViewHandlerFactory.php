@@ -9,6 +9,6 @@ class ViewHandlerFactory
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('config');
-        return new ViewHandler($config['elasticsearch']['hosts']);
+        return new ViewHandler($config['elasticsearch']['host']);
     }
 }

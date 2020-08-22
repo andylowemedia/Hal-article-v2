@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1583001991">
-  <project timestamp="1583001991">
+<coverage generated="1586622880">
+  <project timestamp="1586622880">
+    <package name="App\Aws">
+      <file name="/var/www/html/src/App/src/Aws/SqsLog.php">
+        <class name="App\Aws\SqsLog" namespace="App\Aws">
+          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+        </class>
+        <line num="12" type="method" name="__invoke" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="13" type="stmt" count="0"/>
+        <line num="14" type="stmt" count="0"/>
+        <line num="15" type="stmt" count="0"/>
+        <line num="16" type="stmt" count="0"/>
+        <line num="17" type="stmt" count="0"/>
+        <metrics loc="17" ncloc="17" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+      </file>
+    </package>
     <package name="App\Elasticsearch">
       <file name="/var/www/html/src/App/src/Elasticsearch/ClientFactory.php">
         <class name="App\Elasticsearch\ClientFactory" namespace="App\Elasticsearch">
@@ -378,7 +392,7 @@
       </file>
       <file name="/var/www/html/src/App/src/Entity/EntityAbstract.php">
         <class name="App\Entity\EntityAbstract" namespace="App\Entity">
-          <metrics complexity="24" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="45" coveredstatements="45" elements="52" coveredelements="52"/>
+          <metrics complexity="25" methods="8" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="45" elements="54" coveredelements="52"/>
         </class>
         <line num="9" type="method" name="__construct" visibility="public" complexity="2" crap="2" count="77"/>
         <line num="11" type="stmt" count="77"/>
@@ -432,7 +446,9 @@
         <line num="105" type="stmt" count="2"/>
         <line num="106" type="stmt" count="2"/>
         <line num="110" type="stmt" count="2"/>
-        <metrics loc="112" ncloc="88" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="45" coveredstatements="45" elements="52" coveredelements="52"/>
+        <line num="113" type="method" name="jsonSerialize" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="115" type="stmt" count="0"/>
+        <metrics loc="117" ncloc="93" classes="1" methods="8" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="45" elements="54" coveredelements="52"/>
       </file>
       <file name="/var/www/html/src/App/src/Entity/EntityException.php">
         <class name="App\Entity\EntityException" namespace="App\Entity">
@@ -700,10 +716,22 @@
         <metrics loc="18" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
     </package>
+    <package name="App\Middleware">
+      <file name="/var/www/html/src/App/src/Middleware/ArticleAddValidationMiddleware.php">
+        <class name="App\Middleware\ArticleAddValidationMiddleware" namespace="App\Middleware">
+          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+        </class>
+        <line num="15" type="method" name="process" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="16" type="stmt" count="0"/>
+        <line num="18" type="stmt" count="0"/>
+        <line num="19" type="stmt" count="0"/>
+        <metrics loc="19" ncloc="17" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+      </file>
+    </package>
     <package name="App\Query">
       <file name="/var/www/html/src/App/src/Query/QueryAbstract.php">
         <class name="App\Query\QueryAbstract" namespace="App\Query" fullPackage="App" package="App">
-          <metrics complexity="45" methods="7" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="85" coveredstatements="39" elements="92" coveredelements="42"/>
+          <metrics complexity="38" methods="7" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="36" elements="79" coveredelements="39"/>
         </class>
         <line num="22" type="method" name="getParams" visibility="public" complexity="1" crap="1" count="2"/>
         <line num="24" type="stmt" count="2"/>
@@ -728,35 +756,34 @@
         <line num="73" type="stmt" count="2"/>
         <line num="98" type="stmt" count="2"/>
         <line num="99" type="stmt" count="0"/>
-        <line num="103" type="stmt" count="2"/>
-        <line num="105" type="stmt" count="2"/>
-        <line num="107" type="stmt" count="2"/>
-        <line num="109" type="stmt" count="2"/>
-        <line num="117" type="method" name="buildFilteringParams" visibility="private" complexity="24" crap="261.39" count="2"/>
-        <line num="119" type="stmt" count="2"/>
-        <line num="120" type="stmt" count="0"/>
+        <line num="102" type="stmt" count="2"/>
+        <line num="104" type="stmt" count="2"/>
+        <line num="106" type="stmt" count="2"/>
+        <line num="108" type="stmt" count="2"/>
+        <line num="116" type="method" name="buildFilteringParams" visibility="private" complexity="17" crap="130.97" count="2"/>
+        <line num="118" type="stmt" count="2"/>
+        <line num="119" type="stmt" count="0"/>
+        <line num="122" type="stmt" count="0"/>
         <line num="123" type="stmt" count="0"/>
-        <line num="124" type="stmt" count="0"/>
-        <line num="130" type="stmt" count="2"/>
+        <line num="129" type="stmt" count="2"/>
+        <line num="130" type="stmt" count="0"/>
         <line num="131" type="stmt" count="0"/>
         <line num="132" type="stmt" count="0"/>
-        <line num="133" type="stmt" count="0"/>
-        <line num="135" type="stmt" count="0"/>
-        <line num="136" type="stmt" count="0"/>
-        <line num="137" type="stmt" count="0"/>
-        <line num="141" type="stmt" count="2"/>
+        <line num="134" type="stmt" count="0"/>
+        <line num="140" type="stmt" count="2"/>
+        <line num="141" type="stmt" count="0"/>
         <line num="142" type="stmt" count="0"/>
-        <line num="143" type="stmt" count="0"/>
-        <line num="145" type="stmt" count="0"/>
-        <line num="150" type="stmt" count="2"/>
+        <line num="144" type="stmt" count="0"/>
+        <line num="149" type="stmt" count="2"/>
+        <line num="150" type="stmt" count="0"/>
         <line num="151" type="stmt" count="0"/>
-        <line num="152" type="stmt" count="0"/>
-        <line num="154" type="stmt" count="0"/>
-        <line num="159" type="stmt" count="2"/>
+        <line num="153" type="stmt" count="0"/>
+        <line num="158" type="stmt" count="2"/>
+        <line num="159" type="stmt" count="0"/>
         <line num="160" type="stmt" count="0"/>
         <line num="161" type="stmt" count="0"/>
-        <line num="162" type="stmt" count="0"/>
-        <line num="167" type="stmt" count="2"/>
+        <line num="166" type="stmt" count="2"/>
+        <line num="167" type="stmt" count="0"/>
         <line num="168" type="stmt" count="0"/>
         <line num="169" type="stmt" count="0"/>
         <line num="173" type="stmt" count="2"/>
@@ -764,40 +791,28 @@
         <line num="175" type="stmt" count="0"/>
         <line num="176" type="stmt" count="0"/>
         <line num="180" type="stmt" count="2"/>
-        <line num="181" type="stmt" count="0"/>
-        <line num="182" type="stmt" count="0"/>
-        <line num="183" type="stmt" count="0"/>
-        <line num="187" type="stmt" count="2"/>
-        <line num="188" type="stmt" count="0"/>
-        <line num="189" type="stmt" count="0"/>
-        <line num="190" type="stmt" count="0"/>
-        <line num="194" type="stmt" count="2"/>
-        <line num="195" type="stmt" count="0"/>
+        <line num="188" type="method" name="buildSortParams" visibility="private" complexity="3" crap="5.67" count="2"/>
+        <line num="190" type="stmt" count="2"/>
+        <line num="191" type="stmt" count="0"/>
+        <line num="192" type="stmt" count="0"/>
+        <line num="194" type="stmt" count="0"/>
         <line num="196" type="stmt" count="0"/>
-        <line num="197" type="stmt" count="0"/>
-        <line num="201" type="stmt" count="2"/>
-        <line num="209" type="method" name="buildSortParams" visibility="private" complexity="3" crap="5.67" count="2"/>
-        <line num="211" type="stmt" count="2"/>
-        <line num="212" type="stmt" count="0"/>
-        <line num="213" type="stmt" count="0"/>
-        <line num="215" type="stmt" count="0"/>
-        <line num="217" type="stmt" count="0"/>
-        <line num="220" type="stmt" count="2"/>
-        <line num="228" type="method" name="buildDateParams" visibility="private" complexity="8" crap="22.91" count="2"/>
-        <line num="230" type="stmt" count="2"/>
-        <line num="231" type="stmt" count="0"/>
-        <line num="234" type="stmt" count="2"/>
-        <line num="235" type="stmt" count="0"/>
-        <line num="238" type="stmt" count="2"/>
-        <line num="239" type="stmt" count="0"/>
-        <line num="241" type="stmt" count="0"/>
-        <line num="242" type="stmt" count="0"/>
-        <line num="244" type="stmt" count="2"/>
-        <line num="245" type="stmt" count="0"/>
-        <line num="247" type="stmt" count="0"/>
-        <line num="248" type="stmt" count="0"/>
-        <line num="252" type="stmt" count="2"/>
-        <metrics loc="254" ncloc="215" classes="1" methods="7" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="85" coveredstatements="39" elements="92" coveredelements="42"/>
+        <line num="199" type="stmt" count="2"/>
+        <line num="207" type="method" name="buildDateParams" visibility="private" complexity="8" crap="22.91" count="2"/>
+        <line num="209" type="stmt" count="2"/>
+        <line num="210" type="stmt" count="0"/>
+        <line num="213" type="stmt" count="2"/>
+        <line num="214" type="stmt" count="0"/>
+        <line num="217" type="stmt" count="2"/>
+        <line num="218" type="stmt" count="0"/>
+        <line num="220" type="stmt" count="0"/>
+        <line num="221" type="stmt" count="0"/>
+        <line num="223" type="stmt" count="2"/>
+        <line num="224" type="stmt" count="0"/>
+        <line num="226" type="stmt" count="0"/>
+        <line num="227" type="stmt" count="0"/>
+        <line num="231" type="stmt" count="2"/>
+        <metrics loc="233" ncloc="188" classes="1" methods="7" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="36" elements="79" coveredelements="39"/>
       </file>
       <file name="/var/www/html/src/App/src/Query/Search.php">
         <class name="App\Query\Search" namespace="App\Query">
@@ -808,7 +823,6 @@
         <line num="17" type="stmt" count="0"/>
         <line num="19" type="stmt" count="0"/>
         <line num="21" type="stmt" count="0"/>
-        <line num="23" type="stmt" count="0"/>
         <line num="24" type="stmt" count="0"/>
         <line num="25" type="stmt" count="0"/>
         <line num="26" type="stmt" count="0"/>
@@ -822,7 +836,8 @@
         <line num="34" type="stmt" count="0"/>
         <line num="35" type="stmt" count="0"/>
         <line num="36" type="stmt" count="0"/>
-        <metrics loc="37" ncloc="32" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="0" elements="19" coveredelements="0"/>
+        <line num="37" type="stmt" count="0"/>
+        <metrics loc="38" ncloc="33" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="0" elements="19" coveredelements="0"/>
       </file>
       <file name="/var/www/html/src/App/src/Query/SearchFactory.php">
         <class name="App\Query\SearchFactory" namespace="App\Query">
@@ -952,6 +967,6 @@
         <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
     </package>
-    <metrics files="43" loc="2775" ncloc="1812" classes="21" methods="169" coveredmethods="142" conditionals="0" coveredconditionals="0" statements="514" coveredstatements="379" elements="683" coveredelements="521"/>
+    <metrics files="45" loc="2796" ncloc="1825" classes="23" methods="172" coveredmethods="142" conditionals="0" coveredconditionals="0" statements="510" coveredstatements="376" elements="682" coveredelements="518"/>
   </project>
 </coverage>

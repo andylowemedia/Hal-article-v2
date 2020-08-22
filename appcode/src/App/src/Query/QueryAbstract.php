@@ -52,20 +52,19 @@ abstract class QueryAbstract
     public function buildClientParams(array $params): self
     {
         if (!isset($params['index'])) {
-            throw new \InvalidArgumentException('Index must be set');
+            throw new \InvalidArgumentException('Index must be set', 400);
         }
 
         if (!isset($params['type'])) {
-            throw new \InvalidArgumentException('Type must be set');
+            throw new \InvalidArgumentException('Type must be set', 400);
         }
 
         $size = isset($params['size']) ? $params['size'] : 102;
 
-        $from = isset($params['page']) ? ($params['page'] * $params['size']) : 0;
+        $from = isset($params['page']) ? ($params['page'] * $size) : 0;
         if ($from < 0) {
             $from = 0;
         }
-
 
         $this->params = [
             'index' => $params['index'],
@@ -89,7 +88,7 @@ abstract class QueryAbstract
                     'posted',
                     'url',
                 ],
-                'track_scores' => true,
+//                'track_scores' => true,
                 'query' => [
                     "bool" => []
                 ]
@@ -99,7 +98,6 @@ abstract class QueryAbstract
         if (isset($params['min-score'])) {
             $this->params['body']['min_source'] = $params['min-score'];
         }
-
 
         $this->buildFilteringParams($params);
 
@@ -130,17 +128,18 @@ abstract class QueryAbstract
 
         if (isset($params['keywords'])) {
             $keywords = [];
-            foreach ($params['keywords'] as $keyword) {
+            foreach (\explode(',', $params['keywords']) as $keyword) {
                 $keywords['should'][] = ["term" => ["keywords" => $keyword]];
             }
-            $this->params['body']['query']['bool']['must']['bool'] = $keywords;
-            $this->params['body']['query']['bool']['must_not'] = [
-                "term" => ["slug" => $params['slug']]
-            ];
+            $this->params['body']['query']['bool'] = $keywords;
+//            $this->params['body']['query']['bool']['must_not'] = [
+//                "term" => ["slug" => $params['slug']]
+//            ];
         }
 
+
         if (isset($params["exists"])) {
-            foreach ($params["exists"] as $field) {
+            foreach (\explode(',', $params["exists"]) as $field) {
                 $this->params['body']['query']['bool']['must'][] =
                     ['exists' => [
                         'field' => $field
@@ -149,7 +148,7 @@ abstract class QueryAbstract
         }
 
         if (isset($params["not-exists"])) {
-            foreach ($params["not-exists"] as $field) {
+            foreach (\explode(',', $params["not-exists"]) as $field) {
                 $this->params['body']['query']['bool']['must_not'][] =
                     ['exists' => [
                         'field' => $field
@@ -157,13 +156,13 @@ abstract class QueryAbstract
             }
         }
 
-//        if (isset($params["excludes"])) {
-//            foreach ($params["excludes"] as $key => $field) {
-//                foreach ($field as $value) {
-//                    $this->params['body']['query']['bool']['must_not'][]['match_phrase'] = [$key => $value];
-//                }
-//            }
-//        }
+        if (isset($params["excludes"])) {
+            foreach ($params["excludes"] as $key => $field) {
+                foreach (\explode(',', $field) as $value) {
+                    $this->params['body']['query']['bool']['must_not'][]['match_phrase'] = [$key => $value];
+                }
+            }
+        }
 
         if (isset($params['filter']) && is_array($params['filter'])) {
             foreach ($params['filter'] as $key => $value) {
@@ -190,12 +189,7 @@ abstract class QueryAbstract
     private function buildSortParams(array $params): self
     {
         if (isset($params['sort'])) {
-            if (is_array($params['sort'])) {
-                $sort = $params['sort'];
-            } else {
-                $sort = [$params['sort']];
-            }
-            $this->params['sort'] = $sort;
+            $this->params['sort'] = \explode(',', $params['sort']);
         }
 
         return $this;

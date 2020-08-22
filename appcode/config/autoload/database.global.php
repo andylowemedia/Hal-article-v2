@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 use Laminas\Db\Adapter\AdapterAbstractServiceFactory;
 
 return [
@@ -26,8 +29,6 @@ return [
         ],
     ],
     'elasticsearch' => [
-        'hosts' => [
-            getenv('ELASTICSEARCH_ARTICLE_HOST'),
-        ],
+        'host' => getenv('ELASTICSEARCH_ARTICLE_HOST'),
     ]
 ];

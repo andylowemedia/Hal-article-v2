@@ -33,9 +33,9 @@ use Mezzio\MiddlewareFactory;
  * );
  */
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->get('/health-check', App\Handler\HealthCheckHandler::class, 'health-check');
-    $app->get('/', App\Handler\HealthCheckHandler::class, 'default-health-check');
+    $app->route('/health-check', App\Handler\HealthCheckHandler::class, ['HEAD'],'health-check');
 
+//    $app->get('/summary', App\Handler\SummaryHandler::class, 'summary');
     $app->get('/custom-feed', App\Handler\CustomFeedHandler::class, 'custom-feed');
     $app->get('/search', App\Handler\SearchHandler::class, 'search');
     $app->get('/{slug}', App\Handler\ViewHandler::class, 'view')
@@ -44,13 +44,12 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
                 'slug' => '[0-9a-zA-Z-]+'
             ]
         ]);
-    $app->post('/', App\Handler\AddHandler::class, 'add');
+    $app->post('/', [App\Middleware\ArticleAddValidationMiddleware::class, App\Handler\AddHandler::class], 'add');
     $app->put('/{id}', App\Handler\EditHandler::class, 'edit');
     $app->delete('/{id}', App\Handler\DeleteHandler::class, 'delete');
 
 
 //    $app->get('/related', App\Handler\RelatedHandler::class, 'related');
-//    $app->get('/summary', App\Handler\SummaryHandler::class, 'summary');
     //$app->post('/article/history/add', App\Handler\HistoryAddHandler::class, 'history-add');
 
     //$app->patch('/article', App\Handler\UpdateSocialPostsHandler::class, 'update-social-posts');

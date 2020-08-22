@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Handler;
 
 use App\Entity\ArticleEntity as ArticleModel;
@@ -39,8 +41,10 @@ class EditHandler implements RequestHandlerInterface
     private $dbAdapter;
     private $articleMapper;
     private $articleImageMapper;
+    private $articleMediaMapper;
     private $articleCategoryMapper;
     private $articleKeywordMapper;
+    private $featuredArticleMapper;
     private $categories = [];
     private $systemCategories = [];
     private $featuredSites;

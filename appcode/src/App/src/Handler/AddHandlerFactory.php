@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface;
 use App\Mapper\ArticleMapper as ArticleMapper;
 use App\Mapper\ArticleImageMapper as ArticleImageMapper;
@@ -22,9 +23,10 @@ class AddHandlerFactory
         $articleCategoryMapper = $container->get(ArticleCategoryMapper::class);
         $articleKeywordMapper = $container->get(ArticleKeywordMapper::class);
         $featuredArticleMapper = $container->get(FeaturedArticleMapper::class);
+        $sqsClient = $container->get(SqsClient::class);
 
         return new AddHandler(
-            $config['elasticsearch']['hosts'],
+            [$config['elasticsearch']['host']],
             $config['api'],
             $config['featured']['sites'],
             $dbAdapter,
@@ -33,7 +35,9 @@ class AddHandlerFactory
             $articleMediaMapper,
             $articleCategoryMapper,
             $articleKeywordMapper,
-            $featuredArticleMapper
+            $featuredArticleMapper,
+            $sqsClient,
+            $config['queue']['events']['queue']
         );
     }
 }

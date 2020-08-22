@@ -11,7 +11,7 @@ class ClientFactory
         $config = $container->get('config');
 
         return ClientBuilder::create()
-                ->setHosts($config['elasticsearch']['hosts'])
+                ->setHosts([$config['elasticsearch']['host']])
                 ->build();
     }
 }

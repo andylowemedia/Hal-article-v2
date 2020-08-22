@@ -17,12 +17,6 @@ class SearchHandler implements RequestHandlerInterface
         $this->search = $search;
     }
 
-    /**
-     * @OA\Get(
-     *     path="/search",
-     *     @OA\Response(response="200", description="Search articles")
-     * )
-     */
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
         $params = $request->getQueryParams();

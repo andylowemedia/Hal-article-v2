@@ -1,0 +1,761 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "The Hal Project Article Microservice",
+    "version": "0.6.0"
+  },
+  "servers": [
+    {
+      "url": "http://hal-article-v2.discovery:8082/"
+    }
+  ],
+  "paths": {
+    "/health-check": {
+      "head": {
+        "summary": "Health check",
+        "tags": [
+          "Articles"
+        ],
+        "operationId": "App\\Handler\\HealthCheckHandler::handle",
+        "responses": {
+          "204": {
+            "description": "Health Check Endpoint Response"
+          }
+        }
+      }
+    },
+    "/{slug}": {
+      "description": "local development network",
+      "get": {
+        "summary": "Fetch Article",
+        "tags": [
+          "Articles"
+        ],
+        "operationId": "App\\Handler\\ViewHandler::handle",
+        "responses": {
+          "200": {
+            "description": "Article Data Endpoint Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Article Data Endpoint Not Found Response"
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Slug of the article",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "netflix-stock-price-boosted-by-coronavirus"
+            }
+          }
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search Articles",
+        "tags": [
+          "Articles"
+        ],
+        "operationId": "App\\Handler\\SearchHandler::handle",
+        "responses": {
+          "200": {
+            "description": "Searching of articles has found results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Article Search Endpoint Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Status of request",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Message of status from request",
+                      "example": "An error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Article search has not found any results"
+          }
+        },
+        "parameters": [
+          {
+            "name": "index",
+            "in": "query",
+            "description": "Index for articles",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "articles"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type for articles",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "article"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of articles to return",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Starting point in terms of pages of articles to return, based on the size of each page.",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Single term for searching articles",
+            "schema": {
+              "type": "string",
+              "example": "brexit"
+            }
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "description": "Searching for articles keywords",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "Donald Trump",
+                "Coronavirus"
+              ]
+            }
+          },
+          {
+            "name": "exists",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "description": "Fields must exist in articles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "image",
+                "categories"
+              ]
+            }
+          },
+          {
+            "name": "not-exists",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "description": "Fields must not exist in articles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "image",
+                "categories"
+              ]
+            }
+          },
+          {
+            "name": "excludes",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "description": "Phrases must not be included in articles",
+            "schema": {
+              "type": "object",
+              "example": {
+                "title": "netflix,boris"
+              }
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "description": "Filter articles by field and value",
+            "schema": {
+              "type": "object",
+              "example": {
+                "title": "Democratic"
+              }
+            }
+          },
+          {
+            "name": "not-filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "description": "Filter articles by field and value",
+            "schema": {
+              "type": "object",
+              "example": {
+                "title": "Washington"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "style": "form",
+            "explode": false,
+            "description": "Sort articles by field",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "publishDate:desc",
+                "title:desc"
+              ]
+            }
+          },
+          {
+            "name": "date-fr",
+            "in": "query",
+            "description": "Filter articles from date",
+            "schema": {
+              "type": "string",
+              "example": "2020-01-01"
+            }
+          },
+          {
+            "name": "date-to",
+            "in": "query",
+            "description": "Filter articles from date",
+            "schema": {
+              "type": "string",
+              "example": "2020-03-01"
+            }
+          }
+        ]
+      }
+    },
+    "/": {
+      "post": {
+        "operationId": "App\\Handler\\AddHandler::handle",
+        "summary": "Add Article",
+        "tags": [
+          "Articles"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "summary": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "sourceId": {
+                    "type": "integer"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "articleTypeId": {
+                    "type": "integer"
+                  },
+                  "publishDate": {
+                    "type": "string"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "media": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categoryCodes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "links": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "headline": {
+                    "type": "boolean"
+                  }
+                },
+                "example": {
+                  "title": "article title",
+                  "subtitle": "article subtitle",
+                  "summary": "article summary paragraph",
+                  "content": "article content",
+                  "publishDate": "2020-01-01 00:00:00",
+                  "author": "article author",
+                  "articleTypeId": 1,
+                  "url": "http://www.something.com/article-title",
+                  "sourceId": 1,
+                  "images": [
+                    "image url"
+                  ],
+                  "media": [
+                    "media url"
+                  ],
+                  "categoryIds": [
+                    1,
+                    2
+                  ],
+                  "displayCategories": [
+                    {
+                      "name": "UK",
+                      "code": "currentAffairs-UK"
+                    }
+                  ],
+                  "categoryCodes": [
+                    "currentAffairs",
+                    "currentAffairs-uk"
+                  ],
+                  "keywords": [
+                    "article keyword"
+                  ],
+                  "headline": true
+                },
+                "required": [
+                  "title",
+                  "subtitle",
+                  "content",
+                  "publishDate",
+                  "author",
+                  "articleTypeId",
+                  "url",
+                  "sourceId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Add article successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate article",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Status of request",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Message of status for request",
+                      "example": "An error has occurred : Statement could not be executed (23000 - 1062 - Duplicate entry 'article-title-12' for key 'slug_UNIQUE')"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Status of request"
+          },
+          "message": {
+            "type": "string",
+            "description": "String status of request",
+            "example": "Article added"
+          },
+          "total": {
+            "type": "integer",
+            "example": 11
+          },
+          "count": {
+            "type": "integer",
+            "example": 1
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "example": {
+                "id": 1429588,
+                "slug": "explainer--super-tuesday-contests-offer-big-rewards--challenges-in-u-s--democratic-presidential-race",
+                "title": "Explainer: Super Tuesday contests offer big rewards, challenges in U.S. Democratic presidential race",
+                "subtitle": "Democrat primary",
+                "summary": "WASHINGTON (Reuters) - Fourteen states and one U.S. territory host Super Tuesday primaries next week, a flurry that could bring more clarity about whi",
+                "author": "Ginger Gibson",
+                "url": "https://uk.reuters.com/article/uk-usa-election-super-tuesday-explainer/explainer-super-tuesday-contests-offer-big-rewards-challenges-in-u-s-democratic-presidential-race-idUKKCN20M1K7",
+                "publishDate": "2020-02-29 20:04:13",
+                "source": "Reuters",
+                "image": "",
+                "displayCategories": [
+                  {
+                    "code": "currentAffairs-world",
+                    "name": "World"
+                  }
+                ],
+                "keywords": [],
+                "posted": []
+              }
+            }
+          }
+        }
+      },
+      "AddResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Status of request"
+          },
+          "message": {
+            "type": "string",
+            "description": "String status of request",
+            "example": "Article added"
+          },
+          "article": {
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Unique ID of article",
+                "example": "1429692,"
+              },
+              "slug": {
+                "type": "string",
+                "description": "Unique slug of article",
+                "example": "article-title-12"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of article",
+                "example": "Article Title 12"
+              },
+              "subtitle": {
+                "type": "string",
+                "description": "Subtitle of article",
+                "example": "Article Subtitle"
+              },
+              "summary": {
+                "type": "string",
+                "description": "Summary of article",
+                "example": "Article Summary Paragraph"
+              },
+              "content": {
+                "type": "string",
+                "description": "Content of article",
+                "example": "<p>Article Content in HTML markup</p>"
+              },
+              "author": {
+                "type": "string",
+                "description": "Author of article",
+                "example": "John Doe"
+              },
+              "originalUrl": {
+                "type": "string",
+                "description": "URL of article.",
+                "example": "http://www.something.com/article-title"
+              },
+              "sourceId": {
+                "type": "integer",
+                "description": "Source ID of article",
+                "example": 1
+              },
+              "articleTypeId": {
+                "type": "integer",
+                "description": "Type ID of article",
+                "example": 1
+              },
+              "publishDate": {
+                "type": "string",
+                "description": "Publication date of article",
+                "example": "2020-01-01 00:00:00"
+              },
+              "statusId": {
+                "type": "integer",
+                "description": "Status ID of article.",
+                "example": 2
+              },
+              "images": {
+                "type": "array",
+                "description": "Images for article",
+                "example": [
+                  {
+                    "id": 2934544,
+                    "articleId": 1429692,
+                    "url": "image url",
+                    "statusId": 2
+                  }
+                ]
+              },
+              "media": {
+                "type": "array",
+                "description": "Media for article",
+                "example": [
+                  {
+                    "id": 35140,
+                    "articleId": 1429692,
+                    "code": "media url",
+                    "statusId": 2
+                  }
+                ]
+              },
+              "categoryIds": {
+                "type": "array",
+                "description": "Media for article",
+                "example": [
+                  1
+                ]
+              },
+              "categoryCodes": {
+                "description": "Category codes for article",
+                "type": "array",
+                "example": [
+                  "currentAffairs",
+                  "currentAffairs-UK"
+                ]
+              },
+              "displayCategories": {
+                "type": "array",
+                "description": "Display categories for article",
+                "example": [
+                  {
+                    "name": "UK",
+                    "code": "currentAffairs-UK"
+                  }
+                ]
+              },
+              "keywords": {
+                "type": "array",
+                "description": "Keywords of Article",
+                "example": [
+                  {
+                    "id": 3314394,
+                    "articleId": 1429692,
+                    "keyword": "article keyword"
+                  }
+                ]
+              },
+              "featured": {
+                "type": "array",
+                "description": "Article featured details",
+                "example": [
+                  {
+                    "id": 471215,
+                    "articleId": 1429692,
+                    "siteId": 3,
+                    "orderNo": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "ArticleResponse": {
+        "type": "object",
+        "properties": {
+          "article": {
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Unique ID of article",
+                "example": 1429588
+              },
+              "slug": {
+                "type": "string",
+                "description": "Unique slug of article",
+                "example": "article-title"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of article",
+                "example": "Article Title"
+              },
+              "subtitle": {
+                "type": "string",
+                "description": "Subtitle of article",
+                "example": "Article Subtitle"
+              },
+              "summary": {
+                "type": "string",
+                "description": "Summary of article",
+                "example": "Article Summary Paragraph"
+              },
+              "content": {
+                "type": "string",
+                "description": "Content of article",
+                "example": "<p>Article Content in HTML markup</p>"
+              },
+              "author": {
+                "type": "string",
+                "description": "Author of article",
+                "example": "John Doe"
+              },
+              "url": {
+                "type": "string",
+                "description": "URL of article.",
+                "example": "http://www.something.com/article-title"
+              },
+              "source": {
+                "type": "string",
+                "description": "Source name of article",
+                "example": "BBC News"
+              },
+              "publishDate": {
+                "type": "string",
+                "description": "Publication date of article",
+                "example": "2020-01-01 00:00:00"
+              },
+              "date": {
+                "type": "string",
+                "description": "Save date of article",
+                "example": "2020-01-01 01:00:00"
+              },
+              "status": {
+                "type": "integer",
+                "description": "Status ID of article.",
+                "example": 2
+              },
+              "articleTypeId": {
+                "type": "integer",
+                "description": "Type ID of article",
+                "example": 1
+              },
+              "sourceId": {
+                "type": "integer",
+                "description": "Source ID of article",
+                "example": 1
+              },
+              "keywords": {
+                "type": "array",
+                "description": "Keywords of Article",
+                "example": [
+                  "Brexit",
+                  "United Kingdom"
+                ]
+              },
+              "image": {
+                "type": "string",
+                "description": "Main image for article",
+                "example": "something.jpg"
+              },
+              "images": {
+                "type": "array",
+                "description": "Images for article",
+                "example": [
+                  "something.jpg",
+                  "something2.jpg"
+                ]
+              },
+              "categories": {
+                "type": "array",
+                "description": "Categories for article",
+                "example": [
+                  "currentAffairs",
+                  "currentAffairs-world"
+                ]
+              },
+              "displayCategories": {
+                "type": "array",
+                "description": "Display categories for article",
+                "example": [
+                  "Current Affairs - World"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

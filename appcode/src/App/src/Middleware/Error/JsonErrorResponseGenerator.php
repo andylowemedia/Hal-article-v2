@@ -45,7 +45,7 @@ EOT;
      */
     public function __invoke($e, ServerRequestInterface $request, ResponseInterface $response)
     {
-        $code = $e->getCode() === 0 ? 500 : $e->getCode();
+        $code = $e->getCode() === 0 ||  $e->getCode() > 500 ? 500 : $e->getCode();
 
         return new JsonResponse(
             $this->prepareResponseData($e),

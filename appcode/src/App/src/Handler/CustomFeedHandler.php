@@ -24,11 +24,27 @@ class CustomFeedHandler implements RequestHandlerInterface
         $params = [
             'index' => 'articles',
             'type' => 'article',
-
             'body' => [
                 'size' => $queryParams['size'],
                 'from' => $queryParams['from'],
                 'min_score' => $queryParams['threshold'],
+                '_source' => [
+                    'id',
+                    'slug',
+                    'title',
+                    'subtitle',
+                    'summary',
+                    'image',
+                    'publishDate',
+                    'author',
+                    'source',
+                    'categories',
+                    'displayCategories',
+                    'keywords',
+                    'posted',
+                    'url',
+                ],
+                'track_scores' => true,
                 'query' => [
                     'bool' => [
                         "must" => [
@@ -51,9 +67,13 @@ class CustomFeedHandler implements RequestHandlerInterface
             ]
         ];
 
+        if (isset($queryParams['sort'])) {
+            $params['sort'] = $queryParams['sort'];
+        }
+
         if (isset($queryParams['categories'])) {
-            foreach ($queryParams['categories'] as $category) {
-                $breakup = explode('---', $category);
+            foreach (\explode(',', $queryParams['categories']) as $category) {
+                $breakup = explode('|||', $category);
                 $categoryCode = $breakup[0];
                 $score = (int) $breakup[1];
 
@@ -68,9 +88,9 @@ class CustomFeedHandler implements RequestHandlerInterface
             }
         }
 
-        if (isset($queryParams['keywords'])) {
-            foreach ($queryParams['keywords'] as $keyword) {
-                $breakup = explode('|||', $keyword);
+        if (isset($queryParams['terms'])) {
+            foreach (\explode(',', $queryParams['terms']) as $keyword) {
+                    $breakup = explode('|||', $keyword);
                 $search = $breakup[0];
                 $scoreFieldTitle = $breakup[1];
                 $scoreFieldContent = $breakup[2];
@@ -90,8 +110,9 @@ class CustomFeedHandler implements RequestHandlerInterface
         $resultSet->setArrayObjectPrototype(new ArticleModel);
         $resultSet->elasticsearchInitialize($response['hits']);
 
+        $results = $resultSet->toArray();
 
-        return new JsonResponse(['total' => $response['hits']['total'], 'articles' => $resultSet->toArray()]);
+        return new JsonResponse(['total' => $response['hits']['total'], 'count' => count($results), 'articles' => $results]);
     }
 }
 

@@ -2,3 +2,4 @@ nbproject/
 .idea/
 .DS_Store
 appcode/public/coverage/
+/appcode/.phpunit.result.cache

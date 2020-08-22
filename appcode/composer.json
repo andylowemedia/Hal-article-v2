@@ -10,6 +10,7 @@
         "php": "^7.4",
         "ext-PDO": "^7.4",
         "ext-json": "^7.4",
+        "aws/aws-sdk-php": "^3.133",
         "elasticsearch/elasticsearch": "^5.2",
         "guzzlehttp/guzzle": "^6.3",
         "http-interop/http-middleware": "^0.4.1",

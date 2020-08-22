@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\ResultSet\ResultSetAbstract;
 
-abstract class EntityAbstract
+abstract class EntityAbstract implements \JsonSerializable
 {
     public function __construct(array $data = null)
     {
@@ -108,5 +108,10 @@ abstract class EntityAbstract
             }
         }
         return $data;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

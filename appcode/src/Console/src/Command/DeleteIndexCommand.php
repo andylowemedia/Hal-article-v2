@@ -37,7 +37,7 @@ class DeleteIndexCommand extends Command
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('')
-            ->addArgument('data-index', InputArgument::REQUIRED)
+//            ->addArgument('data-index', InputArgument::REQUIRED)
         ;
     }
 

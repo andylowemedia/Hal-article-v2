@@ -43,9 +43,13 @@ RUN \
     && pecl install xdebug \
     && docker-php-ext-enable redis memcached xdebug;
 
+RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 COPY /php/config /var/www/config
 COPY appcode /var/www/html
 
+COPY php/setupAws.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/setupAws.sh;
 COPY php/run.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/run.sh;
 

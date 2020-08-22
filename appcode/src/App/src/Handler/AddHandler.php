@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Handler;
 
-use App\Entity\ArticleEntity as ArticleModel;
+use App\Entity\ArticleEntity as ArticleEntity;
 use App\Mapper\ArticleMapper as ArticleMapper;
 
 use App\Entity\ArticleImageEntity as ArticleImageModel;
@@ -22,6 +22,7 @@ use App\Mapper\FeaturedArticleMapper as FeaturedArticleMapper;
 
 //use App\Model\SourceHistoryMapper as SourceHistoryModel;
 
+use Aws\Sqs\SqsClient;
 use Psr\Http\Message\ResponseInterface;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Sql;
@@ -37,57 +38,77 @@ class AddHandler implements RequestHandlerInterface
     /**
      * @var array
      */
-    private $hosts = [];
+    private array $hosts = [];
 
     /**
      * @var array
      */
-    private $apiConfig;
+    private array $apiConfig;
 
     /**
      * @var Adapter
      */
-    private $dbAdapter;
+    private Adapter $dbAdapter;
 
     /**
      * @var ArticleMapper
      */
-    private $articleMapper;
+    private ArticleMapper $articleMapper;
 
     /**
      * @var ArticleImageMapper
      */
-    private $articleImageMapper;
+    private ArticleImageMapper $articleImageMapper;
+
+    /**
+     * @var ArticleMediaMapper
+     */
+    private ArticleMediaMapper $articleMediaMapper;
 
     /**
      * @var ArticleCategoryMapper
      */
-    private $articleCategoryMapper;
+    private ArticleCategoryMapper $articleCategoryMapper;
 
     /**
      * @var ArticleKeywordMapper
      */
-    private $articleKeywordMapper;
+    private ArticleKeywordMapper $articleKeywordMapper;
+
+    /**
+     * @var FeaturedArticleMapper
+     */
+    private FeaturedArticleMapper $featuredArticleMapper;
 
     /**
      * @var array
      */
-    private $categories = [];
+    private array $categories = [];
 
     /**
      * @var array
      */
-    private $systemCategories = [];
+    private array $systemCategories = [];
 
     /**
      * @var array
      */
-    private $featuredSites = [];
+    private array $featuredSites = [];
 
     /**
      * @var array
      */
-    private $sources = [];
+    private array $sources = [];
+
+    /**
+     * @var SqsClient
+     */
+    private SqsClient $sqsClient;
+
+    /**
+     * @var string
+     */
+    private string $queue;
 
     /**
      * AddHandler constructor.
@@ -112,7 +133,9 @@ class AddHandler implements RequestHandlerInterface
         ArticleMediaMapper $articleMediaMapper,
         ArticleCategoryMapper $articleCategoryMapper,
         ArticleKeywordMapper $articleKeywordMapper,
-        FeaturedArticleMapper $featuredArticleMapper
+        FeaturedArticleMapper $featuredArticleMapper,
+        SqsClient $sqsClient,
+        string $queue
     ) {
 
         $this->apiConfig                = $apiConfig;
@@ -125,6 +148,8 @@ class AddHandler implements RequestHandlerInterface
         $this->articleKeywordMapper     = $articleKeywordMapper;
         $this->featuredArticleMapper    = $featuredArticleMapper;
         $this->featuredSites            = $featuredSites;
+        $this->sqsClient                = $sqsClient;
+        $this->queue                    = $queue;
     }
 
     /**
@@ -138,7 +163,7 @@ class AddHandler implements RequestHandlerInterface
         $data = \json_decode($request->getBody()->getContents(), true);
 
         $this->fetchSources();
-        $this->fetchCategories();
+//        $this->fetchCategories();
 
         $article = $this->mapToArticleModel($data);
 
@@ -157,23 +182,43 @@ class AddHandler implements RequestHandlerInterface
 
         try {
             $this->saveDatabase($article, $images, $media, $categories, $keywords, $featuredSites);
-            $this->saveElasticsearch($article, $images, $media, $categories, $keywords, $featuredSites);
+            $this->saveElasticsearch($article, $images, $media, $data['categoryCodes'], $data['displayCategories'], $keywords, $featuredSites);
             $responseData = [
                 'success' => true,
-                'message' => 'ArticleMapper added',
+                'message' => 'Article added',
                 'article' => $article->toArray()
             ];
-            $responseCode = 200;
+            unset($responseData['article']['date']);
+            $responseData['article']['images'] = $images;
+            $responseData['article']['media'] = $media;
+            $responseData['article']['categoryIds'] = $categories;
+            $responseData['article']['categoryCodes'] = $data['categoryCodes'];
+            $responseData['article']['displayCategories'] = $data['displayCategories'];
+            $responseData['article']['keywords'] = $keywords;
+            $responseData['article']['featured'] = $featuredSites;
+            $responseCode = 201;
             $connection->commit();
-        } catch (\Exception $ex) {
+            $statusId = 4;
+            $outputMessage = "Saved {$data['url']}";
+        } catch (\Exception $error) {
             $responseData = [
                 'success' => false,
-                'message' => 'An error has occurred : ' . $ex->getMessage(),
-                'trace' => $ex->getTraceAsString()
+                'message' => 'An error has occurred : ' . $error->getMessage(),
+                'trace' => $error->getTraceAsString()
             ];
-            $responseCode = 500;
             $connection->rollback();
+            if (strpos(strtolower($error->getMessage()), 'duplicate') !== false) {
+                $statusId = 6;
+                $responseCode = 409;
+            } else {
+                $statusId = 5;
+                $responseCode = 500;
+            }
+
+            $outputMessage = $error->getMessage();
         }
+
+        $this->sendEvent($data, \json_encode($responseData), $statusId, $responseCode, $outputMessage);
         return new JsonResponse($responseData, $responseCode);
     }
 
@@ -181,7 +226,8 @@ class AddHandler implements RequestHandlerInterface
      * @param ArticleEntity $article
      * @param array $images
      * @param array $media
-     * @param array $categories
+     * @param array $categoryCodes
+     * @param array $displayCategories
      * @param array $keywords
      * @param array $featuredSites
      * @return AddHandler
@@ -192,7 +238,8 @@ class AddHandler implements RequestHandlerInterface
         ArticleEntity $article,
         array $images,
         array $media,
-        array $categories,
+        array $categoryCodes,
+        array $displayCategories,
         array $keywords,
         array $featuredSites
     ): self {
@@ -243,15 +290,9 @@ class AddHandler implements RequestHandlerInterface
 
         $params['body']['featured'] = count($featuredSites) > 0 ? true : false;
 
-        foreach ($categories as $category) {
-            $categoryData = $this->categories[$category->categoryId];
-            $params['body']['categories'][] = $categoryData['code'];
-            $params['body']['displayCategories'][] = ['name' => $categoryData['name'], 'code' => $categoryData['code']];
-            if ($categoryData['parentId']) {
-                $params['body']['categories'][] = $this->categories[$categoryData['parentId']]['code'];
-                //$params['body']['displayCategories'][] = $this->categories[$categoryData['parentId']]['name'];
-            }
-        }
+        $params['body']['categories'] = $categoryCodes;
+
+        $params['body']['displayCategories'] = $displayCategories;
 
         foreach ($keywords as $keyword) {
             $params['body']['keywords'][] =  $keyword->keyword;
@@ -343,13 +384,11 @@ class AddHandler implements RequestHandlerInterface
         $categories = [];
 
 
-        if (isset($data['categories'])) {
-            foreach ($data['categories'] as $categoryCode) {
-                if (isset($this->systemCategories[$categoryCode])) {
-                    $categories[] = new ArticleCategoryModel([
-                        'categoryId'  => (int) $this->systemCategories[$categoryCode],
-                    ]);
-                }
+        if (isset($data['categoryIds'])) {
+            foreach ($data['categoryIds'] as $categoryId) {
+                $categories[] = new ArticleCategoryModel([
+                    'categoryId'  => (int) $categoryId,
+                ]);
             }
         }
         return $categories;
@@ -487,5 +526,48 @@ class AddHandler implements RequestHandlerInterface
         }
 
         return $this;
+    }
+
+    private function sendEvent(array $data, string $outputMessage, int $statusId, int $responseCode, string $message): void
+    {
+        $this->sqsClient->sendMessage([
+            'DelaySeconds' => 10,
+            'MessageAttributes' => [
+                "Type" => [
+                    'DataType' => "String",
+                    'StringValue' => "article"
+                ],
+                "Event" => [
+                    'DataType' => "String",
+                    'StringValue' => "article-add"
+                ],
+                "DateTime" => [
+                    'DataType' => "String",
+                    'StringValue' => date('Y-m-d H:i:s')
+                ],
+                "Url" => [
+                    'DataType' => "String",
+                    'StringValue' => $data['url']
+                ],
+                "SourceId" => [
+                    'DataType' => "Number",
+                    'StringValue' => $data['sourceId']
+                ],
+                "StatusId" => [
+                    'DataType' => "Number",
+                    'StringValue' => $statusId
+                ],
+                "ResponseCode" => [
+                    'DataType' => "Number",
+                    'StringValue' => $responseCode
+                ],
+                "ResponseMessage" => [
+                    'DataType' => "String",
+                    'StringValue' => $message
+                ]
+            ],
+            'MessageBody' => $outputMessage,
+            'QueueUrl' => $this->queue
+        ]);
     }
 }

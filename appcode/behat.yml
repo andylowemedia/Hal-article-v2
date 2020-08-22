@@ -6,3 +6,4 @@ default:
         - HealthCheckContext
         - ViewContext
         - SearchContext
+        - AddContext

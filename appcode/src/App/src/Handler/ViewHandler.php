@@ -11,19 +11,16 @@ use Laminas\Diactoros\Response\JsonResponse;
 
 class ViewHandler implements RequestHandlerInterface
 {
-    private array $hosts;
+    private string $host;
 
-    public function __construct(array $hosts)
+    public function __construct(string $host)
     {
-        $this->hosts = $hosts;
+        $this->host = $host;
     }
 
     public function handle(ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
         $slug = $request->getAttribute('slug');
-
-
-
         $params = [
             'index' => 'articles',
             'type' => 'article',
@@ -38,7 +35,7 @@ class ViewHandler implements RequestHandlerInterface
         ];
 
         $client = ClientBuilder::create()
-                ->setHosts($this->hosts)
+                ->setHosts([$this->host])
                 ->build();
 
         $results = $client->search($params);
@@ -52,8 +49,10 @@ class ViewHandler implements RequestHandlerInterface
         $article = $result['_source'];
         $article['id'] = $result['_id'];
 
-        return new JsonResponse([
-            'article' => $article
-        ]);
+        return new JsonResponse(
+            [
+                'article' => $article
+            ]
+        );
     }
 }

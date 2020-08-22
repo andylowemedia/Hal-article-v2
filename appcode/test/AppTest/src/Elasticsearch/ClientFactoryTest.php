@@ -17,9 +17,7 @@ class ClientFactoryTest extends TestCase
 
         $config = [
             'elasticsearch' => [
-                'hosts' => [
-                    '10.211.55.29:9200'
-                ],
+                'host' => '10.211.55.29:9200'
             ]
         ];
 
@@ -29,7 +27,7 @@ class ClientFactoryTest extends TestCase
             ->willReturn($config);
 
         $expectedClientObject = ClientBuilder::create()
-            ->setHosts($config['elasticsearch']['hosts'])
+            ->setHosts([$config['elasticsearch']['host']])
             ->build();
 
         $client = (new ClientFactory())($container);

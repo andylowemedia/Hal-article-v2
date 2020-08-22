@@ -77,7 +77,7 @@ class BuildArticlesIndexCommand extends Command
 
         $count = $this->countOfArticles();
 
-        for ($n = 0; $n < $count; $n += 100) {
+        for ($n = 0; $n < $count; $n += 1000) {
             $select = $this->sql->select()
                 ->columns([
                     'id',
@@ -105,6 +105,7 @@ class BuildArticlesIndexCommand extends Command
                 ->order('date DESC')
                 ->limit(1000)
                 ->offset($n);
+
             $statement = $this->sql->prepareStatementForSqlObject($select);
             $results = $statement->execute();
 
