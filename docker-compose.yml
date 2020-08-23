@@ -14,7 +14,7 @@ services:
     ports:
       - "8082:80"
     volumes:
-      - ./appcode:/var/www/html:cached
+      - ./appcode:/var/www/html
 
     links:
       - php:php-fpm
@@ -58,7 +58,7 @@ services:
 #      XDEBUG_CONFIG: remote_host=host.docker.internal
 
     volumes:
-      - ./appcode:/var/www/html:cached
+      - ./appcode:/var/www/html
 
     depends_on:
       - mysql
