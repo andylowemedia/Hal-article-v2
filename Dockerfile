@@ -14,34 +14,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN \
     apt-get update && \
     apt-get install -y \
-        zlib1g-dev \
-        libicu-dev \
-        g++ \
         vim \
-#        libmcrypt-dev \
-#        php-pear \
-#        curl \
-        wget \
-        git \
-        zip \
-        cron \
-        libzip-dev \
-        libxml2-dev \
-        libmemcached-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-#    && docker-php-ext-install mcrypt \
-    && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
-    && docker-php-ext-install zip \
-#    && docker-php-ext-install xml\
-    && docker-php-ext-install pcntl \
-    && pecl install redis \
-    && pecl install memcached \
     && pecl install xdebug \
-    && docker-php-ext-enable redis memcached xdebug;
+    && docker-php-ext-enable xdebug;
 
 RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
