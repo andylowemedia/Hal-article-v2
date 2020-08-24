@@ -15,9 +15,12 @@ RUN \
     apt-get update && \
     apt-get install -y \
         vim \
+        zip \
+        libzip-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install zip \
     && docker-php-ext-install opcache \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug;

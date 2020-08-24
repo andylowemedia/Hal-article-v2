@@ -1,5 +1,6 @@
 nbproject/
 .idea/
 .DS_Store
-appcode/public/coverage/
+/appcode/public/coverage/
 /appcode/.phpunit.result.cache
+/appcode/public/coverage/
