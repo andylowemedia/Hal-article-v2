@@ -59,7 +59,7 @@ class QueryAbstractTest extends TestCase
                     'posted',
                     'url'
                 ],
-                'track_scores' => 1,
+//                'track_scores' => 1,
 //                'min_score' => 1,
                 'query' => [
                     'bool' => []
@@ -100,7 +100,7 @@ class QueryAbstractTest extends TestCase
                     'posted',
                     'url'
                 ],
-                'track_scores' => 1,
+//                'track_scores' => 1,
 //                'min_score' => 1,
                 'query' => [
                     'bool' => []
