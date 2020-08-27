@@ -3,4 +3,4 @@ Feature: Hal Article Microservice Health Check
 
   Scenario: Loading health check
     Given the health check page is accessed
-    Then a 200 health check response will be recieved
+    Then a 204 health check response will be recieved

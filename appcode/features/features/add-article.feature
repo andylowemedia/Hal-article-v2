@@ -4,5 +4,5 @@ Feature: Add Article
   Scenario: Add article data to databases
     Given article data is prepared
     When save article post request has been sent
-    Then a 201 repsonse is received
+    Then a 201 response is received
     And a successfully created message is received with an article ID

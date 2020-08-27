@@ -56,9 +56,9 @@ class AddContext implements Context
     }
 
     /**
-     * @Then a :statusCode repsonse is received
+     * @Then a :statusCode response is received
      */
-    public function aRepsonseIsReceived(int $statusCode)
+    public function aResponseIsReceived(int $statusCode)
     {
         Assert::assertEquals($statusCode, $this->response->getStatusCode());
     }
@@ -69,8 +69,8 @@ class AddContext implements Context
     public function aSuccessfullyCreatedMessageIsReceivedWithAnArticleId()
     {
         $expectedResponse = <<<JSON
-{"success":true,"message":"ArticleMapper added","article":{"id":1429688,"slug":"test-article","title":"Test Article","subtitle":"Test subtitle","summary":"This is the article text, and can be very big anf as long as it is needed","content":"\u003Cp\u003EThis is the article text, and can be very big anf as long as it is needed\u003C/p\u003E","author":"Whomever the Author is","originalUrl":"https://www.example.com/test-article","sourceId":1,"articleTypeId":1,"publishDate":"2020-01-01 12:00:00","statusId":2,"images":[{"id":2934542,"articleId":1429688,"url":"https://www.example.com/image.jpg","statusId":2}],"media":[{"id":35138,"articleId":1429688,"code":"\u003Ciframe width=\u0022560\u0022 height=\u0022315\u0022 src=\u0022https://www.youtube.com/embed/soemthing\u0022 frameborder=\u00220\u0022 allow=\u0022accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\u0022 allowfullscreen\u003E\u003C/iframe\u003E","statusId":2}],"categoryIds":[{"id":620686,"articleId":1429688,"categoryId":2},{"id":620687,"articleId":1429688,"categoryId":3}],"categoryCodes":["politics","business"],"displayCategories":[{"code":"politics","name":"Politics"},{"code":"business","name":"Business"}],"keywords":[{"id":3314392,"articleId":1429688,"keyword":"something"}],"featured":[{"id":471213,"articleId":1429688,"siteId":3,"orderNo":0}]}}
+{"success":true,"message":"Article added","article":{"id":1429688,"slug":"test-article","title":"Test Article","subtitle":"Test subtitle","summary":"This is the article text, and can be very big anf as long as it is needed","content":"\u003Cp\u003EThis is the article text, and can be very big anf as long as it is needed\u003C/p\u003E","author":"Whomever the Author is","originalUrl":"https://www.example.com/test-article","sourceId":1,"articleTypeId":1,"publishDate":"2020-01-01 12:00:00","statusId":2,"images":[{"id":2934542,"articleId":1429688,"url":"https://www.example.com/image.jpg","statusId":2}],"media":[{"id":35138,"articleId":1429688,"code":"\u003Ciframe width=\u0022560\u0022 height=\u0022315\u0022 src=\u0022https://www.youtube.com/embed/soemthing\u0022 frameborder=\u00220\u0022 allow=\u0022accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\u0022 allowfullscreen\u003E\u003C/iframe\u003E","statusId":2}],"categoryIds":[{"id":620686,"articleId":1429688,"categoryId":2},{"id":620687,"articleId":1429688,"categoryId":3}],"categoryCodes":["politics","business"],"displayCategories":[{"code":"politics","name":"Politics"},{"code":"business","name":"Business"}],"keywords":[{"id":3314392,"articleId":1429688,"keyword":"something"}],"featured":[{"id":471213,"articleId":1429688,"siteId":3,"orderNo":0}]}}
 JSON;
-        Assert::assertEquals(json_decode($this->response->getBody()->getContents()), json_decode($expectedResponse));
+        Assert::assertEquals(json_decode($expectedResponse), json_decode($this->response->getBody()->getContents()));
     }
 }

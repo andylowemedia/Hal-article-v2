@@ -28,7 +28,7 @@ class HealthCheckContext implements Context
     public function loadHealthCheck()
     {
         $client = new \GuzzleHttp\Client();
-        $this->response = $client->get('hal-article-web');
+        $this->response = $client->head('hal-article-web/health-check');
     }
 
     /**
