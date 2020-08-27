@@ -5,8 +5,8 @@ node {
                 checkout scm
                 sh 'docker network create halv2_default'
                 sh 'docker-compose build --no-cache && docker-compose up -d'
-                sleep(300)
-                sh 'docker exec hal-article-php ls -lah vendor'
+                sleep(180)
+                sh 'docker exec hal-article-php composer development-enable'
             } catch (err) {
                 sh 'docker-compose down -v'
                 sh 'docker network rm halv2_default'
@@ -58,3 +58,7 @@ node {
             echo 'Deploying script TODO'
         }
 }
+
+properties properties: [
+  disableConcurrentBuilds()
+]

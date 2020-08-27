@@ -17,9 +17,9 @@ Feature: Search Articles By Query String
     Then an empty search response will be returned
 
   Scenario: Searching article index filter by category that is not 'Entertainment' size of 5
-    Given the microservice search URL is loaded "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching article index filter by term 'brexit' size of 5
     Given the microservice search URL is loaded "/search?index=articles&type=article&search=brexit&size=5"
@@ -42,9 +42,9 @@ Feature: Search Articles By Query String
     Then URL "/search?index=articles&type=article&exists=image&size=5" search content will be returned in a JSON format
 
   Scenario: Searching articles making sure image does not exist
-    Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists=image&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists=image&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&not-exists=image&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&not-exists=image&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching articles making sure image does not exist and ordered by publish date descending
     Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists=image&size=5&sort=publishDate:desc"
