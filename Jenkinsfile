@@ -4,8 +4,8 @@ node {
         stage ('Building Environment') {
             try {
                 checkout scm
-                sh "sed -i \"s/#{TAG_NAME}#/${env.TAG_NAME}/\" docker-compose.yml"
-                sh "sed -i \"s/#{BUILD_NAME}#/${currentBuild.number}/\" docker-compose.yml"
+                sh "sed -i \"s/#{TAG_NAME}#/${env.TAG_NAME}/\" docker-compose.jenkins.yml"
+                sh "sed -i \"s/#{BUILD_NAME}#/${currentBuild.number}/\" docker-compose.jenkins.yml"
 
                 sh "docker network create halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh 'docker-compose -f docker-compose.jenkins.yml build --no-cache && docker-compose -f docker-compose.jenkins.yml up -d'
