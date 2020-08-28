@@ -15,7 +15,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .*"
+                sh "rm -rf .* 2> /dev/null"
+                sh "docker system prune"
                 throw err
             }
 
@@ -35,7 +36,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .*"
+                sh "rm -rf .* 2> /dev/null"
+                sh "docker system prune"
                 throw err
             }
         }
@@ -46,7 +48,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .*"
+                sh "rm -rf .* 2> /dev/null"
+                sh "docker system prune"
                 throw err
             }
         }
@@ -55,6 +58,7 @@ node {
             sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
             sh "rm -rf *"
             sh "rm -rf .* 2> /dev/null"
+            sh "docker system prune"
         }
         stage ('Building & Push Docker Image') {
             checkout scm
@@ -64,6 +68,7 @@ node {
             docker.withRegistry('https://540688370389.dkr.ecr.eu-west-1.amazonaws.com', 'ecr:eu-west-1:aws-lowemedia') {
                 docker.image("low-emedia/hal-article").push(tag)
             }
+            sh "docker system prune"
         }
         stage ('Deploying to ECS') {
             echo 'Deploying script TODO'
