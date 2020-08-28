@@ -1,0 +1,108 @@
+version: '3.8'
+services:
+  web:
+    container_name: 'hal-article-web-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    image: "nginx:latest"
+#    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-nginx:latest"
+#    environment:
+#      SITE_NAME: 'hal-article-v2.discovery'
+#      PROTOCOL: 'http'
+#      SERVER_LANG: 'php'
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./appcode:/var/www/html
+    links:
+      - php:php-fpm
+    depends_on:
+      - php
+
+  mysql:
+    container_name: 'hal-article-mysql-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    build:
+      context: .
+      dockerfile: mysql/Dockerfile
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    ports:
+      - "3325:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_DATABASE: 'hal-articles'
+
+  php:
+    container_name: 'hal-article-php-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    build:
+     context: .
+     dockerfile: Dockerfile
+    environment:
+      APP_ENV: 'development'
+      COMPOSER_INSTALL: 'true'
+      DB_ARTICLE_HOST: 'hal-article-mysql-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+      DB_ARTICLE_SCHEMA: 'hal-articles'
+      DB_ARTICLE_USER: 'root'
+      DB_ARTICLE_PASSWORD: 'admin'
+      ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch-#{$TAG_NAME}#-build-#{$BUILD_NAME}#:9200'
+
+      AWS_ACCESS_KEY: "AKIAJ76WTB7QKINSCVYA"
+      AWS_SECRET_KEY: "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"
+
+      AWS_SQS_QUEUE: "http://hal-message-broker-sqs-#{$TAG_NAME}#-build-#{$BUILD_NAME}#:9324/queue/default"
+
+#      XDEBUG_CONFIG: remote_host=host.docker.internal
+
+    volumes:
+      - ./appcode:/var/www/html
+
+    depends_on:
+      - mysql
+      - elasticsearch
+
+  swagger:
+    container_name: 'hal-article-swagger-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    image: swaggerapi/swagger-ui
+    volumes:
+      - ./appcode:/app:cached
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SWAGGER_JSON: '/app/openapi.json'
+      BASE_URL: '/'
+
+# docker run -d -p 80:8080 swaggerapi/swagger-editor
+
+  elasticsearch:
+    container_name: 'hal-article-elasticsearch-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:5.5.3'
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    volumes:
+      - ./elasticsearch/config/elasticsearch.conf:/etc/elasticsearch/elasticsearch.yml
+    depends_on:
+      - mysql
+    environment:
+      - 'cluster.name=docker-cluster'
+      - 'bootstrap.memory_lock=true'
+#      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  message-queue:
+    container_name: hal-message-broker-sqs-#{$TAG_NAME}#-build-#{$BUILD_NAME}#
+    image: roribio16/alpine-sqs
+    ports:
+      - "9330:9324"
+
+networks:
+  default:
+    external:
+      name: halv2_default-#{$TAG_NAME}#-build-#{$BUILD_NAME}#
