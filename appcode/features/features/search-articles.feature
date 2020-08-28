@@ -2,14 +2,14 @@ Feature: Search Articles By Query String
   Search articles in Elasticsearch index
 
   Scenario: Searching article index filter by category 'Current Affairs' size of 5
-    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&filter[categories]=currentAffairs&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching article index filter by category 'Entertainment' size of 5
-    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=entertainment&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=entertainment&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&filter[categories]=entertainment&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&filter[categories]=entertainment&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching article index filter by category 'Weather'
     Given the microservice search URL is loaded "/search?index=articles&type=article&filter[categories]=weather"
@@ -22,14 +22,14 @@ Feature: Search Articles By Query String
     Then URL "/search?index=articles&type=article&not-filter[categories]=entertainment&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching article index filter by term 'brexit' size of 5
-    Given the microservice search URL is loaded "/search?index=articles&type=article&search=brexit&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&search=brexit&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&search=brexit&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&search=brexit&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching article index filter and exclude term 'brexit' from 'title' size of 5
-    Given the microservice search URL is loaded "/search?index=articles&type=article&excludes[title]=brexit&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&excludes[title]=brexit&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&excludes[title]=brexit&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&excludes[title]=brexit&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching articles index filter by term 'obscure search'
     Given the microservice search URL is loaded "/search?index=articles&type=article&search=obscure+search"
@@ -37,9 +37,9 @@ Feature: Search Articles By Query String
     Then an empty search response will be returned
 
   Scenario: Searching articles making sure image exists and is not empty
-    Given the microservice search URL is loaded "/search?index=articles&type=article&exists=image&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&exists=image&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&exists=image&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&exists=image&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching articles making sure image does not exist
     Given the microservice search URL is loaded "/search?index=articles&type=article&not-exists=image&size=5&sort=id:asc"
