@@ -9,12 +9,13 @@ node {
 
                 sh "docker network create halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh 'docker-compose -f docker-compose.jenkins.yml build --no-cache && docker-compose -f docker-compose.jenkins.yml up -d'
-                sleep(300)
+                sleep(480)
                 sh "docker exec hal-article-php-${env.TAG_NAME}-build-${currentBuild.number} composer development-enable"
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
-                sh "rm -rf * && rm -rf .*"
+                sh "rm -rf *"
+                sh "rm -rf .*"
                 throw err
             }
 
@@ -33,7 +34,8 @@ node {
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
-                sh "rm -rf * && rm -rf .*"
+                sh "rm -rf *"
+                sh "rm -rf .*"
                 throw err
             }
         }
@@ -43,14 +45,16 @@ node {
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
-                sh "rm -rf * && rm -rf .*"
+                sh "rm -rf *"
+                sh "rm -rf .*"
                 throw err
             }
         }
         stage ('Docker Cleanup') {
             sh 'docker-compose -f docker-compose.jenkins.yml down -v'
             sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
-            sh "rm -rf * && rm -rf .*"
+            sh "rm -rf *"
+            sh "rm -rf .* 2> /dev/null"
         }
         stage ('Building & Push Docker Image') {
             checkout scm
