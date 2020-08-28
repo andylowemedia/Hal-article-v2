@@ -14,6 +14,7 @@ node {
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
+                sh "rm -rf * && rm -rf .*"
                 throw err
             }
 
@@ -32,22 +33,24 @@ node {
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
+                sh "rm -rf * && rm -rf .*"
                 throw err
             }
         }
         stage ('Testing: BDD Tests') {
             try {
-                sh 'docker exec hal-article-php-${env.TAG_NAME}-build-${currentBuild.number} vendor/bin/behat'
+                sh "docker exec hal-article-php-${env.TAG_NAME}-build-${currentBuild.number} vendor/bin/behat"
             } catch (err) {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
+                sh "rm -rf * && rm -rf .*"
                 throw err
             }
         }
         stage ('Docker Cleanup') {
             sh 'docker-compose -f docker-compose.jenkins.yml down -v'
             sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
-            sh 'rm -rf *'
+            sh "rm -rf * && rm -rf .*"
         }
         stage ('Building & Push Docker Image') {
             checkout scm
