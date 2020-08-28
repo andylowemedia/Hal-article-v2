@@ -1,11 +1,12 @@
 #!groovy
+properties([[$class: 'JiraProjectProperty'], disableConcurrentBuilds(), pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '10m']])])
 node {
         stage ('Building Environment') {
             try {
                 checkout scm
                 sh 'docker network create halv2_default'
                 sh 'docker-compose build --no-cache && docker-compose up -d'
-                sleep(180)
+                sleep(300)
                 sh 'docker exec hal-article-php composer development-enable'
             } catch (err) {
                 sh 'docker-compose down -v'
