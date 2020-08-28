@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    container_name: 'hal-article-web-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    container_name: 'hal-article-web-#{TAG_NAME}#-build-#{BUILD_NAME}#'
     image: "nginx:latest"
 #    image: "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-nginx:latest"
 #    environment:
@@ -19,7 +19,7 @@ services:
       - php
 
   mysql:
-    container_name: 'hal-article-mysql-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    container_name: 'hal-article-mysql-#{TAG_NAME}#-build-#{BUILD_NAME}#'
     build:
       context: .
       dockerfile: mysql/Dockerfile
@@ -33,23 +33,23 @@ services:
       MYSQL_DATABASE: 'hal-articles'
 
   php:
-    container_name: 'hal-article-php-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    container_name: 'hal-article-php-#{TAG_NAME}#-build-#{BUILD_NAME}#'
     build:
      context: .
      dockerfile: Dockerfile
     environment:
       APP_ENV: 'development'
       COMPOSER_INSTALL: 'true'
-      DB_ARTICLE_HOST: 'hal-article-mysql-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+      DB_ARTICLE_HOST: 'hal-article-mysql-#{TAG_NAME}#-build-#{BUILD_NAME}#'
       DB_ARTICLE_SCHEMA: 'hal-articles'
       DB_ARTICLE_USER: 'root'
       DB_ARTICLE_PASSWORD: 'admin'
-      ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch-#{$TAG_NAME}#-build-#{$BUILD_NAME}#:9200'
+      ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch-#{TAG_NAME}#-build-#{BUILD_NAME}#:9200'
 
       AWS_ACCESS_KEY: "AKIAJ76WTB7QKINSCVYA"
       AWS_SECRET_KEY: "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"
 
-      AWS_SQS_QUEUE: "http://hal-message-broker-sqs-#{$TAG_NAME}#-build-#{$BUILD_NAME}#:9324/queue/default"
+      AWS_SQS_QUEUE: "http://hal-message-broker-sqs-#{TAG_NAME}#-build-#{BUILD_NAME}#:9324/queue/default"
 
 #      XDEBUG_CONFIG: remote_host=host.docker.internal
 
@@ -61,7 +61,7 @@ services:
       - elasticsearch
 
   swagger:
-    container_name: 'hal-article-swagger-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    container_name: 'hal-article-swagger-#{TAG_NAME}#-build-#{BUILD_NAME}#'
     image: swaggerapi/swagger-ui
     volumes:
       - ./appcode:/app:cached
@@ -76,7 +76,7 @@ services:
 # docker run -d -p 80:8080 swaggerapi/swagger-editor
 
   elasticsearch:
-    container_name: 'hal-article-elasticsearch-#{$TAG_NAME}#-build-#{$BUILD_NAME}#'
+    container_name: 'hal-article-elasticsearch-#{TAG_NAME}#-build-#{BUILD_NAME}#'
     image: 'docker.elastic.co/elasticsearch/elasticsearch:5.5.3'
     ports:
       - "9201:9200"
@@ -97,7 +97,7 @@ services:
         hard: -1
 
   message-queue:
-    container_name: hal-message-broker-sqs-#{$TAG_NAME}#-build-#{$BUILD_NAME}#
+    container_name: hal-message-broker-sqs-#{TAG_NAME}#-build-#{BUILD_NAME}#
     image: roribio16/alpine-sqs
     ports:
       - "9330:9324"
@@ -105,4 +105,4 @@ services:
 networks:
   default:
     external:
-      name: halv2_default-#{$TAG_NAME}#-build-#{$BUILD_NAME}#
+      name: halv2_default-#{TAG_NAME}#-build-#{BUILD_NAME}#
