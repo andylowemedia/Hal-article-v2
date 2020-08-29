@@ -52,9 +52,9 @@ Feature: Search Articles By Query String
     Then URL "/search?index=articles&type=article&not-exists=image&size=5&sort=publishDate:desc" search content will be returned in a JSON format
 
   Scenario: Searching articles between date range '2010-01-01' to '2020-02-29'
-    Given the microservice search URL is loaded "/search?index=articles&type=article&date-fr=2020-01-01&date-to=2020-02-29&sort=publishDate:desc&size=5"
+    Given the microservice search URL is loaded "/search?index=articles&type=article&date-fr=2020-01-01&date-to=2020-02-29&sort=publishDate:desc&size=5&sort=id:asc"
     When a 200 search response is be received
-    Then URL "/search?index=articles&type=article&date-fr=2020-01-01&date-to=2020-02-29&sort=publishDate:desc&size=5" search content will be returned in a JSON format
+    Then URL "/search?index=articles&type=article&date-fr=2020-01-01&date-to=2020-02-29&sort=publishDate:desc&size=5&sort=id:asc" search content will be returned in a JSON format
 
   Scenario: Searching Articles with the keyword 'alesha dixon'
     Given the microservice search URL is loaded "/search?index=articles&type=article&keywords=alesha+dixon&sort=publishDate:desc"
