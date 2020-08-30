@@ -1,0 +1,112 @@
+{
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/hal-article",
+          "awslogs-region": "eu-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [],
+      "cpu": 200,
+      "environment": [
+        {
+          "name": "APP_ENV",
+          "value": "production"
+        },
+        {
+          "name": "COMPOSER_INSTALL",
+          "value": "true"
+        },
+        {
+          "name": "DB_ARTICLE_HOST",
+          "value": "the-hal-project-db.ci8hu0holjv0.eu-west-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DB_ARTICLE_PASSWORD",
+          "value": "Alyssaj0nes"
+        },
+        {
+          "name": "DB_ARTICLE_SCHEMA",
+          "value": "hal-articles"
+        },
+        {
+          "name": "DB_ARTICLE_USER",
+          "value": "haluser"
+        },
+        {
+          "name": "ELASTICSEARCH_ARTICLE_HOST",
+          "value": "vpc-the-hal-project-dkvpkqeip7fitqat3ke5fsrz64.eu-west-1.es.amazonaws.com:80"
+        },
+        {
+          "name": "MICROSERVICE_CATEGORY_URL",
+          "value": "http://category.low-emedia.com"
+        }
+      ],
+      "mountPoints": [],
+      "memory": 100,
+      "memoryReservation": 100,
+      "volumesFrom": [],
+      "image": "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/hal-article:#{TAG_NAME}#",
+      "essential": true,
+      "name": "hal-article-php"
+    },
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/hal-article",
+          "awslogs-region": "eu-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "cpu": 50,
+      "environment": [
+        {
+          "name": "PROTOCOL",
+          "value": "http"
+        },
+        {
+          "name": "SERVER_LANG",
+          "value": "php"
+        },
+        {
+          "name": "SITE_NAME",
+          "value": "article.low-emedia.com"
+        }
+      ],
+      "mountPoints": [],
+      "memory": 50,
+      "volumesFrom": [
+        {
+          "sourceContainer": "hal-article-php",
+          "readOnly": false
+        }
+      ],
+      "image": "540688370389.dkr.ecr.eu-west-1.amazonaws.com/low-emedia/nginx:latest",
+      "essential": true,
+      "links": [
+        "hal-article-php:php-fpm"
+      ],
+      "name": "hal-article-nginx"
+    }
+  ],
+  "placementConstraints": [],
+  "memory": "100",
+  "family": "hal-article",
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "networkMode": "bridge",
+  "cpu": "250",
+  "volumes": []
+}

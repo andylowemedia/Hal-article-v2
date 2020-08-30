@@ -1,5 +1,7 @@
 #!groovy
 properties([[$class: 'JiraProjectProperty'], disableConcurrentBuilds(), pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '10m']])])
+
+
 node {
         stage ('Building Environment') {
             try {
@@ -15,8 +17,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .* 2> /dev/null"
-                sh "docker system prune"
+                sh "rm -rf .git .gitignore"
+                sh "docker system prune -f"
                 throw err
             }
 
@@ -36,8 +38,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .* 2> /dev/null"
-                sh "docker system prune"
+                sh "rm -rf .git .gitignore"
+                sh "docker system prune -f"
                 throw err
             }
         }
@@ -48,8 +50,8 @@ node {
                 sh 'docker-compose -f docker-compose.jenkins.yml down -v'
                 sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
                 sh "rm -rf *"
-                sh "rm -rf .* 2> /dev/null"
-                sh "docker system prune"
+                sh "rm -rf .git .gitignore"
+                sh "docker system prune -f"
                 throw err
             }
         }
@@ -57,8 +59,8 @@ node {
             sh 'docker-compose -f docker-compose.jenkins.yml down -v'
             sh "docker network rm halv2_default-${env.TAG_NAME}-build-${currentBuild.number}"
             sh "rm -rf *"
-            sh "rm -rf .* 2> /dev/null"
-            sh "docker system prune"
+            sh "rm -rf .git .gitignore"
+            sh "docker system prune -f"
         }
         stage ('Building & Push Docker Image') {
             checkout scm
@@ -68,9 +70,24 @@ node {
             docker.withRegistry('https://540688370389.dkr.ecr.eu-west-1.amazonaws.com', 'ecr:eu-west-1:aws-lowemedia') {
                 docker.image("low-emedia/hal-article").push(tag)
             }
-            sh "docker system prune"
+            sh "docker system prune -f"
         }
-        stage ('Deploying to ECS') {
-            echo 'Deploying script TODO'
+        
+        def userInput
+        try {
+            userInput = input(
+                id: 'Proceed1', message: 'Was this successful?', parameters: [
+                [$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'Please confirm you agree with this']
+                ])
+        } catch(err) { // input false
+        }
+
+        if (userInput == true) {
+            stage ('Deploying to ECS') {
+                sh "sed -i \"s/#{TAG_NAME}#/${env.TAG_NAME}/\" task-definitions.json"
+                sh "./deploy.sh"
+            }
+        } else {
+            echo 'No Production Deployment'
         }
 }
