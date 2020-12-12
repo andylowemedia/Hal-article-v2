@@ -1,7 +1,8 @@
 <?php
 
-namespace AppTest\Entity;
+declare(strict_types=1);
 
+namespace AppTest\Entity;
 
 use App\Entity\FeaturedArticleEntity;
 use PHPUnit\Framework\TestCase;

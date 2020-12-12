@@ -55,10 +55,6 @@ abstract class QueryAbstract
             throw new \InvalidArgumentException('Index must be set', 400);
         }
 
-        if (!isset($params['type'])) {
-            throw new \InvalidArgumentException('Type must be set', 400);
-        }
-
         $size = isset($params['size']) ? $params['size'] : 102;
 
         $from = isset($params['page']) ? ($params['page'] * $size) : 0;
@@ -68,7 +64,6 @@ abstract class QueryAbstract
 
         $this->params = [
             'index' => $params['index'],
-            'type' => $params['type'],
             'size' => $size,
             'from' => $from,
             'body' => [

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace AppTest\Query;
 
@@ -34,12 +35,10 @@ class QueryAbstractTest extends TestCase
     {
         $this->queryAbstract->buildClientParams([
             'index' => 'articles',
-            'type' => 'article'
         ]);
 
         $expected = [
             'index' => 'articles',
-            'type' => 'article',
             'size' => 102,
             'from' => 0,
             'body' => [
@@ -59,8 +58,6 @@ class QueryAbstractTest extends TestCase
                     'posted',
                     'url'
                 ],
-//                'track_scores' => 1,
-//                'min_score' => 1,
                 'query' => [
                     'bool' => []
                 ]
@@ -74,13 +71,11 @@ class QueryAbstractTest extends TestCase
     {
         $this->queryAbstract->buildClientParams([
             'index' => 'articles',
-            'type' => 'article',
             'page' => 0
         ]);
 
         $expected = [
             'index' => 'articles',
-            'type' => 'article',
             'size' => 102,
             'from' => 0,
             'body' => [
@@ -100,8 +95,6 @@ class QueryAbstractTest extends TestCase
                     'posted',
                     'url'
                 ],
-//                'track_scores' => 1,
-//                'min_score' => 1,
                 'query' => [
                     'bool' => []
                 ]
@@ -115,13 +108,5 @@ class QueryAbstractTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->queryAbstract->buildClientParams([]);
-    }
-
-    public function testBuildingParamsThrowsExceptionWhenMissingType()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->queryAbstract->buildClientParams([
-            'index' => 'articles',
-        ]);
     }
 }

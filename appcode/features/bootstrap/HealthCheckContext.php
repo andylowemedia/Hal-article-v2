@@ -28,14 +28,28 @@ class HealthCheckContext implements Context
     public function loadHealthCheck()
     {
         $client = new \GuzzleHttp\Client();
-        $this->response = $client->head('hal-article-web/health-check');
+        $this->response = $client->get('hal-article-web/health-check');
     }
 
     /**
-     * @Then a :statusCode health check response will be recieved
+     * @Then a :statusCode health check response will be received
      */
-    public function checkJsonResponse($statusCode)
+    public function checkStatusCode($statusCode)
     {
         Assert::assertEquals($statusCode, $this->response->getStatusCode());
+    }
+
+    /**
+     * @Then JSON health check response received
+     */
+    public function checkJsonResponse()
+    {
+        Assert::assertEquals(
+            json_encode([
+                'success' => true,
+                'message' => 'Health check success'
+            ]),
+            $this->response->getBody()->getContents()
+        );
     }
 }

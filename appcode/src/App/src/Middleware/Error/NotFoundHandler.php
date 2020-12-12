@@ -23,6 +23,5 @@ class NotFoundHandler extends ZendNotFoundHandler
         ];
 
         return new JsonResponse($responseData, 404);
-        ;
     }
 }

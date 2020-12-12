@@ -72,7 +72,7 @@ node {
             }
             sh "docker system prune -f"
         }
-        
+
         def userInput
         try {
             userInput = input(

@@ -33,7 +33,7 @@ use Mezzio\MiddlewareFactory;
  * );
  */
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->route('/health-check', App\Handler\HealthCheckHandler::class, ['HEAD'],'health-check');
+    $app->route('/health-check', App\Handler\HealthCheckHandler::class, ['GET'],'health-check');
 
 //    $app->get('/summary', App\Handler\SummaryHandler::class, 'summary');
     $app->get('/custom-feed', App\Handler\CustomFeedHandler::class, 'custom-feed');

@@ -88,3 +88,4 @@ http.port: 9200
 #action.destructive_requires_name: true
 
 xpack.security.enabled: false
+#index.blocks.read_only_allow_delete: null

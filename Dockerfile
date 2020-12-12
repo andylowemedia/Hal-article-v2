@@ -6,7 +6,7 @@ RUN mv /etc/localtime /etc/localtime.bak \
 # -----------------------------------------------------------------------------
 # COMPOSER INSTALLATION
 # -----------------------------------------------------------------------------
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.19
 
 # -----------------------------------------------------------------------------
 # SERVICES & PHP EXTENSIONS
@@ -25,7 +25,7 @@ RUN \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug;
 
-RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 COPY /php/config /var/www/config
 COPY appcode /var/www/html

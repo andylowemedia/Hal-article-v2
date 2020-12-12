@@ -23,8 +23,6 @@ class ViewHandler implements RequestHandlerInterface
         $slug = $request->getAttribute('slug');
         $params = [
             'index' => 'articles',
-            'type' => 'article',
-
             'body' => [
                 'query' => [
                     'term' => [

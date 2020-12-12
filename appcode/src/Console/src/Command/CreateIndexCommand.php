@@ -61,76 +61,70 @@ class CreateIndexCommand extends Command
                     'number_of_replicas' => 0,
                 ],
                 'mappings' => [
-                    'article' => [
-//                        "_timestamp" => [
-//                            "enabled" => "true"
-//                        ],
-                        '_source' => [ 'enabled' => true],
-                        'properties' => [
-                            'id' => [
-                                'type' => 'integer'
-                            ],
-                            'slug' => [
-                                'type' => 'keyword',
-                            ],
-                            'title' => [
-                                'type' => 'text'
-                            ],
-                            'subtitle' => [
-                                'type' => 'text'
-                            ],
-                            'summary' => [
-                                'type' => 'text'
-                            ],
-                            'content' => [
-                                'type' => 'text'
-                            ],
-                            'author' => [
-                                'type' => 'keyword'
-                            ],
-                            'url' => [
-                                'type' => 'keyword'
-                            ],
-                            'articleTypeId' => [
-                                'type' => 'integer'
-                            ],
-                            'sourceId' => [
-                                'type' => 'integer'
-                            ],
-                            'source' => [
-                                'type' => 'keyword'
-                            ],
-                            'publishDate' => [
-                                'type' => 'date',
-                            ],
-                            'date' => [
-                                'type' => 'date'
-                            ],
-                            'image' => [
-                                'type' => 'keyword'
-                            ],
-                            'images' => [
-                                'type' => 'keyword'
-                            ],
-                            'media' => [
-                                'type' => 'text'
-                            ],
-                            'featured' => [
-                                "type" => "boolean"
-                            ],
-                            'categories' => [
-                                "type" => "keyword"
-                            ],
-                            'displayCategories' => [
-                                "properties" => [
-                                    'name' => ["type" => "keyword"],
-                                    'code' => ["type" => "keyword"],
-                                ]
-
-                            ],
-                            'keywords' => [
-                                "type" => "keyword"
+                    'properties' => [
+                        'id' => [
+                            'type' => 'integer'
+                        ],
+                        'slug' => [
+                            'type' => 'keyword',
+                        ],
+                        'title' => [
+                            'type' => 'text'
+                        ],
+                        'subtitle' => [
+                            'type' => 'text'
+                        ],
+                        'summary' => [
+                            'type' => 'text'
+                        ],
+                        'content' => [
+                            'type' => 'text'
+                        ],
+                        'author' => [
+                            'type' => 'keyword'
+                        ],
+                        'url' => [
+                            'type' => 'keyword'
+                        ],
+                        'articleTypeId' => [
+                            'type' => 'integer'
+                        ],
+                        'sourceId' => [
+                            'type' => 'integer'
+                        ],
+                        'source' => [
+                            'type' => 'keyword'
+                        ],
+                        'publishDate' => [
+                            'type' => 'date',
+                        ],
+                        'date' => [
+                            'type' => 'date'
+                        ],
+                        'image' => [
+                            'type' => 'keyword'
+                        ],
+                        'images' => [
+                            'type' => 'keyword'
+                        ],
+                        'media' => [
+                            'type' => 'text'
+                        ],
+                        'featured' => [
+                            "type" => "boolean"
+                        ],
+                        'categories' => [
+                            "type" => "keyword"
+                        ],
+                        'displayCategories' => [
+                            "properties" => [
+                                'name' => ["type" => "keyword"],
+                                'code' => ["type" => "keyword"],
                             ]
+
+                        ],
+                        'keywords' => [
+                            "type" => "keyword"
                         ]
                     ]
                 ]

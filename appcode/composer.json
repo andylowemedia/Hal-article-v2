@@ -11,7 +11,7 @@
         "ext-PDO": "^7.4",
         "ext-json": "^7.4",
         "aws/aws-sdk-php": "^3.133",
-        "elasticsearch/elasticsearch": "^5.2",
+        "elasticsearch/elasticsearch": "7.10",
         "guzzlehttp/guzzle": "^6.3",
         "http-interop/http-middleware": "^0.4.1",
         "laminas/laminas-config-aggregator": "^1.0",

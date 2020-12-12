@@ -32,7 +32,7 @@ class Search extends QueryAbstract
         }
         return [
             'results' => $data,
-            'total' => $results['hits']['total'],
+            'total' => $results['hits']['total']['value'],
         ];
     }
 }

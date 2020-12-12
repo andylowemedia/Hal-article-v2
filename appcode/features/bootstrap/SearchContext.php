@@ -109,7 +109,7 @@ JSON,
         $db = new PDO("mysql:host=$host", $user, $password);
 
         $db->exec('DROP DATABASE IF EXISTS `hal-articles`;');
-        $db->exec('CREATE SCHEMA `hal-articles` DEFAULT CHARACTER SET utf8;');
+        $db->exec('CREATE SCHEMA `hal-articles` DEFAULT CHARACTER SET utf8mb4;');
         $db->exec('USE `hal-articles`;');
 
         $sql = file_get_contents(getcwd() . '/sql/hal-article.sql');

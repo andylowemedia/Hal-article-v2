@@ -249,7 +249,6 @@ class AddHandler implements RequestHandlerInterface
 
         $params = [
             'index' => 'articles',
-            'type' => 'article',
             'id' => $article->id,
             'body' => [
                 'title' => $article->title,

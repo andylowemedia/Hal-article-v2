@@ -283,7 +283,6 @@ JSON;
 
         $params = [
             'index' => 'articles',
-            'type' => 'article',
             'id' => $result['id'],
             'body' => [
                 'title' => $result['title'],
@@ -315,7 +314,7 @@ JSON;
         }
 
         if (!is_null($result['featured'])) {
-            $params['body']['featured'] = $result['featured'];
+            $params['body']['featured'] = (bool) $result['featured'];
         }
 
         if (!empty($reorderedCategories)) {
