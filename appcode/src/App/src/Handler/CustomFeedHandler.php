@@ -23,7 +23,7 @@ class CustomFeedHandler implements RequestHandlerInterface
 
         $params = [
             'index' => 'articles',
-            'type' => 'article',
+            'sort' => "publishDate:desc",
             'body' => [
                 'size' => $queryParams['size'],
                 'from' => $queryParams['from'],
@@ -67,9 +67,12 @@ class CustomFeedHandler implements RequestHandlerInterface
             ]
         ];
 
-        if (isset($queryParams['sort'])) {
-            $params['sort'] = $queryParams['sort'];
-        }
+//        if (isset($queryParams['sort'])) {
+//
+//            $sortParams = explode(':', $queryParams['sort']);
+//
+//            $params['sort'] = [$sortParams[0] => ["order" => $sortParams[1]]];
+//        }
 
         if (isset($queryParams['categories'])) {
             foreach (\explode(',', $queryParams['categories']) as $category) {
@@ -112,7 +115,7 @@ class CustomFeedHandler implements RequestHandlerInterface
 
         $results = $resultSet->toArray();
 
-        return new JsonResponse(['total' => $response['hits']['total'], 'count' => count($results), 'articles' => $results]);
+        return new JsonResponse(['total' => $response['hits']['total']['value'], 'count' => count($results), 'articles' => $results]);
     }
 }
 
