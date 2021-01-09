@@ -27,22 +27,10 @@ abstract class ResultSetAbstract extends ResultSet
 
     public function current()
     {
-//        if ($this->buffer === null) {
-//            $this->buffer = -2; // implicitly disable buffering from here on
-//        } elseif (is_array($this->buffer) && isset($this->buffer[$this->position])) {
-//            return $this->buffer[$this->position];
-//        }
         $data = $this->dataSource->current();
         if (empty($data)) {
             return null;
         }
-//        if (is_array($this->buffer)) {
-//            $this->buffer[$this->position] = $data;
-//        }
-
-//        if ($this->returnType !== self::TYPE_ARRAYOBJECT || !is_array($data)) {
-//            return $data;
-//        }
 
         /** @var $ao ArrayObject */
         $ao = clone $this->arrayObjectPrototype;

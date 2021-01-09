@@ -1,6 +1,7 @@
 <?php
 namespace App\Handler;
 
+use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -23,7 +24,6 @@ class CustomFeedHandler implements RequestHandlerInterface
 
         $params = [
             'index' => 'articles',
-            'sort' => "publishDate:desc",
             'body' => [
                 'size' => $queryParams['size'],
                 'from' => $queryParams['from'],
@@ -67,12 +67,23 @@ class CustomFeedHandler implements RequestHandlerInterface
             ]
         ];
 
-//        if (isset($queryParams['sort'])) {
-//
-//            $sortParams = explode(':', $queryParams['sort']);
-//
-//            $params['sort'] = [$sortParams[0] => ["order" => $sortParams[1]]];
-//        }
+        if (isset($queryParams['sort'])) {
+            $params['sort'] = $queryParams['sort'];
+        }
+
+        if (isset($queryParams['featured'])) {
+            $params['body']['query']['bool']['must'][] =
+                ['exists' => [
+                    'field' => 'featured'
+                ]];
+        }
+
+        if (isset($queryParams['image'])) {
+            $params['body']['query']['bool']['must'][] =
+                ['exists' => [
+                    'field' => 'image'
+                ]];
+        }
 
         if (isset($queryParams['categories'])) {
             foreach (\explode(',', $queryParams['categories']) as $category) {
@@ -109,13 +120,22 @@ class CustomFeedHandler implements RequestHandlerInterface
 
         $response = $this->elasticsearchClient->search($params);
 
+        if ($response['hits']['total']['value'] === 0) {
+            return new EmptyResponse(404);
+        }
+
         $resultSet = new ArticleResultSet();
         $resultSet->setArrayObjectPrototype(new ArticleModel);
         $resultSet->elasticsearchInitialize($response['hits']);
 
         $results = $resultSet->toArray();
 
-        return new JsonResponse(['total' => $response['hits']['total']['value'], 'count' => count($results), 'articles' => $results]);
+        return new JsonResponse([
+            'total' => $response['hits']['total']['value'],
+            'count' => count($results),
+            'maxScore' => (int) $response['hits']['max_score'],
+            'articles' => $results
+        ]);
     }
 }
 
