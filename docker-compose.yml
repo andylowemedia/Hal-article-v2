@@ -47,9 +47,6 @@ services:
       ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch:9200'
       MICROSERVICE_CATEGORY_URL: 'hal-category-web'
 
-      AWS_ACCESS_KEY: "AKIAJ76WTB7QKINSCVYA"
-      AWS_SECRET_KEY: "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"
-
       AWS_SQS_QUEUE: "http://hal-message-broker-sqs:9324/queue/default"
 
 #      XDEBUG_CONFIG: remote_host=host.docker.internal

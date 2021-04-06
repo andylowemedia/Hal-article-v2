@@ -51,9 +51,6 @@ services:
       DB_ARTICLE_PASSWORD: 'admin'
       ELASTICSEARCH_ARTICLE_HOST: 'hal-article-elasticsearch-#{TAG_NAME}#-build-#{BUILD_NAME}#:9200'
 
-      AWS_ACCESS_KEY: "AKIAJ76WTB7QKINSCVYA"
-      AWS_SECRET_KEY: "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"
-
       AWS_SQS_QUEUE: "http://hal-message-broker-sqs-#{TAG_NAME}#-build-#{BUILD_NAME}#:9324/queue/default"
 
 #      XDEBUG_CONFIG: remote_host=host.docker.internal
