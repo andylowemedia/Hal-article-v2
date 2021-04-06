@@ -204,7 +204,7 @@ class AddHandler implements RequestHandlerInterface
             $responseData = [
                 'success' => false,
                 'message' => 'An error has occurred : ' . $error->getMessage(),
-                'trace' => $error->getTraceAsString()
+//                'trace' => $error->getTraceAsString()
             ];
             $connection->rollback();
             if (strpos(strtolower($error->getMessage()), 'duplicate') !== false) {
